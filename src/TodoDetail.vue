@@ -81,6 +81,11 @@
                   <el-table-column property="id" label="ID" width="150" />
                   <el-table-column property="body" label="車型" width="200" />
                   <el-table-column property="kind" label="賽事種類" />
+                  <el-table-column label="刪除">
+                    <template v-slot="scope">
+                      <el-button type="info" @click="deleteNewData(scope.row.id)">刪除</el-button>
+                    </template>
+                  </el-table-column>
                 </el-table>
 
                 <span>
@@ -180,13 +185,12 @@ function navigateToHome() {
 }
 
 function addNewData() {
-
   if (carModel.value.trim() === '' || raceType.value.trim() === '') {
     return
   };
 
   const newData = {
-    id: store.apiComments.length + 1,
+    id: String(store.apiComments.length + 1),
     body: carModel.value,
     kind: raceType.value
   };
@@ -203,6 +207,17 @@ function addNewData() {
   raceType.value = ''
 
 }
+
+
+async function deleteNewData(id) {
+  try {
+    await axios.delete(`http://localhost:3000/comments/${id}`);
+    store.apiComments = store.apiComments.filter((e) => e.id !== id);
+  } catch (error) {
+    console.error('error', error);
+  }
+}
+
 
 
 onMounted(() => {
