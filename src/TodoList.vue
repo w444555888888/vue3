@@ -81,9 +81,6 @@ import i18n from './i18n';
 
 const selectedValue = ref('');
 
-
-
-
 // pinia
 const store = piniaStore();
 // 因pinia解構後會有響應式跑掉的問題，須加上toRefs

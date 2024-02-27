@@ -6,10 +6,10 @@ import store from './store'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-
 const app = createApp(App);
-// app.config.devtools = true;
 
+
+// app.config.devtools = true;
 // vuex
 // app.use(store);
 

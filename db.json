@@ -1,15 +1,57 @@
 {
-    "posts": [
-      { "id": 1, "title": "Post 1" },
-      { "id": 2, "title": "Post 2" },
-      { "id": 3, "title": "Post 3" },
-      { "id": 4, "title": "Post 4" }
-    ],
-    "comments": [
-      { "id": 1, "body": "AUDI RS3", "kind": "WTCC" },
-      { "id": 2, "body": "VW GOLF R", "kind": "WTRC" },
-      { "id": 3, "body": "911 GT3RS", "kind": "GT3" },
-      { "id": 4, "body": "718 GT4RS", "kind": "GT4" }
-    ]
-  }
-  
+  "posts": [
+    {
+      "id": "1",
+      "title": "Post 1"
+    },
+    {
+      "id": "2",
+      "title": "Post 2"
+    },
+    {
+      "id": "3",
+      "title": "Post 3"
+    },
+    {
+      "id": "4",
+      "title": "Post 4"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "body": "AUDI RS3",
+      "kind": "WTCC"
+    },
+    {
+      "id": "2",
+      "body": "VW GOLF R",
+      "kind": "WTRC"
+    },
+    {
+      "id": "3",
+      "body": "911 GT3RS",
+      "kind": "GT3"
+    },
+    {
+      "id": "4",
+      "body": "718 GT4RS",
+      "kind": "GT4"
+    },
+    {
+      "id": 5,
+      "body": "dsad",
+      "kind": "dsadsa"
+    },
+    {
+      "id": 6,
+      "body": "dsa",
+      "kind": "sdad"
+    },
+    {
+      "id": 7,
+      "body": "dsdsa",
+      "kind": "dsds"
+    }
+  ]
+}

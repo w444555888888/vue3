@@ -7,89 +7,107 @@
           status="success"></el-progress>
       </div>
       <div v-else class="common-layout">
-        <el-container class="centered-container">
-          <el-header class="table-header">
-            <el-button class="purple" @click="navigateToHome">首頁</el-button>
-            <h2>TodoDetail.vue 路由{{ routeindex }}</h2>
-          </el-header>
-          <el-main>
-            <div class="demo-collapse">
-              <el-collapse v-model="activeNames" @change="handleChange">
-                <el-collapse-item title="Consistency" name="1" v-if="currentPage === 1">
-                  <div>
-                    Consistent with real life: in line with the process and logic of real
-                    life, and comply with languages and habits that the users are used to;
-                  </div>
-                  <div>
-                    Consistent within interface: all elements should be consistent, such
-                    as: design style, icons and texts, position of elements, etc.
-                  </div>
-                </el-collapse-item>
-                <el-collapse-item title="Feedback" name="2" v-if="currentPage === 2">
-                  <div>
-                    Operation feedback: enable the users to clearly perceive their
-                    operations by style updates and interactive effects;
-                  </div>
-                  <div>
-                    Visual feedback: reflect current state by updating or rearranging
-                    elements of the page.
-                  </div>
-                </el-collapse-item>
-                <el-collapse-item title="Efficiency" name="3" v-if="currentPage === 3">
-                  <div>
-                    Simplify the process: keep operating process simple and intuitive;
-                  </div>
-                  <div>
-                    Definite and clear: enunciate your intentions clearly so that the
-                    users can quickly understand and make decisions;
-                  </div>
-                  <div>
-                    Easy to identify: the interface should be straightforward, which helps
-                    the users to identify and frees them from memorizing and recalling.
-                  </div>
-                </el-collapse-item>
-                <el-collapse-item title="Controllability" name="4" v-if="currentPage === 4">
-                  <div>
-                    Decision making: giving advices about operations is acceptable, but do
-                    not make decisions for the users;
-                  </div>
-                  <div>
-                    Controlled consequences: users should be granted the freedom to
-                    operate, including canceling, aborting or terminating current
-                    operation.
-                  </div>
-                </el-collapse-item>
-                <el-collapse-item title="Ukrainian" name="5" v-if="currentPage === 5">
-                  <div>
-                    Volodymyr Zelensky says 31,000 Ukrainian soldiers have been killed during Russia's full-scale
-                    invasion.
-                  </div>
-                  <div>
-                    Speaking about the wider losses in the war, Mr Zelensky said tens of thousands of civilians had died
-                    in the areas of Ukraine occupied by Russia but the true number was unknown.
-                  </div>
-                </el-collapse-item>
-              </el-collapse>
-            </div>
-            <el-button plain @click="dialogTableVisible = true">
-              購物紀錄
-            </el-button>
-            <el-dialog v-model="dialogTableVisible" title="蝦皮購物紀錄" width="800">
-              <el-table :data="gridData" ref="tableRef" highlight-current-row>
-                <el-table-column property="date" label="Date" width="150" />
-                <el-table-column property="name" label="Name" width="200" />
-                <el-table-column property="address" label="Address" />
-              </el-table>
-              <div style="margin-top: 20px">
-                <el-button @click="setCurrent(gridData[1])">選取第一列</el-button>
-                <el-button @click="setCurrent()">清除標記</el-button>
+        <el-container>
+          <el-aside width="200px">Aside</el-aside>
+          <el-container class="centered-container">
+            <el-header class="table-header">
+              <el-button class="purple" @click="navigateToHome">首頁</el-button>
+              <h2>TodoDetail.vue 路由{{ routeindex }}</h2>
+            </el-header>
+            <el-main>
+              <div class="demo-collapse">
+                <el-collapse v-model="activeNames" @change="handleChange">
+                  <el-collapse-item title="Consistency" name="1" v-if="currentPage === 1">
+                    <div>
+                      Consistent with real life: in line with the process and logic of real
+                      life, and comply with languages and habits that the users are used to;
+                    </div>
+                    <div>
+                      Consistent within interface: all elements should be consistent, such
+                      as: design style, icons and texts, position of elements, etc.
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="Feedback" name="2" v-if="currentPage === 2">
+                    <div>
+                      Operation feedback: enable the users to clearly perceive their
+                      operations by style updates and interactive effects;
+                    </div>
+                    <div>
+                      Visual feedback: reflect current state by updating or rearranging
+                      elements of the page.
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="Efficiency" name="3" v-if="currentPage === 3">
+                    <div>
+                      Simplify the process: keep operating process simple and intuitive;
+                    </div>
+                    <div>
+                      Definite and clear: enunciate your intentions clearly so that the
+                      users can quickly understand and make decisions;
+                    </div>
+                    <div>
+                      Easy to identify: the interface should be straightforward, which helps
+                      the users to identify and frees them from memorizing and recalling.
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="Controllability" name="4" v-if="currentPage === 4">
+                    <div>
+                      Decision making: giving advices about operations is acceptable, but do
+                      not make decisions for the users;
+                    </div>
+                    <div>
+                      Controlled consequences: users should be granted the freedom to
+                      operate, including canceling, aborting or terminating current
+                      operation.
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="Ukrainian" name="5" v-if="currentPage === 5">
+                    <div>
+                      Volodymyr Zelensky says 31,000 Ukrainian soldiers have been killed during Russia's full-scale
+                      invasion.
+                    </div>
+                    <div>
+                      Speaking about the wider losses in the war, Mr Zelensky said tens of thousands of civilians had died
+                      in the areas of Ukraine occupied by Russia but the true number was unknown.
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
               </div>
-            </el-dialog>
-          </el-main>
-          <el-footer>
-            <el-pagination small background layout="prev, pager, next ,jumper" :total="50" class="mt-4"
-              @current-change="handlePageChange" />
-          </el-footer>
+              <el-button plain @click="dialogTableVisible = true">
+                賽事記錄
+              </el-button>
+              <el-dialog v-model="dialogTableVisible" title="賽事記錄" width="800">
+                <el-table :data="apiComments" ref="tableRef" highlight-current-row>
+                  <el-table-column property="id" label="ID" width="150" />
+                  <el-table-column property="body" label="車型" width="200" />
+                  <el-table-column property="kind" label="賽事種類" />
+                </el-table>
+
+                <span>
+                  <label class="inputone">車型:</label>
+                  <el-input v-model="carModel" placeholder="carModel" class="inputone w-10 m-2" size="small"
+                    style="width: 100px;" />
+                </span>
+                <span>
+                  <label class="inputone">賽事種類:</label>
+                  <el-input v-model="raceType" placeholder="raceType" class="inputone w-10 m-2" size="small"
+                    style="width: 100px;" />
+                </span>
+
+
+                <div style="margin-top: 20px">
+                  <el-button type="success" id="btnClick" @click="addNewData">新增資料</el-button>
+                  <el-button @click="setCurrent(apiComments[1])">選取第一列</el-button>
+                  <el-button @click="setCurrent()">清除標記</el-button>
+                </div>
+              </el-dialog>
+
+            </el-main>
+            <el-footer>
+              <el-pagination small background layout="prev, pager, next ,jumper" :total="50" class="mt-4"
+                @current-change="handlePageChange" />
+            </el-footer>
+          </el-container>
         </el-container>
       </div>
 
@@ -98,10 +116,26 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, defineProps } from 'vue';
+import { ref, onBeforeMount, onMounted, defineProps, computed, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { piniaStore } from './pinia'
+import axios from 'axios';
+
+
+// modal 新增數據
+const carModel = ref('')
+const raceType = ref('')
+
+// pinia
+const store = piniaStore();
+// 因pinia解構後會有響應式跑掉的問題，須加上toRefs
+const { apiPosts, apiComments } = toRefs(store)
+console.log(apiComments.value, 'apiComments');
+
+
+
 const activeNames = ref([])
 const handleChange = (val) => {
   console.log(val)
@@ -134,28 +168,7 @@ const tableRef = ref(null)
 const setCurrent = (row) => {
   tableRef.value.setCurrentRow(row)
 }
-const gridData = [
-  {
-    date: '2016-05-02',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-04',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-01',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-03',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-]
+
 
 
 //router到首頁
@@ -164,6 +177,31 @@ function navigateToHome() {
   appRouter.push({
     name: 'TodoList'
   });
+}
+
+function addNewData() {
+
+  if (carModel.value.trim() === '' || raceType.value.trim() === '') {
+    return
+  };
+
+  const newData = {
+    id: store.apiComments.length + 1,
+    body: carModel.value,
+    kind: raceType.value
+  };
+
+  axios.post('http://localhost:3000/comments', newData)
+    .then((res) => {
+      store.apiComments = [...store.apiComments, res.data]
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+
+  carModel.value = ''
+  raceType.value = ''
+
 }
 
 
@@ -177,9 +215,23 @@ onMounted(() => {
     }
   }, 1000);
 })
+
+
+
+onBeforeMount(() => {
+  store.fetchCommentsApi();
+});
 </script>
 
 <style scoped>
+span {
+  margin-right: 10px;
+}
+
+.inputone {
+  margin: 4px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
