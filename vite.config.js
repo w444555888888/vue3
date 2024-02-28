@@ -28,5 +28,8 @@ export default defineConfig({
     // vue devtools 開啟
     // mismatch details in production build
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true'
+  },
+  optimizeDeps: {
+    include: ['element-plus']
   }
 })
