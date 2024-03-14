@@ -9,7 +9,6 @@ export const piniaStore = defineStore({
         newTodo: '',
         todos: [],
         editedContent: '',
-        apiPosts: [],
         apiComments: [],
     }),
     actions: {
@@ -51,14 +50,6 @@ export const piniaStore = defineStore({
                 this.setTodos(this.getDefaultTodo());
             } else {
                 this.setTodos(todosData);
-            }
-        },
-        async fetchPostsApi() {
-            try {
-                const postsResponse = await axios.get('http://localhost:3000/posts');
-                this.apiPosts = postsResponse.data;
-            } catch (error) {
-                console.error('Error axios data from API', error);
             }
         },
         async fetchCommentsApi() {
