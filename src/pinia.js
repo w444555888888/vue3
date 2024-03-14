@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 
 export const piniaStore = defineStore({
-    id: 'myStore',
+    id: 'pinia',
     state: () => ({
         locale: 'en',
         newTodo: '',
@@ -72,6 +72,6 @@ export const piniaStore = defineStore({
                 { done: false, content: 'Lotus Emira' },
             ];
         },
-    }
-
+    },
+      persist: true,
 });

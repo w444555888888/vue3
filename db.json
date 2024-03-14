@@ -32,6 +32,11 @@
       "id": "4",
       "body": "718 GT4RS",
       "kind": "GT4"
+    },
+    {
+      "id": "4",
+      "body": "Focus ST",
+      "kind": "WTCR"
     }
   ]
 }

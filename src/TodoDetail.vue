@@ -257,13 +257,11 @@ const raceType = ref('')
 const store = piniaStore();
 // 因pinia解構後會有響應式跑掉的問題，須加上toRefs
 const { apiComments } = toRefs(store)
-
-
-
 const activeNames = ref([])
 const handleChange = (val) => {
   console.log(val)
 }
+
 
 // 使用路由router
 const route = useRoute();
@@ -276,8 +274,10 @@ const handlePageChange = (newPage) => {
   currentPage.value = newPage;
 };
 
+
 // 滾動條
-const currentPercentage = ref(0)
+const currentPercentage = ref(0);
+
 
 // 滾動條到100展開摺疊面板
 function hundredPercentage() {
@@ -286,13 +286,13 @@ function hundredPercentage() {
   }
 }
 
+
 // modal
 const dialogTableVisible = ref(false);
 const tableRef = ref(null);
 const setCurrent = (row) => {
   tableRef.value.setCurrentRow(row)
 }
-
 
 
 //router到首頁
