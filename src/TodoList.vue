@@ -63,7 +63,7 @@
             </li>
         </ul>
         <!-- 日曆 v-calendar -->
-        <div v-show="vcalenderToggle">
+        <!-- <div v-show="vcalenderToggle">
             <h4>
                 時間:{{ range.start.toLocaleDateString('zh-TW') }} {{ range.start.toLocaleTimeString('zh-TW') }}
                 -
@@ -80,9 +80,9 @@
                         {{ format(dragValue ? dragValue.end : range.end, 'MMM D') }}
                     </div>
                 </template>
-            </VDatePicker>
-        </div>
-        <button @click="enableCalendar">日曆確認</button>
+</VDatePicker>
+</div>
+<button @click="enableCalendar">日曆確認</button> -->
         <br>
         <template v-for="(item, key) in imagesUrl" :key="key">
             <input type="text" v-model="imagesUrl[key]">
@@ -104,6 +104,8 @@
         <button class="btn" :disabled="isDisabled">請操作本元件</button>
         <button type="button" @click="addDisabledAttribute">為陣列加入 disabled 屬性</button>
 
+       
+       
         <h4 v-if="store.todos.length === 0">No data</h4>
     </div>
 </template>
@@ -121,8 +123,8 @@ const isDisabled = ref(false);
 //   isDisabled.value = true;
 // }
 function addDisabledAttribute() {
-  const button = document.querySelector('.btn');
-  button.setAttribute('disabled', 'disabled');
+    const button = document.querySelector('.btn');
+    button.setAttribute('disabled', 'disabled');
 }
 
 
