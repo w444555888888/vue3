@@ -417,5 +417,9 @@ span {
   text-decoration: none;
   cursor: pointer;
 }
+
+.el-collapse-item{
+  max-width: 600px;
+}
 </style>
 ../pinia
