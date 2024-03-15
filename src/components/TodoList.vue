@@ -67,15 +67,6 @@ import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
 
-const isDisabled = ref(false)
-// function addDisabledAttribute() {
-//   isDisabled.value = true;
-// }
-function addDisabledAttribute() {
-  const button = document.querySelector('.btn')
-  button.setAttribute('disabled', 'disabled')
-}
-
 
 const imagesUrl = ref([])
 

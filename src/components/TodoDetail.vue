@@ -14,8 +14,7 @@
         <el-container>
           <el-container class="centered-container">
             <el-header class="table-header">
-              <el-button class="purple" @click="navigateToHome">首頁</el-button>
-              <h2>TodoDetail.vue 路由{{ routeindex }}</h2>
+              <el-button class="purple" @click="navigateToHome">詳細頁面 : {{ store.todos[routeindex].content }}</el-button>
             </el-header>
             <el-main>
               <div class="demo-collapse">
@@ -414,7 +413,7 @@ span {
 .purple {
   margin-right: 20px;
   color: rgb(255, 255, 255);
-  background-color: rgb(111, 111, 252);
+  background-color: rgb(161, 161, 161);
   text-decoration: none;
   cursor: pointer;
 }

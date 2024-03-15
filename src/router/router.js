@@ -15,12 +15,7 @@ const routes = [
         path: '/todo/:index',
         name: 'TodoDetail',
         component: TodoDetail,
-        props: true,
-        beforeEnter: (to, from, next) => {
-            const index = to.params.index;
-            to.props = { index };
-            next();
-          }
+        props: true
     },
 ];
 
