@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-export const piniaStore = defineStore({
+export const usePiniaStore  = defineStore({
     id: 'pinia',
     state: () => ({
         locale: 'en',

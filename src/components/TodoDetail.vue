@@ -243,7 +243,7 @@ import { ref, onBeforeMount, onMounted, defineProps, computed, toRefs } from 'vu
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { piniaStore } from './pinia'
+import { usePiniaStore } from '../store/pinia.js'
 import axios from 'axios'
 
 
@@ -252,7 +252,7 @@ const carModel = ref('')
 const raceType = ref('')
 
 // pinia
-const store = piniaStore()
+const store = usePiniaStore()
 // 因pinia解構後會有響應式跑掉的問題，須加上toRefs
 const { apiComments } = toRefs(store)
 const activeNames = ref([])
@@ -419,3 +419,4 @@ span {
   cursor: pointer;
 }
 </style>
+../pinia

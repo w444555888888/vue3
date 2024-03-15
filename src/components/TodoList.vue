@@ -18,36 +18,17 @@
       <li v-for="(todo, index) in store.todos" :key="index">
         <span :class="{ done: todo.done }">
           <span>
-            <input
-              type="radio"
-              :checked="!todo.done"
-              :id="`pending${index}`"
-              :name="`done${index}`"
-            />
+            <input type="radio" :checked="!todo.done" :id="`pending${index}`" :name="`done${index}`" />
             <label :for="`pending${index}`">待辦</label>
-            <input
-              type="radio"
-              :checked="todo.done"
-              :id="`done${index}`"
-              :name="`done${index}`"
-            />
+            <input type="radio" :checked="todo.done" :id="`done${index}`" :name="`done${index}`" />
             <label :for="`done${index}`">完成</label>
           </span>
 
-          <div
-            class="li-data"
-            v-if="!todo.editing"
-            @dblclick="dispatchStartEditing(index)"
-          >
+          <div class="li-data" v-if="!todo.editing" @dblclick="dispatchStartEditing(index)">
             {{ todo.content }}
           </div>
-          <input
-            v-else
-            type="text"
-            v-model="store.editedContent"
-            @blur="dispatchStopEditing(index)"
-            @keyup.enter="dispatchStopEditing(index)"
-          />
+          <input v-else type="text" v-model="store.editedContent" @blur="dispatchStopEditing(index)"
+            @keyup.enter="dispatchStopEditing(index)" />
         </span>
         <div class="li-btn">
           <button @click="dispatchRemoveTodo(index)">刪除項目</button>
@@ -55,27 +36,7 @@
         </div>
       </li>
     </ul>
-    <!-- 日曆 v-calendar -->
-    <!-- <div v-show="vcalenderToggle">
-            <h4>
-                時間:{{ range.start.toLocaleDateString('zh-TW') }} {{ range.start.toLocaleTimeString('zh-TW') }}
-                -
-                {{ range.end.toLocaleDateString('zh-TW') }} {{ range.end.toLocaleTimeString('zh-TW') }}
-            </h4>
-
-            <br>
-            <VDatePicker v-model.range="range" :select-attribute="selectDragAttribute"
-                :drag-attribute="selectDragAttribute" @drag="dragValue = $event">
-                <template #day-popover="{ format }">
-                    <div class="text-sm">
-                        {{ format(dragValue ? dragValue.start : range.start, 'MMM D') }}
-                        -
-                        {{ format(dragValue ? dragValue.end : range.end, 'MMM D') }}
-                    </div>
-                </template>
-</VDatePicker>
-</div>
-<button @click="enableCalendar">日曆確認</button> -->
+    
     <br />
     <template v-for="(item, key) in imagesUrl" :key="key">
       <input type="text" v-model="imagesUrl[key]" />
@@ -93,7 +54,7 @@
         <div class="container" v-for="(item,key) in photo" :key="key">
           <img :src="`${item.urls.small}&w=${imageSize}`">
         </div> -->
-        
+
     <h4 v-if="store.todos.length === 0">No data</h4>
   </div>
 </template>
@@ -103,43 +64,24 @@
 import { onBeforeMount, onMounted, computed, ref, toRefs, watch, onUnmounted } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { piniaStore } from './pinia'
-import i18n from './i18n'
+import { usePiniaStore } from '../store/pinia'
+import i18n from '../i18n.js'
 
 const isDisabled = ref(false)
 // function addDisabledAttribute() {
 //   isDisabled.value = true;
 // }
-function addDisabledAttribute () {
+function addDisabledAttribute() {
   const button = document.querySelector('.btn')
   button.setAttribute('disabled', 'disabled')
 }
 
 
 const imagesUrl = ref([])
-const range = ref({
-  start: new Date(2020, 0, 6),
-  end: new Date(2020, 0, 10),
-})
-const dragValue = ref(null)
-const selectDragAttribute = computed(() => ({
-  popover: {
-    visibility: 'hover',
-    isInteractive: false,
-  },
-}))
 
-const vcalenderToggle = ref(false)
-function enableCalendar () {
-  vcalenderToggle.value = !vcalenderToggle.value
-}
-
-
-
-const selectedValue = ref('')
 
 // pinia
-const store = piniaStore()
+const store = usePiniaStore()
 // 因pinia解構後會有響應式跑掉的問題，須加上toRefs
 const { apiComments } = toRefs(store)
 
@@ -151,19 +93,19 @@ const changeLocale = () => {
 }
 
 
-function dispatchAddTodo () {
+function dispatchAddTodo() {
   store.addTodo()
 }
 
-function dispatchRemoveTodo (index) {
+function dispatchRemoveTodo(index) {
   store.removeTodo(index)
 }
 
-function dispatchStartEditing (index) {
+function dispatchStartEditing(index) {
   store.startEditing(index)
 }
 
-function dispatchStopEditing (index) {
+function dispatchStopEditing(index) {
   store.stopEditing(index)
 }
 
@@ -171,13 +113,14 @@ function dispatchStopEditing (index) {
 // 使用路由useRouter
 const appRouter = useRouter()
 
-function navigateToDetail (index) {
+function navigateToDetail(index) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: index },
     query: { index: index }
   })
 }
+
 
 
 // 調用真實dom練習
@@ -222,9 +165,7 @@ onUnmounted(() => {
 
 
 <style scoped lang="scss">
-$border: 2px solid
-  rgba(
-    $color: white,
+$border: 2px solid rgba($color: white,
     $alpha: 0.35,
   );
 $size1: 6px;

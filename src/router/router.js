@@ -1,7 +1,7 @@
 // router.js
 import { createRouter, createWebHistory } from 'vue-router'
-import TodoList from './TodoList.vue'
-import TodoDetail from './TodoDetail.vue'
+import TodoList from '../components/TodoList.vue'
+import TodoDetail from '../components/TodoDetail.vue'
 
 
 const routes = [
