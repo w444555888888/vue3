@@ -1,61 +1,67 @@
 <!-- TodoList -->
 <template>
-  <div>
+  <div id="indexPage">
     <nav>
       <select v-model="store.locale" @change="changeLocale">
         <option value="en">en-US</option>
         <option value="zh">zh-TW</option>
       </select>
     </nav>
-    <h1>{{ t("title") }}</h1>
+    <h1>{{ t("titleFirst") }}</h1>
     <form @submit.prevent="dispatchAddTodo">
       <input v-model.trim="store.newTodo" name="newTodo" autocomplete="off" />
-      <button>Add ToDo</button>
+      <button>{{ t("searchButton") }}</button>
     </form>
 
-    <h2>ToDo List</h2>
+    <h3>{{ t("titleSecond") }}</h3>
     <ul>
       <li v-for="(todo, index) in store.todos" :key="index">
         <span :class="{ done: todo.done }">
           <span>
-            <input type="radio" :checked="!todo.done" :id="`pending${index}`" :name="`done${index}`" />
-            <label :for="`pending${index}`">待辦</label>
-            <input type="radio" :checked="todo.done" :id="`done${index}`" :name="`done${index}`" />
-            <label :for="`done${index}`">完成</label>
+            <input
+              type="radio"
+              :checked="!todo.done"
+              :id="`pending${index}`"
+              :name="`done${index}`"
+            />
+            <label :for="`pending${index}`">{{ t("undone") }}</label>
+            <input
+              type="radio"
+              :checked="todo.done"
+              :id="`done${index}`"
+              :name="`done${index}`"
+            />
+            <label :for="`done${index}`">{{ t("done") }}</label>
           </span>
 
-          <div class="li-data" v-if="!todo.editing" @dblclick="dispatchStartEditing(index)">
+          <div
+            class="li-data"
+            v-if="!todo.editing"
+            @dblclick="dispatchStartEditing(index)"
+          >
             {{ todo.content }}
           </div>
-          <input v-else type="text" v-model="store.editedContent" @blur="dispatchStopEditing(index)"
-            @keyup.enter="dispatchStopEditing(index)" />
+          <input
+            v-else
+            type="text"
+            v-model="store.editedContent"
+            @blur="dispatchStopEditing(index)"
+            @keyup.enter="dispatchStopEditing(index)"
+          />
         </span>
         <div class="li-btn">
-          <button @click="dispatchRemoveTodo(index)">刪除項目</button>
-          <button @click="navigateToDetail(index)">詳情</button>
+          <button @click="dispatchRemoveTodo(index)">{{ t("delete") }}</button>
+          <button @click="navigateToDetail(index)">{{ t("detail") }}</button>
         </div>
       </li>
     </ul>
-    
-    <br />
-    <template v-for="(item, key) in imagesUrl" :key="key">
-      <input type="text" v-model="imagesUrl[key]" />
-    </template>
-    <div v-if="!imagesUrl.length || imagesUrl[imagesUrl.length - 1] === ''">
-      <button type="button" @click="imagesUrl.push('')">add新增+1</button>
-    </div>
-    <div v-else>
-      <button type="button" @click="imagesUrl.shift()">delete刪除先前</button>
-    </div>
-
-    <br />
-    <!-- 圖片 -->
-    <!-- <input type="range" min="10" max="100" v-model="imageSize">
-        <div class="container" v-for="(item,key) in photo" :key="key">
-          <img :src="`${item.urls.small}&w=${imageSize}`">
-        </div> -->
-
     <h4 v-if="store.todos.length === 0">No data</h4>
+    <br />
+
+    <div>
+      <input type="text" v-model="message" />
+      <button type="button" @click="sendMessage">{{ t("postBoard") }}</button>
+    </div>
   </div>
 </template>
 
@@ -67,36 +73,44 @@ import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
 
+//留言板
+const message = ref('')
+const sendMessage = () => {
+  if (message.value.trim() !== '') {
+    axios.post('http://localhost:3000/messages', { content: message.value.trim() })
+      .then(response => {
+        console.log('response', response)
+        message.value = ''
+      })
+      .catch(error => {
+        console.error('error', error)
+      })
+  } else {
+    console.log('请输入留言内容')
+  }
+}
 
-const imagesUrl = ref([])
-
-
-// pinia
-const store = usePiniaStore()
-// 因pinia解構後會有響應式跑掉的問題，須加上toRefs
-const { apiComments } = toRefs(store)
-
-// i18n
+// i18n語系  store.locale= i18n.global.locale.value
 const { t } = i18n.global
-// 先改變store.locale再把i18n的locale = store裡面的locale
 const changeLocale = () => {
   i18n.global.locale.value = store.locale
 }
 
-
-function dispatchAddTodo() {
+// pinia
+const store = usePiniaStore()
+function dispatchAddTodo () {
   store.addTodo()
 }
 
-function dispatchRemoveTodo(index) {
+function dispatchRemoveTodo (index) {
   store.removeTodo(index)
 }
 
-function dispatchStartEditing(index) {
+function dispatchStartEditing (index) {
   store.startEditing(index)
 }
 
-function dispatchStopEditing(index) {
+function dispatchStopEditing (index) {
   store.stopEditing(index)
 }
 
@@ -104,7 +118,7 @@ function dispatchStopEditing(index) {
 // 使用路由useRouter
 const appRouter = useRouter()
 
-function navigateToDetail(index) {
+function navigateToDetail (index) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: index },
@@ -114,33 +128,9 @@ function navigateToDetail(index) {
 
 
 
-// 調用真實dom練習
-const refFromDom = ref(null)
-// 布林值
-const isHighlighted = ref(false)
-
-// 點擊事件 : 根據isHighlighted決定真實dom(refFromDom)要不要添加class : highlighted
-const handleClick = () => {
-  isHighlighted.value = !isHighlighted.value
-  isHighlighted.value ? refFromDom.value.classList.add('highlighted') : refFromDom.value.classList.remove('highlighted')
-}
-
-// const imageSize=ref(100)
-// const photo = ref([])
-// async function photounsplashApi () {
-//     try {
-//         const aaa = await axios.get('https://api.unsplash.com/photos/?client_id=I3-nqqwJlLC_WOr-F2o5YJdDtwSZ3O-ONCH84AwnemM');
-//         photo.value = aaa.data;
-//     } catch (error) {
-//         console.error('error', error);
-//     }
-// }
-
-
 onBeforeMount(() => {
   store.initializeTodos()
   store.fetchCommentsApi()
-  // photounsplashApi()
 })
 
 
@@ -156,9 +146,7 @@ onUnmounted(() => {
 
 
 <style scoped lang="scss">
-$border: 2px solid rgba($color: white,
-    $alpha: 0.35,
-  );
+$border: 2px solid rgba(219, 219, 219, 0.4);
 $size1: 6px;
 $size2: 12px;
 $size3: 18px;
@@ -169,140 +157,121 @@ $textColor: white;
 $primaryColor: #a0a4d9;
 $secondTextColor: #1f2023;
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: $backgroundColor;
-  color: $textColor;
+#indexPage {
+  background-color: rgb(245, 245, 245);
 
-  #app {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px;
+  select,
+  option {
+    background-color: rgb(22, 22, 22);
+    color: white;
+    border-radius: 5px;
+  }
 
-    select,
-    option {
-      background-color: rgb(22, 22, 22);
-      color: white;
-      border-radius: 5px;
-    }
+  h1 {
+    font-weight: bold;
+    font-size: 28px;
+    text-align: center;
+  }
 
-    h1 {
-      font-weight: bold;
-      font-size: 28px;
-      text-align: center;
-    }
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 5px 0px;
 
-    .highlighted {
-      color: aqua;
-    }
-
-    #realDomDiv {
-      margin: 5px;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      margin: 5px;
-
-      label {
-        font-size: 14px;
-        font-weight: bold;
-      }
-
-      input,
-      button {
-        height: $size5;
-        box-shadow: none;
-        outline: none;
-        padding-left: $size2;
-        padding-right: $size2;
-        border-radius: $size1;
-        font-size: 18px;
-        margin-top: $size1;
-        margin-bottom: $size2;
-      }
-
-      input {
-        background-color: transparent;
-        border: $border;
-        color: inherit;
-      }
+    input {
+      font-size: 1.125rem;
+      padding: 1rem 1.5rem;
+      background-color: #fff;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
     }
 
     button {
-      cursor: pointer;
-
-      border: 1px solid $primaryColor;
-      color: $secondTextColor;
-      font-weight: bold;
+      height: $size5;
+      box-shadow: none;
       outline: none;
+      padding-left: $size2;
+      padding-right: $size2;
       border-radius: $size1;
+      font-size: 18px;
+      margin-top: $size1;
+      margin-bottom: $size2;
     }
+  }
 
-    h2 {
-      font-size: 22px;
-      border-bottom: $border;
-      padding-bottom: $size1;
-    }
+  button {
+    cursor: pointer;
+    border: 1px solid $primaryColor;
+    color: $secondTextColor;
+    font-weight: bold;
+    outline: none;
+    border-radius: $size1;
+    background-color: #7e7e7e;
+  }
 
-    ul {
-      padding: 10px;
+  button:hover {
+    background-color: rgb(172, 171, 171);
+  }
 
-      li {
+  h2 {
+    font-size: 22px;
+    border-bottom: $border;
+    padding-bottom: $size1;
+  }
+
+  ul {
+    padding: 10px;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: $border;
+      padding: $size2 22px;
+      border-radius: $size1;
+      margin-bottom: $size2;
+
+      span {
+        cursor: pointer;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: $border;
-        padding: $size2 22px;
-        border-radius: $size1;
-        margin-bottom: $size2;
+      }
 
-        span {
-          cursor: pointer;
-          display: flex;
-        }
+      .li-data {
+        margin: 2px 15px;
+        flex-shrink: 0;
+      }
 
-        .li-data {
-          margin: 2px 10px;
-          flex-shrink: 0;
-        }
+      input {
+        margin: 2px 2px;
+        flex-shrink: 0;
+      }
 
-        input {
-          margin: 2px 2px;
-          flex-shrink: 0;
-        }
+      .li-btn {
+        margin: 0 1px;
+        flex-shrink: 0;
+      }
 
-        .li-btn {
-          margin: 0 1px;
-          flex-shrink: 0;
-        }
-
-        button {
-          font-size: $size2;
-          padding: $size1;
-          margin: 0 6px;
-        }
+      button {
+        font-size: $size2;
+        padding: $size1;
+        margin: 0 6px;
       }
     }
+  }
 
-    h4 {
-      text-align: center;
-      opacity: 0.5;
-      margin: 0;
-    }
+  h4 {
+    text-align: center;
+    opacity: 0.5;
+    margin: 0;
+  }
 
-    input[type="text"] {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-    }
+  input[type="text"] {
+    display: block;
+    width: 95%;
+    margin-bottom: 10px;
+    border-radius: $size1;
+    padding: 10px;
   }
 }
 </style>

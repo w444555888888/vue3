@@ -14,7 +14,9 @@
         <el-container>
           <el-container class="centered-container">
             <el-header class="table-header">
-              <el-button class="purple" @click="navigateToHome">詳細頁面 : {{ store.todos[routeindex].content }}</el-button>
+              <el-button class="purple" @click="navigateToHome"
+                >詳細頁面 : {{ store.todos[routeindex].content }}</el-button
+              >
             </el-header>
             <el-main>
               <div class="demo-collapse">
@@ -355,6 +357,7 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
+
 span {
   margin-right: 10px;
 }
@@ -418,7 +421,7 @@ span {
   cursor: pointer;
 }
 
-.el-collapse-item{
+.el-collapse-item {
   max-width: 600px;
 }
 </style>
