@@ -2,7 +2,7 @@
 <template>
   <div id="indexPage">
     <nav>
-      <select v-model="store.locale" @change="changeLocale">
+      <select v-model="locale18n" @change="changeLocale">
         <option value="en">en-US</option>
         <option value="zh">zh-TW</option>
       </select>
@@ -72,6 +72,8 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
+import { ElNotification } from 'element-plus'
+
 
 //留言板
 const message = ref('')
@@ -79,25 +81,38 @@ const sendMessage = () => {
   if (message.value.trim() !== '') {
     axios.post('http://localhost:3000/messages', { content: message.value.trim() })
       .then(response => {
-        console.log('response', response)
         message.value = ''
-      })
+      }, ElNotification({
+        title: 'Success',
+        message: 'send message success',
+        type: 'success',
+      }))
       .catch(error => {
-        console.error('error', error)
+        ElNotification({
+          title: 'Error',
+          message: 'error message',
+          type: 'error',
+        })
       })
   } else {
-    console.log('请输入留言内容')
+    ElNotification({
+      title: 'Warning',
+      message: 'Please enter message content',
+      type: 'warning',
+    })
   }
 }
-
-// i18n語系  store.locale= i18n.global.locale.value
-const { t } = i18n.global
-const changeLocale = () => {
-  i18n.global.locale.value = store.locale
-}
-
 // pinia
 const store = usePiniaStore()
+
+// i18n語系  
+const { t } = i18n.global
+const locale18n = ref(i18n.global.locale)
+const changeLocale = () => {
+  store.locale = i18n.global.locale.value
+}
+
+
 function dispatchAddTodo () {
   store.addTodo()
 }

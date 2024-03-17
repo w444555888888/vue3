@@ -22,144 +22,64 @@
               <div class="demo-collapse">
                 <el-collapse v-model="activeNames" @change="handleChange">
                   <el-collapse-item
-                    title="Consistency"
+                    title="工作事項"
                     name="1"
                     v-if="currentPage === 1"
                   >
-                    <div>
-                      Consistent with real life: in line with the process and
-                      logic of real life, and comply with languages and habits
-                      that the users are used to; Consistent with real life: in
-                      line with the process and logic of real life, and comply
-                      with languages and habits that the users are used to;
-                      Consistent with real life: in line with the process and
-                      logic of real life, and comply with languages and habits
-                      that the users are used to; Consistent with real life: in
-                      line with the process and logic of real life, and comply
-                      with languages and habits that the users are used to;
-                    </div>
-                    <div>
-                      Consistent within interface: all elements should be
-                      consistent, such as: design style, icons and texts,
-                      position of elements, etc. Consistent with real life: in
-                      line with the process and logic of real life, and comply
-                      with languages and habits that the users are used to;
-                      Consistent with real life: in line with the process and
-                      logic of real life, and comply with languages and habits
-                      that the users are used to; Consistent with real life: in
-                      line with the process and logic of real life, and comply
-                      with languages and habits that the users are used to;
-                    </div>
+                    <input
+                      type="text"
+                      v-model="inputText"
+                      @keyup.enter="renderText"
+                    />
+                    <div class="detailOne">{{ renderedText }}</div>
                   </el-collapse-item>
                   <el-collapse-item
-                    title="Feedback"
+                    title="學習事項"
                     name="2"
                     v-if="currentPage === 2"
                   >
-                    <div>
-                      Operation feedback: enable the users to clearly perceive
-                      their operations by style updates and interactive effects;
-                      Operation feedback: enable the users to clearly perceive
-                      their operations by style updates and interactive effects;
-                      Operation feedback: enable the users to clearly perceive
-                      their operations by style updates and interactive effects;
-                    </div>
-                    <div>
-                      Visual feedback: reflect current state by updating or
-                      rearranging elements of the page. Visual feedback: reflect
-                      current state by updating or rearranging elements of the
-                      page. Visual feedback: reflect current state by updating
-                      or rearranging elements of the page. Visual feedback:
-                      reflect current state by updating or rearranging elements
-                      of the page.
-                    </div>
+                    <input
+                      type="text"
+                      v-model="inputText"
+                      @keyup.enter="renderText"
+                    />
+                    <div class="detailOne">{{ renderedText }}</div>
                   </el-collapse-item>
                   <el-collapse-item
-                    title="Efficiency"
+                    title="短期計畫"
                     name="3"
                     v-if="currentPage === 3"
                   >
-                    <div>
-                      Simplify the process: keep operating process simple and
-                      intuitive; Simplify the process: keep operating process
-                      simple and intuitive; Simplify the process: keep operating
-                      process simple and intuitive; Simplify the process: keep
-                      operating process simple and intuitive;
-                    </div>
-                    <div>
-                      Definite and clear: enunciate your intentions clearly so
-                      that the users can quickly understand and make decisions;
-                      Definite and clear: enunciate your intentions clearly so
-                      that the users can quickly understand and make decisions;
-                      Definite and clear: enunciate your intentions clearly so
-                      that the users can quickly understand and make decisions;
-                      Definite and clear: enunciate your intentions clearly so
-                      that the users can quickly understand and make decisions;
-                    </div>
-                    <div>
-                      Easy to identify: the interface should be straightforward,
-                      which helps the users to identify and frees them from
-                      memorizing and recalling. Easy to identify: the interface
-                      should be straightforward, which helps the users to
-                      identify and frees them from memorizing and recalling.
-                      Easy to identify: the interface should be straightforward,
-                      which helps the users to identify and frees them from
-                      memorizing and recalling. Easy to identify: the interface
-                      should be straightforward, which helps the users to
-                      identify and frees them from memorizing and recalling.
-                    </div>
+                    <input
+                      type="text"
+                      v-model="inputText"
+                      @keyup.enter="renderText"
+                    />
+                    <div class="detailOne">{{ renderedText }}</div>
                   </el-collapse-item>
                   <el-collapse-item
-                    title="Controllability"
+                    title="中期計畫"
                     name="4"
                     v-if="currentPage === 4"
                   >
-                    <div>
-                      Decision making: giving advices about operations is
-                      acceptable, but do not make decisions for the users;
-                      Decision making: giving advices about operations is
-                      acceptable, but do not make decisions for the users;
-                      Decision making: giving advices about operations is
-                      acceptable, but do not make decisions for the users;
-                      Decision making: giving advices about operations is
-                      acceptable, but do not make decisions for the users;
-                    </div>
-                    <div>
-                      Controlled consequences: users should be granted the
-                      freedom to operate, including canceling, aborting or
-                      terminating current operation. Controlled consequences:
-                      users should be granted the freedom to operate, including
-                      canceling, aborting or terminating current operation.
-                      Controlled consequences: users should be granted the
-                      freedom to operate, including canceling, aborting or
-                      terminating current operation.
-                    </div>
+                    <input
+                      type="text"
+                      v-model="inputText"
+                      @keyup.enter="renderText"
+                    />
+                    <div class="detailOne">{{ renderedText }}</div>
                   </el-collapse-item>
                   <el-collapse-item
-                    title="Ukrainian"
+                    title="長期計畫"
                     name="5"
                     v-if="currentPage === 5"
                   >
-                    <div>
-                      Volodymyr Zelensky says 31,000 Ukrainian soldiers have
-                      been killed during Russia's full-scale invasion. Volodymyr
-                      Zelensky says 31,000 Ukrainian soldiers have been killed
-                      during Russia's full-scale invasion. Volodymyr Zelensky
-                      says 31,000 Ukrainian soldiers have been killed during
-                      Russia's full-scale invasion.
-                    </div>
-                    <div>
-                      Speaking about the wider losses in the war, Mr Zelensky
-                      said tens of thousands of civilians had died in the areas
-                      of Ukraine occupied by Russia but the true number was
-                      unknown. Speaking about the wider losses in the war, Mr
-                      Zelensky said tens of thousands of civilians had died in
-                      the areas of Ukraine occupied by Russia but the true
-                      number was unknown. Speaking about the wider losses in the
-                      war, Mr Zelensky said tens of thousands of civilians had
-                      died in the areas of Ukraine occupied by Russia but the
-                      true number was unknown.
-                    </div>
+                    <input
+                      type="text"
+                      v-model="inputText"
+                      @keyup.enter="renderText"
+                    />
+                    <div class="detailOne">{{ renderedText }}</div>
                   </el-collapse-item>
                 </el-collapse>
               </div>
@@ -246,7 +166,13 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
 import axios from 'axios'
+const inputText = ref('')
+const renderedText = ref('')
 
+function renderText () {
+
+  renderedText.value = inputText.value
+}
 
 // modal 新增數據
 const carModel = ref('')
@@ -357,7 +283,6 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-
 span {
   margin-right: 10px;
 }
@@ -423,6 +348,21 @@ span {
 
 .el-collapse-item {
   max-width: 600px;
+}
+
+input,
+.detailOne {
+  font-size: 1.125rem;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  width: 500px;
+  word-wrap: break-word;
+}
+
+.detailOne {
+  white-space: pre-wrap;
 }
 </style>
 ../pinia
