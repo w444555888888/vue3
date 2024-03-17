@@ -14,7 +14,7 @@
         <el-container>
           <el-container class="centered-container">
             <el-header class="table-header">
-              <el-button class="purple" @click="navigateToHome"
+              <el-button class="gray" @click="navigateToHome"
                 >詳細頁面 : {{ store.todos[routeindex].content }}</el-button
               >
             </el-header>
@@ -31,7 +31,10 @@
                       v-model="inputText"
                       @keyup.enter="renderText"
                     />
-                    <div class="detailOne">{{ renderedText }}</div>
+                    <div>
+                      <span class="text">待辦事項</span>
+                      <div class="detailOne">{{ renderedText }}</div>
+                    </div>
                   </el-collapse-item>
                   <el-collapse-item
                     title="學習事項"
@@ -43,7 +46,10 @@
                       v-model="inputText"
                       @keyup.enter="renderText"
                     />
-                    <div class="detailOne">{{ renderedText }}</div>
+                    <div>
+                      <span class="text">待辦事項</span>
+                      <div class="detailOne">{{ renderedText }}</div>
+                    </div>
                   </el-collapse-item>
                   <el-collapse-item
                     title="短期計畫"
@@ -55,7 +61,10 @@
                       v-model="inputText"
                       @keyup.enter="renderText"
                     />
-                    <div class="detailOne">{{ renderedText }}</div>
+                    <div>
+                      <span class="text">待辦事項</span>
+                      <div class="detailOne">{{ renderedText }}</div>
+                    </div>
                   </el-collapse-item>
                   <el-collapse-item
                     title="中期計畫"
@@ -67,7 +76,10 @@
                       v-model="inputText"
                       @keyup.enter="renderText"
                     />
-                    <div class="detailOne">{{ renderedText }}</div>
+                    <div>
+                      <span class="text">待辦事項</span>
+                      <div class="detailOne">{{ renderedText }}</div>
+                    </div>
                   </el-collapse-item>
                   <el-collapse-item
                     title="長期計畫"
@@ -79,16 +91,19 @@
                       v-model="inputText"
                       @keyup.enter="renderText"
                     />
-                    <div class="detailOne">{{ renderedText }}</div>
+                    <div>
+                      <span class="text">待辦事項</span>
+                      <div class="detailOne">{{ renderedText }}</div>
+                    </div>
                   </el-collapse-item>
                 </el-collapse>
               </div>
               <el-button plain @click="dialogTableVisible = true">
-                賽事記錄
+                歷程記錄
               </el-button>
               <el-dialog
                 v-model="dialogTableVisible"
-                title="賽事記錄"
+                title="歷程記錄"
                 width="800"
               >
                 <el-table
@@ -97,8 +112,8 @@
                   highlight-current-row
                 >
                   <el-table-column property="id" label="ID" width="150" />
-                  <el-table-column property="body" label="車型" width="200" />
-                  <el-table-column property="kind" label="賽事種類" />
+                  <el-table-column property="body" label="事件" width="200" />
+                  <el-table-column property="kind" label="種類" />
                   <el-table-column label="刪除">
                     <template v-slot="scope">
                       <el-button
@@ -111,7 +126,7 @@
                 </el-table>
 
                 <span>
-                  <label class="inputone">車型:</label>
+                  <label class="inputone">事件:</label>
                   <el-input
                     v-model="carModel"
                     placeholder="carModel"
@@ -121,7 +136,7 @@
                   />
                 </span>
                 <span>
-                  <label class="inputone">賽事種類:</label>
+                  <label class="inputone">種類:</label>
                   <el-input
                     v-model="raceType"
                     placeholder="raceType"
@@ -165,13 +180,14 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
+import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 const inputText = ref('')
 const renderedText = ref('')
 
 function renderText () {
-
   renderedText.value = inputText.value
+  inputText.value = ''
 }
 
 // modal 新增數據
@@ -234,7 +250,7 @@ function addNewData () {
   };
 
   const newData = {
-    id: String(store.apiComments.length + 1),
+    id: uuidv4(),
     body: carModel.value,
     kind: raceType.value
   }
@@ -254,6 +270,7 @@ function addNewData () {
 
 
 async function deleteNewData (id) {
+  console.log(id, 'iddddd')
   try {
     await axios.delete(`http://localhost:3000/comments/${id}`)
     store.apiComments = store.apiComments.filter((e) => e.id !== id)
@@ -285,6 +302,14 @@ onBeforeMount(() => {
 <style scoped>
 span {
   margin-right: 10px;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.text {
+  margin-right: 10px;
+  font-size: 12px;
+  line-height: 40px;
 }
 
 .inputone {
@@ -338,16 +363,14 @@ span {
   align-items: center;
 }
 
-.purple {
+.gray {
   margin-right: 20px;
   color: rgb(255, 255, 255);
   background-color: rgb(161, 161, 161);
   text-decoration: none;
   cursor: pointer;
-}
-
-.el-collapse-item {
-  max-width: 600px;
+  border-radius: 5px;
+  font-size: 17px;
 }
 
 input,
@@ -359,10 +382,36 @@ input,
   margin-bottom: 1.5rem;
   width: 500px;
   word-wrap: break-word;
+  outline: none;
+}
+
+input:focus,
+input:valid {
+  color: black;
+  border: 4px solid #9f9f9f;
+}
+
+input:not(:focus) {
+  border: 4px solid #e3e2e2;
 }
 
 .detailOne {
   white-space: pre-wrap;
+  border: 4px solid #9f9f9f;
+  height: 70px;
+}
+
+.el-collapse {
+  --el-collapse-border-color: var(--el-border-color-lighter);
+  --el-collapse-header-height: 48px;
+  --el-collapse-header-bg-color: var(--el-fill-color-blank);
+  --el-collapse-header-text-color: #050505;
+  --el-collapse-header-font-size: 12px;
+  --el-collapse-content-bg-color: var(--el-fill-color-blank);
+  --el-collapse-content-font-size: 12px;
+  --el-collapse-content-text-color: var(--el-text-color-primary);
+  border-top: 1px solid var(--el-collapse-border-color);
+  border-bottom: 1px solid var(--el-collapse-border-color);
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 </style>
-../pinia
