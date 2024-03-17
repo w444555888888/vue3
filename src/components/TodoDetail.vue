@@ -7,7 +7,7 @@
           :text-inside="true"
           :stroke-width="25"
           :percentage="currentPercentage"
-          status="success"
+          color="gray"
         ></el-progress>
       </div>
       <div v-else class="common-layout">
@@ -371,6 +371,11 @@ span {
   cursor: pointer;
   border-radius: 5px;
   font-size: 17px;
+}
+
+.gray:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(67, 67, 67);
 }
 
 input,
