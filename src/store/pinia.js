@@ -39,10 +39,8 @@ export const usePiniaStore = defineStore({
             }
         },
         startEditing(todoId) {
-            console.log(todoId,'todoId');
             const todoToEdit = this.todos.find(todo => todo.id === todoId);
             if (todoToEdit) {
-                console.log('111');
                 todoToEdit.editing = true;
                 this.editedContent = todoToEdit.content;
                 this.saveData(this.todos);
