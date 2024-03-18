@@ -1,8 +1,9 @@
 // pinia.js
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid'
 
-export const usePiniaStore  = defineStore({
+export const usePiniaStore = defineStore({
     id: 'pinia',
     state: () => ({
         locale: 'en',
@@ -21,6 +22,7 @@ export const usePiniaStore  = defineStore({
         addTodo() {
             if (this.newTodo.trim() !== '') {
                 this.todos.push({
+                    id:uuidv4(),
                     done: false,
                     content: this.newTodo.trim(),
                     editing: false,
@@ -29,20 +31,33 @@ export const usePiniaStore  = defineStore({
                 this.saveData(this.todos);
             }
         },
-        removeTodo(index) {
-            this.todos.splice(index, 1);
-            this.saveData(this.todos);
-        },
-        startEditing(index) {
-            this.todos[index].editing = true;
-            this.editedContent = this.todos[index].content;
-        },
-        stopEditing(index) {
-            this.todos[index].editing = false;
-            if (this.editedContent !== '') {
-                this.todos[index].content = this.editedContent.trim();
+        removeTodo(todoId) {
+            const indexToRemove = this.todos.findIndex(todo => todo.id === todoId);
+            if (indexToRemove !== -1) {
+                this.todos.splice(indexToRemove, 1);
+                this.saveData(this.todos);
             }
-            this.saveData(this.todos);
+        },
+        startEditing(todoId) {
+            console.log(todoId,'todoId');
+            const todoToEdit = this.todos.find(todo => todo.id === todoId);
+            if (todoToEdit) {
+                console.log('111');
+                todoToEdit.editing = true;
+                this.editedContent = todoToEdit.content;
+                this.saveData(this.todos);
+            }
+        },
+
+        stopEditing(todoId) {
+            const todoToStopEdit = this.todos.find(todo => todo.id === todoId);
+            if (todoToStopEdit) {
+                todoToStopEdit.editing = false;
+                if (this.editedContent !== '') {
+                    todoToStopEdit.content = this.editedContent.trim();
+                }
+                this.saveData(this.todos);
+            }
         },
         initializeTodos() {
             const todosData = JSON.parse(localStorage.getItem('todos')) || [];
@@ -66,12 +81,12 @@ export const usePiniaStore  = defineStore({
         },
         getDefaultTodo() {
             return [
-                { done: true, content: 'Lotus Elise' },
-                { done: false, content: 'Lotus Exige' },
-                { done: false, content: 'Lotus Caterham 620' },
-                { done: false, content: 'Lotus Emira' },
+                { id: 1, done: true, content: 'Lotus Elise' },
+                { id: 2, done: false, content: 'Lotus Exige' },
+                { id: 3, done: false, content: 'Lotus Caterham 620' },
+                { id: 4, done: false, content: 'Lotus Emira' },
             ];
         },
     },
-      persist: true,
+    persist: true,
 });

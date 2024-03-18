@@ -6,24 +6,24 @@ const i18n = createI18n({
     locale: 'en',
     messages: {
         en: {
-            titleFirst: 'Create a ToDo',
+            titleFirst: 'Create a ToDoList',
             titleSecond: 'TO DO LIST',
             searchButton: 'Add ToDoList',
             delete: 'delete',
             detail: 'detail',
             undone: 'undone',
             done: 'done',
-            postBoard: 'post message board',
+            postBoard: 'Customer service message board',
         },
         zh: {
-            titleFirst: '創建待辦記事本',
+            titleFirst: '創建待辦事項',
             titleSecond: '待辦記事本',
             searchButton: '新增待辦事項',
             delete: '刪除項目',
             detail: '詳情',
             undone: '待辦',
             done: '已完成',
-            postBoard: '發送留言板',
+            postBoard: '客服留言板',
 
         }
     },

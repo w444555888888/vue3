@@ -3,94 +3,20 @@
   <div>
     <div class="container">
       <div v-if="currentPercentage < 100" class="demo-progress">
-        <el-progress
-          :text-inside="true"
-          :stroke-width="25"
-          :percentage="currentPercentage"
-          color="gray"
-        ></el-progress>
+        <el-progress :text-inside="true" :stroke-width="25" :percentage="currentPercentage" color="gray"></el-progress>
       </div>
       <div v-else class="common-layout">
         <el-container>
           <el-container class="centered-container">
             <el-header class="table-header">
-              <el-button class="gray" @click="navigateToHome"
-                >詳細頁面 : {{ store.todos[routeindex].content }}</el-button
-              >
+             
+              <el-button class="gray" @click="navigateToHome"> <el-icon><HomeFilled /></el-icon> 回首頁</el-button>
             </el-header>
             <el-main>
               <div class="demo-collapse">
                 <el-collapse v-model="activeNames" @change="handleChange">
-                  <el-collapse-item
-                    title="工作事項"
-                    name="1"
-                    v-if="currentPage === 1"
-                  >
-                    <input
-                      type="text"
-                      v-model="inputText"
-                      @keyup.enter="renderText"
-                    />
-                    <div>
-                      <span class="text">待辦事項</span>
-                      <div class="detailOne">{{ renderedText }}</div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item
-                    title="學習事項"
-                    name="2"
-                    v-if="currentPage === 2"
-                  >
-                    <input
-                      type="text"
-                      v-model="inputText"
-                      @keyup.enter="renderText"
-                    />
-                    <div>
-                      <span class="text">待辦事項</span>
-                      <div class="detailOne">{{ renderedText }}</div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item
-                    title="短期計畫"
-                    name="3"
-                    v-if="currentPage === 3"
-                  >
-                    <input
-                      type="text"
-                      v-model="inputText"
-                      @keyup.enter="renderText"
-                    />
-                    <div>
-                      <span class="text">待辦事項</span>
-                      <div class="detailOne">{{ renderedText }}</div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item
-                    title="中期計畫"
-                    name="4"
-                    v-if="currentPage === 4"
-                  >
-                    <input
-                      type="text"
-                      v-model="inputText"
-                      @keyup.enter="renderText"
-                    />
-                    <div>
-                      <span class="text">待辦事項</span>
-                      <div class="detailOne">{{ renderedText }}</div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item
-                    title="長期計畫"
-                    name="5"
-                    v-if="currentPage === 5"
-                  >
-                    <input
-                      type="text"
-                      v-model="inputText"
-                      @keyup.enter="renderText"
-                    />
+                  <el-collapse-item title="工作事項" name="1" v-if="currentPage === 1">
+                    <input type="text" v-model="inputText" @keyup.enter="renderText" />
                     <div>
                       <span class="text">待辦事項</span>
                       <div class="detailOne">{{ renderedText }}</div>
@@ -101,71 +27,37 @@
               <el-button plain @click="dialogTableVisible = true">
                 歷程記錄
               </el-button>
-              <el-dialog
-                v-model="dialogTableVisible"
-                title="歷程記錄"
-                width="800"
-              >
-                <el-table
-                  :data="apiComments"
-                  ref="tableRef"
-                  highlight-current-row
-                >
+              <el-dialog v-model="dialogTableVisible" title="歷程記錄" width="800">
+                <el-table :data="apiComments" ref="tableRef" highlight-current-row>
                   <el-table-column property="id" label="ID" width="150" />
                   <el-table-column property="body" label="事件" width="200" />
                   <el-table-column property="kind" label="種類" />
                   <el-table-column label="刪除">
                     <template v-slot="scope">
-                      <el-button
-                        type="info"
-                        @click="deleteNewData(scope.row.id)"
-                        >刪除</el-button
-                      >
+                      <el-button type="info" @click="deleteNewData(scope.row.id)">刪除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
 
                 <span>
                   <label class="inputone">事件:</label>
-                  <el-input
-                    v-model="carModel"
-                    placeholder="carModel"
-                    class="inputone w-10 m-2"
-                    size="small"
-                    style="width: 100px"
-                  />
+                  <el-input v-model="carModel" placeholder="carModel" class="inputone w-10 m-2" size="small"
+                    style="width: 100px" />
                 </span>
                 <span>
                   <label class="inputone">種類:</label>
-                  <el-input
-                    v-model="raceType"
-                    placeholder="raceType"
-                    class="inputone w-10 m-2"
-                    size="small"
-                    style="width: 100px"
-                  />
+                  <el-input v-model="raceType" placeholder="raceType" class="inputone w-10 m-2" size="small"
+                    style="width: 100px" />
                 </span>
 
                 <div style="margin-top: 20px">
-                  <el-button type="success" id="btnClick" @click="addNewData"
-                    >新增資料</el-button
-                  >
-                  <el-button @click="setCurrent(apiComments[0])"
-                    >選取第幾列</el-button
-                  >
+                  <el-button type="success" id="btnClick" @click="addNewData">新增資料</el-button>
+                  <el-button @click="setCurrent(apiComments[0])">選取第一列</el-button>
                   <el-button @click="setCurrent()">清除標記</el-button>
                 </div>
               </el-dialog>
             </el-main>
             <el-footer>
-              <el-pagination
-                small
-                background
-                layout="prev, pager, next ,jumper"
-                :total="50"
-                class="mt-4"
-                @current-change="handlePageChange"
-              />
             </el-footer>
           </el-container>
         </el-container>
@@ -185,7 +77,7 @@ import axios from 'axios'
 const inputText = ref('')
 const renderedText = ref('')
 
-function renderText () {
+function renderText() {
   renderedText.value = inputText.value
   inputText.value = ''
 }
@@ -221,9 +113,9 @@ const currentPercentage = ref(0)
 
 
 // 滾動條到100展開摺疊面板
-function hundredPercentage () {
+function hundredPercentage() {
   if (currentPercentage.value == 100) {
-    activeNames.value = ['1', '2', '3', '4', '5']
+    activeNames.value = ['1']
   }
 }
 
@@ -238,13 +130,13 @@ const setCurrent = (row) => {
 
 //router到首頁
 const appRouter = useRouter()
-function navigateToHome () {
+function navigateToHome() {
   appRouter.push({
     name: 'TodoList'
   })
 }
 
-function addNewData () {
+function addNewData() {
   if (carModel.value.trim() === '' || raceType.value.trim() === '') {
     return
   };
@@ -269,7 +161,7 @@ function addNewData () {
 }
 
 
-async function deleteNewData (id) {
+async function deleteNewData(id) {
   console.log(id, 'iddddd')
   try {
     await axios.delete(`http://localhost:3000/comments/${id}`)

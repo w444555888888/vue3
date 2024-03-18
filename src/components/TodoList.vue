@@ -15,54 +15,44 @@
 
     <h3>{{ t("titleSecond") }}</h3>
     <ul>
-      <li v-for="(todo, index) in store.todos" :key="index">
+      <li v-for="(todo, index) in pagesTodos" :key="index">
         <span :class="{ done: todo.done }">
           <span>
-            <input
-              type="radio"
-              :checked="!todo.done"
-              :id="`pending${index}`"
-              :name="`done${index}`"
-            />
+            <input type="radio" :checked="!todo.done" :id="`pending${index}`" :name="`done${index}`" />
             <label :for="`pending${index}`">{{ t("undone") }}</label>
-            <input
-              type="radio"
-              :checked="todo.done"
-              :id="`done${index}`"
-              :name="`done${index}`"
-            />
+            <input type="radio" :checked="todo.done" :id="`done${index}`" :name="`done${index}`" />
             <label :for="`done${index}`">{{ t("done") }}</label>
           </span>
 
-          <div
-            class="li-data"
-            v-if="!todo.editing"
-            @dblclick="dispatchStartEditing(index)"
-          >
+          <div class="li-data" v-if="!todo.editing" @dblclick="dispatchStartEditing(todo.id)">
             {{ todo.content }}
           </div>
-          <input
-            v-else
-            type="text"
-            v-model="store.editedContent"
-            @blur="dispatchStopEditing(index)"
-            @keyup.enter="dispatchStopEditing(index)"
-          />
+          <input v-else type="text" v-model="store.editedContent" @blur="dispatchStopEditing(todo.id)"
+            @keyup.enter="dispatchStopEditing(index)" />
         </span>
         <div class="li-btn">
-          <button @click="dispatchRemoveTodo(index)">{{ t("delete") }}</button>
-          <button @click="navigateToDetail(index)">{{ t("detail") }}</button>
+          <button @click="dispatchRemoveTodo(todo.id)">{{ t("delete") }}</button>
+          <button @click="navigateToDetail(todo.id)">{{ t("detail") }}</button>
         </div>
       </li>
     </ul>
     <h4 v-if="store.todos.length === 0">No data</h4>
-    <br />
 
+    <br>
     <div>
       <input type="text" v-model="message" />
       <button type="button" @click="sendMessage">{{ t("postBoard") }}</button>
     </div>
+
+    <br>
+    <div class="pagination-container">
+      <el-pagination v-model:currentPage="currentPage" :total="totalItems" :page-size="pageSize"
+        @current-change="handlePageChange" background small />
+    </div>
+
   </div>
+
+
 </template>
 
 
@@ -101,51 +91,65 @@ const sendMessage = () => {
       type: 'warning',
     })
   }
-}
+};
+
 // pinia
-const store = usePiniaStore()
+const store = usePiniaStore();
+const currentPage = ref(1);
+const pageSize = 5;
+const totalItems = computed(() => store.todos.length);
+const pagesTodos = computed(() => {
+  const startIndex = (currentPage.value-1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  return store.todos.slice(startIndex, endIndex);
+});
+
+const handlePageChange = (newPage) => {
+  currentPage.value = newPage;
+};
+
 
 // i18n語系  
-const { t } = i18n.global
-const locale18n = ref(i18n.global.locale)
+const { t } = i18n.global;
+const locale18n = ref(i18n.global.locale);
 const changeLocale = () => {
   store.locale = i18n.global.locale.value
 }
 
 
-function dispatchAddTodo () {
-  store.addTodo()
+function dispatchAddTodo() {
+  store.addTodo();
 }
 
-function dispatchRemoveTodo (index) {
-  store.removeTodo(index)
+function dispatchRemoveTodo(todoId) {
+  store.removeTodo(todoId);
 }
 
-function dispatchStartEditing (index) {
-  store.startEditing(index)
+function dispatchStartEditing(todoId) {
+  store.startEditing(todoId);
 }
 
-function dispatchStopEditing (index) {
-  store.stopEditing(index)
+function dispatchStopEditing(todoId) {
+  store.stopEditing(todoId);
 }
 
 // 把父組件ref開放傳遞到子組件
 // 使用路由useRouter
-const appRouter = useRouter()
+const appRouter = useRouter();
 
-function navigateToDetail (index) {
+function navigateToDetail(index) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: index },
     query: { index: index }
-  })
+  });
 }
 
 
 
 onBeforeMount(() => {
-  store.initializeTodos()
-  store.fetchCommentsApi()
+  store.initializeTodos();
+  store.fetchCommentsApi();
 })
 
 
@@ -174,6 +178,8 @@ $secondTextColor: #1f2023;
 
 #indexPage {
   background-color: rgb(245, 245, 245);
+  padding: 20px;
+  border-radius: 8px;
 
   select,
   option {
@@ -288,5 +294,11 @@ $secondTextColor: #1f2023;
     border-radius: $size1;
     padding: 10px;
   }
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+  }
+
 }
 </style>

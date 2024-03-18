@@ -34,7 +34,7 @@ body {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    padding: 20px;
+    padding: 30px;
   }
 }
 </style>
