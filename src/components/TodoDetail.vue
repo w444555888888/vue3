@@ -9,17 +9,27 @@
         <el-container>
           <el-container class="centered-container">
             <el-header class="table-header">
-             
-              <el-button class="gray" @click="navigateToHome"> <el-icon><HomeFilled /></el-icon> 回首頁</el-button>
+
+              <el-button class="gray" @click="navigateToHome"> <el-icon>
+                  <HomeFilled />
+                </el-icon> 回首頁</el-button>
             </el-header>
             <el-main>
               <div class="demo-collapse">
                 <el-collapse v-model="activeNames" @change="handleChange">
                   <el-collapse-item title="工作事項" name="1" v-if="currentPage === 1">
-                    <input type="text" v-model="inputText" @keyup.enter="renderText" />
+                    <el-radio-group v-model="workRadio" size="small" class="workRadio" text-color="white" fill="black">
+                      <el-radio-button label="優先度高" value="優先度高" />
+                      <el-radio-button label="優先度中" value="優先度中" />
+                      <el-radio-button label="優先度低" value="優先度低" />
+                    </el-radio-group>
+                    <input type="text" v-model="inputText" />
                     <div>
-                      <span class="text">待辦事項</span>
-                      <div class="detailOne">{{ renderedText }}</div>
+                      <span class="text">待辦事項:{{ workRadio }}</span>
+                      <div class="detailOne">
+                        {{ storeTheTodoListArray }}
+                      </div>
+                      <button @click="storeTheTodoList">儲存待辦事項</button>
                     </div>
                   </el-collapse-item>
                 </el-collapse>
@@ -74,13 +84,9 @@ import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
+const workRadio = ref('優先度高')
 const inputText = ref('')
-const renderedText = ref('')
-
-function renderText() {
-  renderedText.value = inputText.value
-  inputText.value = ''
-}
+const storeTheTodoListArray=ref("")
 
 // modal 新增數據
 const carModel = ref('')
@@ -117,6 +123,12 @@ function hundredPercentage() {
   if (currentPercentage.value == 100) {
     activeNames.value = ['1']
   }
+}
+
+// 儲存待辦事項
+function storeTheTodoList(){
+  storeTheTodoListArray.value += inputText.value ;
+  inputText.value='';
 }
 
 
@@ -310,5 +322,9 @@ input:not(:focus) {
   border-top: 1px solid var(--el-collapse-border-color);
   border-bottom: 1px solid var(--el-collapse-border-color);
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.workRadio {
+  margin-bottom: 5px;
 }
 </style>
