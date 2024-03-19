@@ -68,6 +68,16 @@
               </el-dialog>
             </el-main>
             <el-footer>
+              <br>
+              <h1>台幣美金轉換</h1>
+              <div>
+                <label for="twdInput">台幣：</label>
+                <input id="twdInput" type="number" v-model="twd">
+              </div>
+              <div>
+                <label for="usdInput">$美金：</label>
+                <input id="usdInput" type="number" v-model="usd">
+              </div>
             </el-footer>
           </el-container>
         </el-container>
@@ -77,16 +87,28 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, defineProps, computed, toRefs } from 'vue'
+import { ref, onBeforeMount, onMounted, defineProps, computed, toRefs, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
+// 雙向監聽案例
+const twd = ref(0);
+const usd = ref(0);
+watch(twd, (newValue) => {
+  usd.value = newValue / 30;
+});
+watch(usd, (newValue) => {
+  twd.value = newValue * 30;
+});
+
+
+
 const workRadio = ref('優先度高')
 const inputText = ref('')
-const storeTheTodoListArray=ref("")
+const storeTheTodoListArray = ref("")
 
 // modal 新增數據
 const carModel = ref('')
@@ -126,9 +148,9 @@ function hundredPercentage() {
 }
 
 // 儲存待辦事項
-function storeTheTodoList(){
-  storeTheTodoListArray.value += inputText.value ;
-  inputText.value='';
+function storeTheTodoList() {
+  storeTheTodoListArray.value += inputText.value;
+  inputText.value = '';
 }
 
 
