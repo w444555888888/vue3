@@ -58,6 +58,7 @@ export const usePiniaStore = defineStore({
             }
         },
         initializeTodos() {
+            // parse解析陣列
             const todosData = JSON.parse(localStorage.getItem('todos')) || [];
             if (todosData.length === 0) {
                 this.setTodos(this.getDefaultTodo());
@@ -74,6 +75,7 @@ export const usePiniaStore = defineStore({
             }
         },
         saveData(todos) {
+             // stringify儲存字串
             const storageData = JSON.stringify(todos);
             localStorage.setItem('todos', storageData);
         },

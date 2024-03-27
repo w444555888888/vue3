@@ -42,6 +42,7 @@ const store = createStore({
             }
         },
         SET_API_POSTS(state, posts) {
+            console.log(posts,'posts');
             state.apiPosts = posts;
         },
         SET_API_COMMENTS(state, comments) {

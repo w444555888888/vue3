@@ -117,7 +117,8 @@ const raceType = ref('')
 // pinia
 const store = usePiniaStore()
 // 因pinia解構後會有響應式跑掉的問題，須加上toRefs
-const { apiComments } = toRefs(store)
+const { apiComments } = store
+
 const activeNames = ref([])
 const handleChange = (val) => {
   console.log(val)
