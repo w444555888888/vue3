@@ -8,7 +8,6 @@ const store = createStore({
         newTodo: '',  //新的待辦事項輸入欄
         todos: [],    //儲存待辦事項陣列
         editedContent: '',  //正在編輯內容 
-        apiPosts: [],
         apiComments: [],
     },
     // Mutation用於直接修改狀態
@@ -41,10 +40,7 @@ const store = createStore({
                 state.todos[index].content = state.editedContent.trim();
             }
         },
-        SET_API_POSTS(state, posts) {
-            console.log(posts,'posts');
-            state.apiPosts = posts;
-        },
+        // 拿到API
         SET_API_COMMENTS(state, comments) {
             state.apiComments = comments;
         },
@@ -80,14 +76,6 @@ const store = createStore({
                 commit('SET_TODOS', getDefaultTodo());
             } else {
                 commit('SET_TODOS', todosData);
-            }
-        },
-        async fetchPostsApi({ commit }) {
-            try {
-                const postsResponse = await axios.get('http://localhost:3000/posts');
-                commit('SET_API_POSTS', postsResponse.data);
-            } catch (error) {
-                console.error('Error fetching data from API', error);
             }
         },
         async fetchCommentsApi({ commit }) {
