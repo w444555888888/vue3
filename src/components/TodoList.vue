@@ -1,3 +1,11 @@
+<!--
+ * @Author: w444555888 w444555888@yahoo.com.tw
+ * @Date: 2024-04-02 12:13:18
+ * @LastEditors: w444555888 w444555888@yahoo.com.tw
+ * @LastEditTime: 2024-04-05 21:52:24
+ * @FilePath: \vue3\src\components\TodoList.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <!-- TodoList -->
 <template>
   <div id="indexPage">
@@ -18,41 +26,90 @@
       <li v-for="(todo, index) in pagesTodos" :key="index">
         <span :class="{ done: todo.done }">
           <span>
-            <input type="radio" :checked="!todo.done" :id="`pending${index}`" :name="`done${index}`" />
+            <input
+              type="radio"
+              :checked="!todo.done"
+              :id="`pending${index}`"
+              :name="`done${index}`"
+            />
             <label :for="`pending${index}`">{{ t("undone") }}</label>
-            <input type="radio" :checked="todo.done" :id="`done${index}`" :name="`done${index}`" />
+            <input
+              type="radio"
+              :checked="todo.done"
+              :id="`done${index}`"
+              :name="`done${index}`"
+            />
             <label :for="`done${index}`">{{ t("done") }}</label>
           </span>
 
-          <div class="li-data" v-if="!todo.editing" @dblclick="dispatchStartEditing(todo.id)">
+          <div
+            class="li-data"
+            v-if="!todo.editing"
+            @dblclick="dispatchStartEditing(todo.id)"
+          >
             {{ todo.content }}
           </div>
-          <input v-else type="text" v-model="store.editedContent" @blur="dispatchStopEditing(todo.id)"
-            @keyup.enter="dispatchStopEditing(index)" />
+          <input
+            v-else
+            type="text"
+            v-model="store.editedContent"
+            @blur="dispatchStopEditing(todo.id)"
+            @keyup.enter="dispatchStopEditing(index)"
+          />
         </span>
         <div class="li-btn">
-          <button @click="dispatchRemoveTodo(todo.id)">{{ t("delete") }}</button>
-          <button @click="navigateToDetail(todo.id)">{{ t("detail") }}</button>
+          <button @click="dispatchRemoveTodo(todo.id)">
+            {{ t("delete") }}
+          </button>
+          <button @click="navigateToDetail(index)">{{ t("detail") }}</button>
         </div>
       </li>
     </ul>
     <h4 v-if="store.todos.length === 0">No data</h4>
 
-    <br>
+    <br />
     <div>
       <input type="text" v-model="message" />
       <button type="button" @click="sendMessage">{{ t("postBoard") }}</button>
     </div>
 
-    <br>
-    <div class="pagination-container">
-      <el-pagination v-model:currentPage="currentPage" :total="totalItems" :page-size="pageSize"
-        @current-change="handlePageChange" background small />
+    <br />
+    <!-- drop -->
+    <div>
+      <h4>Upload Image Files</h4>
+      <form enctype="multipart/form-data">
+        <input
+          ref="uploadImage"
+          type="file"
+          accept="image/*"
+          @change="handleFileUpload"
+        />
+      </form>
+
+      <h4>Drop Image In Here:</h4>
+      <div id="dragArea" @dragover.prevent @drop="handleDrop">
+        <img
+          v-for="image in previewImages"
+          :key="image.src"
+          :src="image.src"
+          :alt="image.name"
+          width="250"
+        />
+      </div>
     </div>
-
+    <br />
+    <!-- pages -->
+    <div class="pagination-container">
+      <el-pagination
+        v-model:currentPage="currentPage"
+        :total="totalItems"
+        :page-size="pageSize"
+        @current-change="handlePageChange"
+        background
+        small
+      />
+    </div>
   </div>
-
-
 </template>
 
 
@@ -63,6 +120,36 @@ import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
 import { ElNotification } from 'element-plus'
+
+// drop
+const previewImages = ref([])
+
+function previewFile (file) {
+  const reader = new FileReader()
+  reader.onload = () => {
+    previewImages.value.push({ src: reader.result, name: file.name })
+  }
+  reader.readAsDataURL(file)
+}
+
+
+
+function handleFileUpload (event) {
+  const files = event.target.files
+  previewImages.value = []
+  for (const file of files) {
+    previewFile(file)
+  }
+}
+
+function handleDrop (event) {
+  event.preventDefault()
+  const files = event.dataTransfer.files
+  previewImages.value = []
+  for (const file of files) {
+    previewFile(file)
+  }
+}
 
 
 //留言板
@@ -91,65 +178,64 @@ const sendMessage = () => {
       type: 'warning',
     })
   }
-};
+}
 
 // pinia
-const store = usePiniaStore();
-const currentPage = ref(1);
-const pageSize = 5;
-const totalItems = computed(() => store.todos.length);
+const store = usePiniaStore()
+const currentPage = ref(1)
+const pageSize = 5
+const totalItems = computed(() => store.todos.length)
 const pagesTodos = computed(() => {
-  const startIndex = (currentPage.value-1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  return store.todos.slice(startIndex, endIndex);
-});
+  const startIndex = (currentPage.value - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  return store.todos.slice(startIndex, endIndex)
+})
 
 const handlePageChange = (newPage) => {
-  currentPage.value = newPage;
-};
+  currentPage.value = newPage
+}
 
 
 // i18n語系  
-const { t } = i18n.global;
-const locale18n = ref(i18n.global.locale);
+const { t } = i18n.global
+const locale18n = ref(i18n.global.locale)
 const changeLocale = () => {
   store.locale = i18n.global.locale.value
 }
 
 
-function dispatchAddTodo() {
-  store.addTodo();
+function dispatchAddTodo () {
+  store.addTodo()
 }
 
-function dispatchRemoveTodo(todoId) {
-  store.removeTodo(todoId);
+function dispatchRemoveTodo (todoId) {
+  store.removeTodo(todoId)
 }
 
-function dispatchStartEditing(todoId) {
-  store.startEditing(todoId);
+function dispatchStartEditing (todoId) {
+  store.startEditing(todoId)
 }
 
-function dispatchStopEditing(todoId) {
-  store.stopEditing(todoId);
+function dispatchStopEditing (todoId) {
+  store.stopEditing(todoId)
 }
 
 // 把父組件ref開放傳遞到子組件
 // 使用路由useRouter
-const appRouter = useRouter();
+const appRouter = useRouter()
 
-function navigateToDetail(index) {
+function navigateToDetail (index) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: index },
-    query: { index: index }
-  });
+  })
 }
 
 
 
 onBeforeMount(() => {
-  store.initializeTodos();
-  store.fetchCommentsApi();
+  store.initializeTodos()
+  store.fetchCommentsApi()
 })
 
 
@@ -300,5 +386,9 @@ $secondTextColor: #1f2023;
     justify-content: center;
   }
 
+  .dragArea {
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>
