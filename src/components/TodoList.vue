@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-04-05 21:52:24
+ * @LastEditTime: 2024-04-05 23:41:03
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -93,7 +93,6 @@
           :key="image.src"
           :src="image.src"
           :alt="image.name"
-          width="250"
         />
       </div>
     </div>
@@ -131,7 +130,6 @@ function previewFile (file) {
   }
   reader.readAsDataURL(file)
 }
-
 
 
 function handleFileUpload (event) {
@@ -386,9 +384,18 @@ $secondTextColor: #1f2023;
     justify-content: center;
   }
 
-  .dragArea {
+  #dragArea {
     display: flex;
     justify-content: center;
+    border: dotted 1px rgb(0, 0, 0);
+    min-width: 300px;
+    min-height: 200px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 }
 </style>
