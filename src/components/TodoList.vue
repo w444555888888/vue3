@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-04-05 23:41:03
+ * @LastEditTime: 2024-04-06 22:57:06
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -74,28 +74,67 @@
     </div>
 
     <br />
-    <!-- drop -->
+    <!-- cropper -->
     <div>
-      <h4>Upload Image Files</h4>
-      <form enctype="multipart/form-data">
-        <input
-          ref="uploadImage"
-          type="file"
-          accept="image/*"
-          @change="handleFileUpload"
-        />
-      </form>
+      <div class="live-demo">
+        <section class="section">
+          <button class="select-picture">
+            <span>選擇圖片</span>
+            <input
+              ref="uploadInput"
+              type="file"
+              accept="image/jpg, image/jpeg, image/png, image/gif"
+              @change="selectFile"
+            />
+          </button>
+        </section>
 
-      <h4>Drop Image In Here:</h4>
-      <div id="dragArea" @dragover.prevent @drop="handleDrop">
-        <img
-          v-for="image in previewImages"
-          :key="image.src"
-          :src="image.src"
-          :alt="image.name"
-        />
+        <!-- Crop result preview -->
+        <section class="section" v-if="result.blobURL">
+         
+          <div class="preview">
+            <p>預覽圖片blob</p>
+            <img :src="result.blobURL" />
+          </div>
+        </section>
+
+        <!-- Modal -->
+        <div class="modal-wrap" v-if="isShowModal">
+          <div class="modal-mask"></div>
+          <div class="modal-scroll-view">
+            <div class="modal">
+              <div class="modal-title">
+                <span class="title">Cropper</span>
+                <div class="tools">
+                  <button class="btn" @click="closeModal">Cancel</button>
+                  <button class="btn" @click="clear">Clear</button>
+                  <button class="btn" @click="reset">Reset</button>
+                  <button class="btn primary" @click="getResult">Crop</button>
+                </div>
+              </div>
+
+              <div class="modal-content">
+                <VuePictureCropper
+                  :boxStyle="{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: '#f8f8f8',
+                    margin: 'auto',
+                  }"
+                  :img="pic"
+                  :options="{
+                    viewMode: 1,
+                    dragMode: 'crop',
+                    aspectRatio: 16 / 9,
+                  }"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <br />
     <!-- pages -->
     <div class="pagination-container">
@@ -113,41 +152,65 @@
 
 
 <script setup>
-import { onBeforeMount, onMounted, computed, ref, toRefs, watch, onUnmounted } from 'vue'
+import { onBeforeMount, onMounted, computed, ref, reactive, toRefs, watch, onUnmounted } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
 import { ElNotification } from 'element-plus'
+import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 
-// drop
-const previewImages = ref([])
+// cropper
+const isShowModal = ref(false)
+const uploadInput = ref(null)
+const pic = ref('')
+const result = reactive({
+  blobURL: '',
+})
 
-function previewFile (file) {
+
+function closeModal () {
+  isShowModal.value = false
+}
+
+// 選擇檔案
+function selectFile (e) {
+  pic.value = ''
+  result.blobURL = ''
+  const { files } = e.target
+  if (!files || !files.length) return
+
+  const file = files[0]
   const reader = new FileReader()
-  reader.onload = () => {
-    previewImages.value.push({ src: reader.result, name: file.name })
-  }
   reader.readAsDataURL(file)
-}
-
-
-function handleFileUpload (event) {
-  const files = event.target.files
-  previewImages.value = []
-  for (const file of files) {
-    previewFile(file)
+  reader.onload = () => {
+    pic.value = reader.result
+    isShowModal.value = true
   }
 }
 
-function handleDrop (event) {
-  event.preventDefault()
-  const files = event.dataTransfer.files
-  previewImages.value = []
-  for (const file of files) {
-    previewFile(file)
-  }
+async function getResult () {
+  if (!cropper) return
+
+  const blob = await cropper.getBlob()
+  if (!blob) return
+  result.blobURL = URL.createObjectURL(blob)
+  isShowModal.value = false
 }
+
+function clear () {
+  console.log('111')
+  if (!cropper) return
+  cropper.clear()
+}
+
+function reset () {
+  console.log('111')
+  if (!cropper) return
+  cropper.reset()
+}
+
+
 
 
 //留言板
@@ -261,6 +324,7 @@ $primaryColor: #a0a4d9;
 $secondTextColor: #1f2023;
 
 #indexPage {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   background-color: rgb(245, 245, 245);
   padding: 20px;
   border-radius: 8px;
@@ -384,18 +448,44 @@ $secondTextColor: #1f2023;
     justify-content: center;
   }
 
-  #dragArea {
+ 
+
+  .modal-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    border: dotted 1px rgb(0, 0, 0);
-    min-width: 300px;
-    min-height: 200px;
+    align-items: center;
+  }
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+  .modal-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .modal-scroll-view {
+    overflow-y: auto;
+  }
+
+  .modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  .modal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
   }
 }
 </style>
