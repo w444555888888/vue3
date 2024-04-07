@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-04-06 22:57:06
+ * @LastEditTime: 2024-04-07 14:32:09
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -91,7 +91,6 @@
 
         <!-- Crop result preview -->
         <section class="section" v-if="result.blobURL">
-         
           <div class="preview">
             <p>預覽圖片blob</p>
             <img :src="result.blobURL" />
@@ -194,18 +193,17 @@ async function getResult () {
 
   const blob = await cropper.getBlob()
   if (!blob) return
+
   result.blobURL = URL.createObjectURL(blob)
   isShowModal.value = false
 }
 
 function clear () {
-  console.log('111')
   if (!cropper) return
   cropper.clear()
 }
 
 function reset () {
-  console.log('111')
   if (!cropper) return
   cropper.reset()
 }
@@ -324,7 +322,7 @@ $primaryColor: #a0a4d9;
 $secondTextColor: #1f2023;
 
 #indexPage {
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   background-color: rgb(245, 245, 245);
   padding: 20px;
   border-radius: 8px;
@@ -447,8 +445,6 @@ $secondTextColor: #1f2023;
     display: flex;
     justify-content: center;
   }
-
- 
 
   .modal-wrap {
     position: fixed;
