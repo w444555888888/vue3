@@ -173,20 +173,65 @@ function closeModal () {
 }
 
 // 選擇檔案
-function selectFile (e) {
-  pic.value = ''
-  result.blobURL = ''
-  const { files } = e.target
-  if (!files || !files.length) return
+// function selectFile (e) {
+//   pic.value = ''
+//   result.blobURL = ''
+//   const { files } = e.target
+//   if (!files || !files.length) return
 
-  const file = files[0]
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
+//   const file = files[0]
+//   const reader = new FileReader()
+//   reader.readAsDataURL(file)
+//   reader.onload = () => {
+//     pic.value = reader.result
+//     isShowModal.value = true
+//   }
+// }
+
+function selectFile(e) {
+  // 清空图片数据和 blobURL
+  pic.value = '';
+  result.blobURL = '';
+
+  const { files } = e.target;
+  if (!files || !files.length) return;
+
+  const file = files[0];
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
   reader.onload = () => {
-    pic.value = reader.result
-    isShowModal.value = true
-  }
+    const img = new Image();
+    
+    img.src = reader.result;
+    img.onload = () => {
+      const MAX_WIDTH = 400;
+      const MAX_HEIGHT = 400;
+      let width = img.width;
+      let height = img.height;
+
+      // 圖片超過400 等比例縮放
+      if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+        const scale = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+        width *= scale;
+        height *= scale;
+      }
+
+      // 創建canvas畫布
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // 所放圖片後轉換成base64格式
+      const scaledImageData = canvas.toDataURL('image/jpeg');
+      pic.value = scaledImageData;
+      isShowModal.value = true;
+    };
+  };
 }
+
 
 async function getResult () {
   if (!cropper) return
