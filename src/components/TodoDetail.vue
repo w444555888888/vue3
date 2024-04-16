@@ -23,7 +23,7 @@
             </el-header>
             <el-main>
               <div class="demo-collapse">
-                <el-collapse v-model="activeNames" @change="handleChange">
+                <el-collapse v-model="activeNames">
                   <el-collapse-item
                     title="工作事項"
                     name="1"
@@ -134,40 +134,28 @@ import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 
 
-const workRadio = ref('優先度高')
-const inputText = ref('')
-const storeTheTodoListArray = ref("")
-
+const workRadio = ref('優先度高');
+const inputText = ref('');
+const storeTheTodoListArray = ref("");
 // modal 新增數據
-const carModel = ref('')
-const raceType = ref('')
+const carModel = ref('');
+const raceType = ref('');
+const activeNames = ref([]);
+// 處理分頁currentPage
+const currentPage = ref(1);
+// 滾動條
+const currentPercentage = ref(0);
+// 使用路由router
+const route = useRoute();
+// 拿到params
+const routeindex = ref(route.params.index);
+
 
 // pinia
-const store = usePiniaStore()
+const store = usePiniaStore();
 // 因pinia解構後會有響應式跑掉的問題，須加上toRefs
-const { apiComments } = store
+const { apiComments } = store;
 
-const activeNames = ref([])
-const handleChange = (val) => {
-  console.log(val)
-}
-
-
-// 使用路由router
-const route = useRoute()
-// 拿到params
-const routeindex = ref(route.params.index)
-
-
-// 處理分頁currentPage
-const currentPage = ref(1)
-const handlePageChange = (newPage) => {
-  currentPage.value = newPage
-}
-
-
-// 滾動條
-const currentPercentage = ref(0)
 
 
 // 滾動條到100展開摺疊面板

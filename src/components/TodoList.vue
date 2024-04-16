@@ -74,7 +74,7 @@
     </div>
 
     <br />
-    <!-- cropper -->
+    <!-- picture -->
     <div>
       <div class="live-demo">
         <section class="section">
@@ -87,6 +87,7 @@
               @change="selectFile"
             />
           </button>
+          <button @click="sendPicture">發送圖片到後台</button>
         </section>
 
         <!-- Crop result preview -->
@@ -97,7 +98,7 @@
           </div>
         </section>
 
-        <!-- Modal -->
+        <!-- cropper Modal -->
         <div class="modal-wrap" v-if="isShowModal">
           <div class="modal-mask"></div>
           <div class="modal-scroll-view">
@@ -160,33 +161,42 @@ import { ElNotification } from 'element-plus'
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 
 // cropper
-const isShowModal = ref(false)
-const uploadInput = ref(null)
-const pic = ref('')
+const isShowModal = ref(false);
+const uploadInput = ref(null);
+const pic = ref('');
 const result = reactive({
   blobURL: '',
+});
+const message = ref('');
+const currentPage = ref(1);
+const locale18n = ref(i18n.global.locale);
+
+// pinia
+const store = usePiniaStore()
+const pageSize = 5
+const totalItems = computed(() => store.todos.length)
+const pagesTodos = computed(() => {
+  const startIndex = (currentPage.value - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  return store.todos.slice(startIndex, endIndex)
 })
+
+const handlePageChange = (newPage) => {
+  currentPage.value = newPage
+}
+
+
+// i18n語系  
+const { t } = i18n.global
+const changeLocale = () => {
+  store.locale = i18n.global.locale.value
+}
+
 
 
 function closeModal () {
   isShowModal.value = false
 }
-
-// 選擇檔案
-// function selectFile (e) {
-//   pic.value = ''
-//   result.blobURL = ''
-//   const { files } = e.target
-//   if (!files || !files.length) return
-
-//   const file = files[0]
-//   const reader = new FileReader()
-//   reader.readAsDataURL(file)
-//   reader.onload = () => {
-//     pic.value = reader.result
-//     isShowModal.value = true
-//   }
-// }
 
 function selectFile(e) {
   // 清空图片数据和 blobURL
@@ -232,6 +242,79 @@ function selectFile(e) {
   };
 }
 
+window.onload=function(){
+  getSavedImage();
+}
+
+function getSavedImage() {
+  axios.get('http://localhost:3000/picture') 
+    .then(res => {
+      const imageData = res.data[0].content; 
+      if (imageData) {
+        result.blobURL = imageData; 
+      }
+    })
+    .catch(error => {
+      console.error('error', error);
+    });
+}
+
+
+
+const sendPicture = () => {
+  if (pic.value) {
+    // 先檢查是否有已存在的圖片，如果有，則使用 PUT 請求替換它
+    axios.get('http://localhost:3000/picture')
+      .then(res => {
+        if (res.data.length > 0) {
+          const existImageId = res.data[0].id;
+          axios.put(`http://localhost:3000/picture/${existImageId}`, { content: pic.value })
+            .then(res => {
+              ElNotification({
+                title: 'Success',
+                message: 'Image replaced successfully',
+                type: 'success',
+              });
+            })
+            .catch(err => {
+              ElNotification({
+                title: 'Error',
+                message: 'Failed to replace image',
+                type: 'error',
+              });
+            });
+        } else {
+          // 如果沒有已存在的圖片，則使用 POST 請求添加新的圖片
+          axios.post('http://localhost:3000/picture', { content: pic.value })
+            .then(res => {
+              ElNotification({
+                title: 'Success',
+                message: 'Image added successfully',
+                type: 'success',
+              });
+            })
+            .catch(err => {
+              ElNotification({
+                title: 'Error',
+                message: 'Failed to add image',
+                type: 'error',
+              });
+            });
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching existing image:', err);
+      });
+  } else {
+    ElNotification({
+      title: 'Warning',
+      message: 'Please enter image content',
+      type: 'warning',
+    });
+  }
+};
+
+
 
 async function getResult () {
   if (!cropper) return
@@ -257,7 +340,7 @@ function reset () {
 
 
 //留言板
-const message = ref('')
+
 const sendMessage = () => {
   if (message.value.trim() !== '') {
     axios.post('http://localhost:3000/messages', { content: message.value.trim() })
@@ -284,29 +367,6 @@ const sendMessage = () => {
   }
 }
 
-// pinia
-const store = usePiniaStore()
-const currentPage = ref(1)
-const pageSize = 5
-const totalItems = computed(() => store.todos.length)
-const pagesTodos = computed(() => {
-  const startIndex = (currentPage.value - 1) * pageSize
-  const endIndex = startIndex + pageSize
-  return store.todos.slice(startIndex, endIndex)
-})
-
-const handlePageChange = (newPage) => {
-  currentPage.value = newPage
-}
-
-
-// i18n語系  
-const { t } = i18n.global
-const locale18n = ref(i18n.global.locale)
-const changeLocale = () => {
-  store.locale = i18n.global.locale.value
-}
-
 
 function dispatchAddTodo () {
   store.addTodo()
@@ -324,10 +384,9 @@ function dispatchStopEditing (todoId) {
   store.stopEditing(todoId)
 }
 
-// 把父組件ref開放傳遞到子組件
+
 // 使用路由useRouter
 const appRouter = useRouter()
-
 function navigateToDetail (index) {
   appRouter.push({
     name: 'TodoDetail',
