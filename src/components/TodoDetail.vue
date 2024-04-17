@@ -32,8 +32,9 @@
                   </el-radio-group>
                   <div>
                     <span class="text">待辦事項:{{ workRadio }}</span>
-                    <input class="detailOne" @change="storeTheTodoList" />
-                    {{ storeTheTodoListArray }}
+                    <textarea @change="storeTheTodoList">{{
+                      storeTheTodoListArray
+                    }}</textarea>
                   </div>
                 </el-collapse>
               </div>
@@ -62,13 +63,7 @@ import axios from 'axios'
 
 
 const workRadio = ref('優先度高')
-const inputText = ref('')
 const storeTheTodoListArray = ref("")
-// modal 新增數據
-const carModel = ref('')
-const raceType = ref('')
-// 處理分頁currentPage
-const currentPage = ref(1)
 // 滾動條
 const currentPercentage = ref(0)
 // 使用路由router
@@ -85,9 +80,8 @@ const { apiComments } = store
 
 // 儲存待辦事項
 function storeTheTodoList () {
-  storeTheTodoListArray.value 
+  storeTheTodoListArray.value
 }
-
 
 
 //router到首頁
@@ -100,15 +94,10 @@ function navigateToHome () {
 
 
 
-
-
 onMounted(() => {
   const interval = setInterval(() => {
     if (currentPercentage.value < 100) {
       currentPercentage.value += 50
-    } else {
-      clearInterval(interval)
-      hundredPercentage()
     }
   }, 1000)
 })
@@ -121,6 +110,12 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: 'Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif';
+}
 span {
   margin-right: 10px;
   font-size: 12px;
@@ -128,13 +123,10 @@ span {
 }
 
 .text {
+  font-weight: bold;
   margin-right: 10px;
   font-size: 12px;
   line-height: 40px;
-}
-
-.inputone {
-  margin: 4px;
 }
 
 .container {
@@ -199,32 +191,28 @@ span {
   background-color: rgb(67, 67, 67);
 }
 
-input,
-.detailOne {
+textarea {
   font-size: 1.125rem;
   padding: 1rem 2rem;
   background-color: #fff;
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
   width: 500px;
+  height: 400px;
+  resize: none;
+  overflow: hidden;
   word-wrap: break-word;
   outline: none;
 }
 
-input:focus,
-input:valid {
+textarea:focus,
+textarea:valid {
   color: black;
   border: 4px solid #9f9f9f;
 }
 
-input:not(:focus) {
+textarea:not(:focus) {
   border: 4px solid #e3e2e2;
-}
-
-.detailOne {
-  white-space: pre-wrap;
-  border: 4px solid #9f9f9f;
-  height: 70px;
 }
 
 .el-collapse {
