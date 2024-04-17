@@ -4,7 +4,6 @@ import TodoList from '../components/TodoList.vue'
 import TodoDetail from '../components/TodoDetail.vue'
 import Cropper from '../components/Cropper.vue'
 import Child from '../components/child.vue'
-import Child2 from '../components/child2.vue'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 
@@ -27,8 +26,6 @@ const routes = [
                 name: 'children',
                 components: {
                     A: Child,
-                    B: Child2,
-
                 }
 
             }
@@ -61,7 +58,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const authenticate = localStorage.getItem('token'); //localStorage token
-    
+
     if (!authenticate && to.name !== 'Login' && to.name !== 'Register') {
         next('/login');
     } else if (authenticate && (to.name == 'Login' || to.name == 'Register')) {

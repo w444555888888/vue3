@@ -111,11 +111,10 @@
               </el-dialog>
             </el-main>
             <router-link :to="`/todo/${routeindex}/children`"
-              ><button>Go to Child</button></router-link
+              ><button>美金台幣轉換路由</button></router-link
             >
             <el-footer>
               <router-view name="A"></router-view>
-              <router-view name="B"></router-view>
             </el-footer>
           </el-container>
         </el-container>
@@ -187,6 +186,7 @@ function navigateToHome () {
     name: 'TodoList'
   })
 }
+
 
 function addNewData () {
   if (carModel.value.trim() === '' || raceType.value.trim() === '') {
