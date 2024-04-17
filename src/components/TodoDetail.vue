@@ -14,101 +14,29 @@
         <el-container>
           <el-container class="centered-container">
             <el-header class="table-header">
-              <el-button class="gray" @click="navigateToHome">
-                <el-icon>
-                  <HomeFilled />
-                </el-icon>
-                回首頁</el-button
-              >
+              <button @click="navigateToHome">回首頁</button>
             </el-header>
             <el-main>
               <div class="demo-collapse">
-                <el-collapse v-model="activeNames">
-                  <el-collapse-item
-                    title="工作事項"
-                    name="1"
-                    v-if="currentPage === 1"
+                <el-collapse>
+                  <el-radio-group
+                    v-model="workRadio"
+                    size="small"
+                    class="workRadio"
+                    text-color="white"
+                    fill="black"
                   >
-                    <el-radio-group
-                      v-model="workRadio"
-                      size="small"
-                      class="workRadio"
-                      text-color="white"
-                      fill="black"
-                    >
-                      <el-radio-button label="優先度高" value="優先度高" />
-                      <el-radio-button label="優先度中" value="優先度中" />
-                      <el-radio-button label="優先度低" value="優先度低" />
-                    </el-radio-group>
-                    <input type="text" v-model="inputText" />
-                    <div>
-                      <span class="text">待辦事項:{{ workRadio }}</span>
-                      <div class="detailOne">
-                        {{ storeTheTodoListArray }}
-                      </div>
-                      <button @click="storeTheTodoList">儲存待辦事項</button>
-                    </div>
-                  </el-collapse-item>
+                    <el-radio-button label="優先度高" value="優先度高" />
+                    <el-radio-button label="優先度中" value="優先度中" />
+                    <el-radio-button label="優先度低" value="優先度低" />
+                  </el-radio-group>
+                  <div>
+                    <span class="text">待辦事項:{{ workRadio }}</span>
+                    <input class="detailOne" @change="storeTheTodoList" />
+                    {{ storeTheTodoListArray }}
+                  </div>
                 </el-collapse>
               </div>
-              <el-button plain @click="dialogTableVisible = true">
-                歷程記錄
-              </el-button>
-              <el-dialog
-                v-model="dialogTableVisible"
-                title="歷程記錄"
-                width="800"
-              >
-                <el-table
-                  :data="apiComments"
-                  ref="tableRef"
-                  highlight-current-row
-                >
-                  <el-table-column property="id" label="ID" width="150" />
-                  <el-table-column property="body" label="事件" width="200" />
-                  <el-table-column property="kind" label="種類" />
-                  <el-table-column label="刪除">
-                    <template v-slot="scope">
-                      <el-button
-                        type="info"
-                        @click="deleteNewData(scope.row.id)"
-                        >刪除</el-button
-                      >
-                    </template>
-                  </el-table-column>
-                </el-table>
-
-                <span>
-                  <label class="inputone">事件:</label>
-                  <el-input
-                    v-model="carModel"
-                    placeholder="carModel"
-                    class="inputone w-10 m-2"
-                    size="small"
-                    style="width: 100px"
-                  />
-                </span>
-                <span>
-                  <label class="inputone">種類:</label>
-                  <el-input
-                    v-model="raceType"
-                    placeholder="raceType"
-                    class="inputone w-10 m-2"
-                    size="small"
-                    style="width: 100px"
-                  />
-                </span>
-
-                <div style="margin-top: 20px">
-                  <el-button type="success" id="btnClick" @click="addNewData"
-                    >新增資料</el-button
-                  >
-                  <el-button @click="setCurrent(apiComments[0])"
-                    >選取第一列</el-button
-                  >
-                  <el-button @click="setCurrent()">清除標記</el-button>
-                </div>
-              </el-dialog>
             </el-main>
             <router-link :to="`/todo/${routeindex}/children`"
               ><button>美金台幣轉換路由</button></router-link
@@ -133,50 +61,33 @@ import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 
 
-const workRadio = ref('優先度高');
-const inputText = ref('');
-const storeTheTodoListArray = ref("");
+const workRadio = ref('優先度高')
+const inputText = ref('')
+const storeTheTodoListArray = ref("")
 // modal 新增數據
-const carModel = ref('');
-const raceType = ref('');
-const activeNames = ref([]);
+const carModel = ref('')
+const raceType = ref('')
 // 處理分頁currentPage
-const currentPage = ref(1);
+const currentPage = ref(1)
 // 滾動條
-const currentPercentage = ref(0);
+const currentPercentage = ref(0)
 // 使用路由router
-const route = useRoute();
+const route = useRoute()
 // 拿到params
-const routeindex = ref(route.params.index);
+const routeindex = ref(route.params.index)
 
 
 // pinia
-const store = usePiniaStore();
+const store = usePiniaStore()
 // 因pinia解構後會有響應式跑掉的問題，須加上toRefs
-const { apiComments } = store;
+const { apiComments } = store
 
-
-
-// 滾動條到100展開摺疊面板
-function hundredPercentage () {
-  if (currentPercentage.value == 100) {
-    activeNames.value = ['1']
-  }
-}
 
 // 儲存待辦事項
 function storeTheTodoList () {
-  storeTheTodoListArray.value += inputText.value
-  inputText.value = ''
+  storeTheTodoListArray.value 
 }
 
-
-// modal
-const dialogTableVisible = ref(false)
-const tableRef = ref(null)
-const setCurrent = (row) => {
-  tableRef.value.setCurrentRow(row)
-}
 
 
 //router到首頁
@@ -188,40 +99,6 @@ function navigateToHome () {
 }
 
 
-function addNewData () {
-  if (carModel.value.trim() === '' || raceType.value.trim() === '') {
-    return
-  };
-
-  const newData = {
-    id: uuidv4(),
-    body: carModel.value,
-    kind: raceType.value
-  }
-
-  axios.post('http://localhost:3000/comments', newData)
-    .then((res) => {
-      store.apiComments = [...store.apiComments, res.data]
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-
-  carModel.value = ''
-  raceType.value = ''
-
-}
-
-
-async function deleteNewData (id) {
-  console.log(id, 'iddddd')
-  try {
-    await axios.delete(`http://localhost:3000/comments/${id}`)
-    store.apiComments = store.apiComments.filter((e) => e.id !== id)
-  } catch (error) {
-    console.error('error', error)
-  }
-}
 
 
 
@@ -366,5 +243,21 @@ input:not(:focus) {
 
 .workRadio {
   margin-bottom: 5px;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #a0a4d9;
+  color: #1f2023;
+  font-weight: bold;
+  outline: none;
+  border-radius: 0.25rem;
+  background-color: #7e7e7e;
+  min-width: 60px;
+  min-height: 25px;
+}
+
+button:hover {
+  background-color: rgb(172, 171, 171);
 }
 </style>
