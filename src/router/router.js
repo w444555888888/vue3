@@ -6,6 +6,7 @@ import Cropper from '../components/Cropper.vue'
 import Child from '../components/child.vue'
 import Child2 from '../components/child2.vue'
 import Login from '../components/Login.vue'
+import Register from '../components/Register.vue'
 
 
 const routes = [
@@ -42,6 +43,11 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register
     }
 ]
 
@@ -54,16 +60,15 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    const authenticate = localStorage.getItem('token'); // 检查本地存储是否有 token
-
-    if (!authenticate && to.name !== 'Login') {
+    const authenticate = localStorage.getItem('token'); //localStorage token
+    
+    if (!authenticate && to.name !== 'Login' && to.name !== 'Register') {
         next('/login');
-    } else if (authenticate && to.name === 'Login') {
+    } else if (authenticate && (to.name == 'Login' || to.name == 'Register')) {
         next('/');
     } else {
         next();
     }
-
 });
 
 export default router

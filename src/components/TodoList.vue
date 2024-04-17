@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-04-07 14:32:09
+ * @LastEditTime: 2024-04-17 22:37:26
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -68,74 +68,6 @@
     <h4 v-if="store.todos.length === 0">No data</h4>
 
     <br />
-    <div>
-      <input type="text" v-model="message" />
-      <button type="button" @click="sendMessage">{{ t("postBoard") }}</button>
-    </div>
-
-    <br />
-    <!-- picture -->
-    <div>
-      <div class="live-demo">
-        <section class="section">
-          <button class="select-picture">
-            <span>選擇圖片</span>
-            <input
-              ref="uploadInput"
-              type="file"
-              accept="image/jpg, image/jpeg, image/png, image/gif"
-              @change="selectFile"
-            />
-          </button>
-          <button @click="sendPicture">發送圖片到後台</button>
-        </section>
-
-        <!-- Crop result preview -->
-        <section class="section" v-if="result.blobURL">
-          <div class="preview">
-            <p>預覽圖片blob</p>
-            <img :src="result.blobURL" />
-          </div>
-        </section>
-
-        <!-- cropper Modal -->
-        <div class="modal-wrap" v-if="isShowModal">
-          <div class="modal-mask"></div>
-          <div class="modal-scroll-view">
-            <div class="modal">
-              <div class="modal-title">
-                <span class="title">Cropper</span>
-                <div class="tools">
-                  <button class="btn" @click="closeModal">Cancel</button>
-                  <button class="btn" @click="clear">Clear</button>
-                  <button class="btn" @click="reset">Reset</button>
-                  <button class="btn primary" @click="getResult">Crop</button>
-                </div>
-              </div>
-
-              <div class="modal-content">
-                <VuePictureCropper
-                  :boxStyle="{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#f8f8f8',
-                    margin: 'auto',
-                  }"
-                  :img="pic"
-                  :options="{
-                    viewMode: 1,
-                    dragMode: 'crop',
-                    aspectRatio: 16 / 9,
-                  }"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <br />
     <!-- pages -->
     <div class="pagination-container">
       <el-pagination
@@ -160,16 +92,8 @@ import i18n from '../i18n.js'
 import { ElNotification } from 'element-plus'
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 
-// cropper
-const isShowModal = ref(false);
-const uploadInput = ref(null);
-const pic = ref('');
-const result = reactive({
-  blobURL: '',
-});
-const message = ref('');
-const currentPage = ref(1);
-const locale18n = ref(i18n.global.locale);
+const currentPage = ref(1)
+const locale18n = ref(i18n.global.locale)
 
 // pinia
 const store = usePiniaStore()
@@ -190,181 +114,6 @@ const handlePageChange = (newPage) => {
 const { t } = i18n.global
 const changeLocale = () => {
   store.locale = i18n.global.locale.value
-}
-
-
-
-function closeModal () {
-  isShowModal.value = false
-}
-
-function selectFile(e) {
-  // 清空图片数据和 blobURL
-  pic.value = '';
-  result.blobURL = '';
-
-  const { files } = e.target;
-  if (!files || !files.length) return;
-
-  const file = files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-
-  reader.onload = () => {
-    const img = new Image();
-    
-    img.src = reader.result;
-    img.onload = () => {
-      const MAX_WIDTH = 400;
-      const MAX_HEIGHT = 400;
-      let width = img.width;
-      let height = img.height;
-
-      // 圖片超過400 等比例縮放
-      if (width > MAX_WIDTH || height > MAX_HEIGHT) {
-        const scale = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
-        width *= scale;
-        height *= scale;
-      }
-
-      // 創建canvas畫布
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = width;
-      canvas.height = height;
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // 所放圖片後轉換成base64格式
-      const scaledImageData = canvas.toDataURL('image/jpeg');
-      pic.value = scaledImageData;
-      isShowModal.value = true;
-    };
-  };
-}
-
-window.onload=function(){
-  getSavedImage();
-}
-
-function getSavedImage() {
-  axios.get('http://localhost:3000/picture') 
-    .then(res => {
-      const imageData = res.data[0].content; 
-      if (imageData) {
-        result.blobURL = imageData; 
-      }
-    })
-    .catch(error => {
-      console.error('error', error);
-    });
-}
-
-
-
-const sendPicture = () => {
-  if (pic.value) {
-    // 先檢查是否有已存在的圖片，如果有，則使用 PUT 請求替換它
-    axios.get('http://localhost:3000/picture')
-      .then(res => {
-        if (res.data.length > 0) {
-          const existImageId = res.data[0].id;
-          axios.put(`http://localhost:3000/picture/${existImageId}`, { content: pic.value })
-            .then(res => {
-              ElNotification({
-                title: 'Success',
-                message: 'Image replaced successfully',
-                type: 'success',
-              });
-            })
-            .catch(err => {
-              ElNotification({
-                title: 'Error',
-                message: 'Failed to replace image',
-                type: 'error',
-              });
-            });
-        } else {
-          // 如果沒有已存在的圖片，則使用 POST 請求添加新的圖片
-          axios.post('http://localhost:3000/picture', { content: pic.value })
-            .then(res => {
-              ElNotification({
-                title: 'Success',
-                message: 'Image added successfully',
-                type: 'success',
-              });
-            })
-            .catch(err => {
-              ElNotification({
-                title: 'Error',
-                message: 'Failed to add image',
-                type: 'error',
-              });
-            });
-        }
-      })
-      .catch(err => {
-        console.error('Error fetching existing image:', err);
-      });
-  } else {
-    ElNotification({
-      title: 'Warning',
-      message: 'Please enter image content',
-      type: 'warning',
-    });
-  }
-};
-
-
-
-async function getResult () {
-  if (!cropper) return
-
-  const blob = await cropper.getBlob()
-  if (!blob) return
-
-  result.blobURL = URL.createObjectURL(blob)
-  isShowModal.value = false
-}
-
-function clear () {
-  if (!cropper) return
-  cropper.clear()
-}
-
-function reset () {
-  if (!cropper) return
-  cropper.reset()
-}
-
-
-
-
-//留言板
-
-const sendMessage = () => {
-  if (message.value.trim() !== '') {
-    axios.post('http://localhost:3000/messages', { content: message.value.trim() })
-      .then(response => {
-        message.value = ''
-      }, ElNotification({
-        title: 'Success',
-        message: 'send message success',
-        type: 'success',
-      }))
-      .catch(error => {
-        ElNotification({
-          title: 'Error',
-          message: 'error message',
-          type: 'error',
-        })
-      })
-  } else {
-    ElNotification({
-      title: 'Warning',
-      message: 'Please enter message content',
-      type: 'warning',
-    })
-  }
 }
 
 
