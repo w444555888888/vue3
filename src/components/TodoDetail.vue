@@ -3,12 +3,7 @@
   <div>
     <div class="container">
       <div v-if="currentPercentage < 100" class="demo-progress">
-        <el-progress
-          :text-inside="true"
-          :stroke-width="25"
-          :percentage="currentPercentage"
-          color="gray"
-        ></el-progress>
+        <el-progress :text-inside="true" :stroke-width="25" :percentage="currentPercentage" color="gray"></el-progress>
       </div>
       <div v-else class="common-layout">
         <el-container>
@@ -19,29 +14,20 @@
             <el-main>
               <div class="demo-collapse">
                 <el-collapse>
-                  <el-radio-group
-                    v-model="workRadio"
-                    size="small"
-                    class="workRadio"
-                    text-color="white"
-                    fill="black"
-                  >
+                  <el-radio-group v-model="workRadio" size="small" class="workRadio" text-color="white" fill="black">
                     <el-radio-button label="優先度高" value="優先度高" />
                     <el-radio-button label="優先度中" value="優先度中" />
                     <el-radio-button label="優先度低" value="優先度低" />
                   </el-radio-group>
                   <div>
                     <span class="text">待辦事項:{{ workRadio }}</span>
-                    <textarea @change="storeTheTodoList">{{
-                      storeTheTodoListArray
-                    }}</textarea>
+                    <textarea v-model="storeTheTodoListArray"></textarea>
+                    <button @click="storeTheTodoList">儲存</button>
                   </div>
                 </el-collapse>
               </div>
             </el-main>
-            <router-link :to="`/todo/${routeindex}/children`"
-              ><button>美金台幣轉換路由</button></router-link
-            >
+            <router-link :to="`/todo/${routeindex}/children`"><button>美金台幣轉換路由</button></router-link>
             <el-footer>
               <router-view name="A"></router-view>
             </el-footer>
@@ -61,32 +47,77 @@ import { usePiniaStore } from '../store/pinia.js'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 
+// textarea
+const workRadio = ref('優先度高');
+const storeTheTodoListArray = ref('');
 
-const workRadio = ref('優先度高')
-const storeTheTodoListArray = ref("")
-// 滾動條
-const currentPercentage = ref(0)
-// 使用路由router
-const route = useRoute()
-// 拿到params
-const routeindex = ref(route.params.index)
+// 滾動條d
+const currentPercentage = ref(0);
+// 使用路由router 路由params
+const route = useRoute();
+const routeindex = ref(route.params.index);
 
 
 // pinia
-const store = usePiniaStore()
-// 因pinia解構後會有響應式跑掉的問題，須加上toRefs
-const { apiComments } = store
+const store = usePiniaStore();
+const { apiComments } = store;
 
 
 // 儲存待辦事項
-function storeTheTodoList () {
-  storeTheTodoListArray.value
+function storeTheTodoList() {
+  axios.get('http://localhost:3000/comments')
+    .then(response => {
+      const dataId = response.data;
+      const ExistId = dataId.some(item => item.id === routeindex.value);
+      if (ExistId) {
+        axios.put(`http://localhost:3000/comments/${routeindex.value}`, { text: storeTheTodoListArray.value })
+          .then(response => {
+            ElNotification({
+              title: 'Success',
+              message: 'Update Success',
+              type: 'success',
+            });
+          })
+          .catch(error => {
+            ElNotification({
+              title: 'Error',
+              message: 'Update Fail',
+              type: 'error',
+            });
+          });
+      } else {
+        axios.post('http://localhost:3000/comments', { id: routeindex.value, text: storeTheTodoListArray.value })
+          .then(response => {
+            if (response.status === 201) {
+              ElNotification({
+                title: 'Success',
+                message: 'Store Success',
+                type: 'success',
+              });
+            }
+          })
+          .catch(error => {
+            ElNotification({
+              title: 'Error',
+              message: 'Store Fail',
+              type: 'error',
+            });
+          });
+      }
+    })
+    .catch(error => {
+      console.error('Error', error);
+    });
 }
+
+
+
+
 
 
 //router到首頁
 const appRouter = useRouter()
-function navigateToHome () {
+function navigateToHome() {
   appRouter.push({
     name: 'TodoList'
   })
@@ -94,12 +125,25 @@ function navigateToHome () {
 
 
 
-onMounted(() => {
+onMounted(async () => {
   const interval = setInterval(() => {
     if (currentPercentage.value < 100) {
       currentPercentage.value += 50
     }
   }, 1000)
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/comments');
+      let filterData = response.data.filter(e => e.id == routeindex.value);
+      storeTheTodoListArray.value = filterData[0].text
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
+  await fetchData();
+
 })
 
 
@@ -116,6 +160,7 @@ onBeforeMount(() => {
   box-sizing: border-box;
   font-family: 'Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif';
 }
+
 span {
   margin-right: 10px;
   font-size: 12px;

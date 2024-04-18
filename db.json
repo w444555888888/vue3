@@ -1,8 +1,12 @@
 {
   "comments": [
     {
-      "id": "d21d1adb-34fa-4b9d-b132-a4dce886d5c9",
-      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "text": "直接給 watch() 傳入一個響應式對象，會隱式地建立一個深層偵聽器－該回呼函數在所有嵌套的變更時都會被觸發",
+      "id": "1"
+    },
+    {
+      "text": "0000000000000000000",
+      "id": "0"
     }
   ],
   "users": [
