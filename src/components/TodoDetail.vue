@@ -3,7 +3,12 @@
   <div>
     <div class="container">
       <div v-if="currentPercentage < 100" class="demo-progress">
-        <el-progress :text-inside="true" :stroke-width="25" :percentage="currentPercentage" color="gray"></el-progress>
+        <el-progress
+          :text-inside="true"
+          :stroke-width="25"
+          :percentage="currentPercentage"
+          color="gray"
+        ></el-progress>
       </div>
       <div v-else class="common-layout">
         <el-container>
@@ -14,7 +19,13 @@
             <el-main>
               <div class="demo-collapse">
                 <el-collapse>
-                  <el-radio-group v-model="workRadio" size="small" class="workRadio" text-color="white" fill="black">
+                  <el-radio-group
+                    v-model="workRadio"
+                    size="small"
+                    class="workRadio"
+                    text-color="white"
+                    fill="black"
+                  >
                     <el-radio-button label="優先度高" value="優先度高" />
                     <el-radio-button label="優先度中" value="優先度中" />
                     <el-radio-button label="優先度低" value="優先度低" />
@@ -27,7 +38,9 @@
                 </el-collapse>
               </div>
             </el-main>
-            <router-link :to="`/todo/${routeindex}/children`"><button>美金台幣轉換路由</button></router-link>
+            <router-link :to="`/todo/${routeindex}/children`"
+              ><button>child路由</button></router-link
+            >
             <el-footer>
               <router-view name="A"></router-view>
             </el-footer>
@@ -48,27 +61,22 @@ import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 
 // textarea
-const workRadio = ref('優先度高');
-const storeTheTodoListArray = ref('');
+const workRadio = ref('優先度高')
+const storeTheTodoListArray = ref('')
 
 // 滾動條d
-const currentPercentage = ref(0);
+const currentPercentage = ref(0)
 // 使用路由router 路由params
-const route = useRoute();
-const routeindex = ref(route.params.index);
-
-
-// pinia
-const store = usePiniaStore();
-const { apiComments } = store;
+const route = useRoute()
+const routeindex = ref(route.params.index)
 
 
 // 儲存待辦事項
-function storeTheTodoList() {
+function storeTheTodoList () {
   axios.get('http://localhost:3000/comments')
     .then(response => {
-      const dataId = response.data;
-      const ExistId = dataId.some(item => item.id === routeindex.value);
+      const dataId = response.data
+      const ExistId = dataId.some(item => item.id === routeindex.value)
       if (ExistId) {
         axios.put(`http://localhost:3000/comments/${routeindex.value}`, { text: storeTheTodoListArray.value })
           .then(response => {
@@ -76,15 +84,15 @@ function storeTheTodoList() {
               title: 'Success',
               message: 'Update Success',
               type: 'success',
-            });
+            })
           })
           .catch(error => {
             ElNotification({
               title: 'Error',
               message: 'Update Fail',
               type: 'error',
-            });
-          });
+            })
+          })
       } else {
         axios.post('http://localhost:3000/comments', { id: routeindex.value, text: storeTheTodoListArray.value })
           .then(response => {
@@ -93,7 +101,7 @@ function storeTheTodoList() {
                 title: 'Success',
                 message: 'Store Success',
                 type: 'success',
-              });
+              })
             }
           })
           .catch(error => {
@@ -101,40 +109,23 @@ function storeTheTodoList() {
               title: 'Error',
               message: 'Store Fail',
               type: 'error',
-            });
-          });
+            })
+          })
       }
     })
     .catch(error => {
-      console.error('Error', error);
-    });
+      console.error('Error', error)
+    })
 }
-
-
-
-
 
 
 //router到首頁
 const appRouter = useRouter()
-function navigateToHome() {
+function navigateToHome () {
   appRouter.push({
     name: 'TodoList'
   })
 }
-
-
-
-const fetchData = async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/comments');
-    const filterData = response.data.filter(e => e.id == routeindex.value);
-    storeTheTodoListArray.value = filterData.length > 0 ? filterData[0].text : '';
-  } catch (error) {
-    console.error('Error', error);
-  }
-};
-
 
 
 onMounted(async () => {
@@ -144,14 +135,18 @@ onMounted(async () => {
     }
   }, 1000)
 
-  fetchData();
+  // pinia
+  const store = usePiniaStore()
+  await store.fetchCommentsApi()
+  let apiCommentFilter = store.apiComments.filter(e => e.id === routeindex.value)
+  storeTheTodoListArray.value = apiCommentFilter[0].text
+
 })
 
-
-
 onBeforeMount(() => {
-  store.fetchCommentsApi()
+
 });
+
 </script>
 
 <style scoped>

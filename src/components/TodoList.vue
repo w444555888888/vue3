@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-04-17 22:37:26
+ * @LastEditTime: 2024-04-18 23:35:15
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -23,23 +23,27 @@
 
     <h3>{{ t("titleSecond") }}</h3>
     <ul>
-      <li v-for="(todo, index) in pagesTodos" :key="index">
-        <span :class="{ done: todo.done }">
+      <li v-for="(todo, index) in pagesTodos" :key="todo.id">
+        <span :class="todo.done ? 'done' : 'pending'">
           <span>
             <input
               type="radio"
               :checked="!todo.done"
-              :id="`pending${index}`"
-              :name="`done${index}`"
+              :id="`pending${todo.id}`"
+              :name="`done${todo.id}`"
+              :value="false"
+              @change="dispatchtodoStatus(todo.id, false)"
             />
-            <label :for="`pending${index}`">{{ t("undone") }}</label>
+            <label :for="`pending${todo.id}`">{{ t("undone") }}</label>
             <input
               type="radio"
               :checked="todo.done"
-              :id="`done${index}`"
-              :name="`done${index}`"
+              :id="`done${todo.id}`"
+              :name="`done${todo.id}`"
+              :value="true"
+              @change="dispatchtodoStatus(todo.id, true)"
             />
-            <label :for="`done${index}`">{{ t("done") }}</label>
+            <label :for="`done${todo.id}`">{{ t("done") }}</label>
           </span>
 
           <div
@@ -54,14 +58,14 @@
             type="text"
             v-model="store.editedContent"
             @blur="dispatchStopEditing(todo.id)"
-            @keyup.enter="dispatchStopEditing(index)"
+            @keyup.enter="dispatchStopEditing(todo.id)"
           />
         </span>
         <div class="li-btn">
           <button @click="dispatchRemoveTodo(todo.id)">
             {{ t("delete") }}
           </button>
-          <button @click="navigateToDetail(index)">{{ t("detail") }}</button>
+          <button @click="navigateToDetail(todo.id)">{{ t("detail") }}</button>
         </div>
       </li>
     </ul>
@@ -133,13 +137,19 @@ function dispatchStopEditing (todoId) {
   store.stopEditing(todoId)
 }
 
+function dispatchtodoStatus (todoId, boolen) {
+  store.todoStatus(todoId, boolen)
+}
+
+
+
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail (index) {
+function navigateToDetail (id) {
   appRouter.push({
     name: 'TodoDetail',
-    params: { index: index },
+    params: { id: id },
   })
 }
 
