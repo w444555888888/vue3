@@ -15,6 +15,7 @@
         <option value="zh">zh-TW</option>
       </select>
     </nav>
+   
     <h1>{{ t("titleFirst") }}</h1>
     <form @submit.prevent="dispatchAddTodo">
       <input v-model.trim="store.newTodo" name="newTodo" autocomplete="off" />
@@ -23,6 +24,7 @@
 
     <h3>{{ t("titleSecond") }}</h3>
     <ul>
+    
       <li v-for="(todo, index) in pagesTodos" :key="todo.id">
         <span :class="todo.done ? 'done' : 'pending'">
           <span>
@@ -72,6 +74,10 @@
     <h4 v-if="store.todos.length === 0">No data</h4>
 
     <br />
+    <div>
+      <img src="~@/assets/apple.jpg" alt="">
+
+    </div>
     <!-- pages -->
     <div class="pagination-container">
       <el-pagination
