@@ -12,6 +12,7 @@
       </div>
       <div v-else class="common-layout">
         <el-container>
+          <TodoDetailNavbar :receivedMessage="receivedMessage"/>
           <el-container class="centered-container">
             <el-header class="table-header">
               <button @click="navigateToHome">回首頁</button>
@@ -59,6 +60,15 @@ import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
+import TodoDetailNavbar from './TodoDetailNavbar.vue'
+import bus from 'vue3-eventbus'
+
+// eventbus
+const receivedMessage = ref('orginal receivedMessage')
+bus.on('message', (message) => {
+  receivedMessage.value = message
+})
+
 
 // textarea
 const workRadio = ref('優先度高')
