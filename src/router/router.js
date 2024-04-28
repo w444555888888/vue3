@@ -3,7 +3,6 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import TodoList from '../components/TodoList.vue'
 import TodoDetail from '../components/TodoDetail.vue'
 import Cropper from '../components/Cropper.vue'
-import Child from '../components/Child.vue'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import Table from '../components/Table.vue'
@@ -27,7 +26,7 @@ const routes = [
                 path: 'children',
                 name: 'children',
                 components: {
-                    A: Child,
+                   
                 }
 
             }

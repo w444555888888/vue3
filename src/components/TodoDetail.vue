@@ -39,9 +39,6 @@
                 </el-collapse>
               </div>
             </el-main>
-            <router-link :to="`/todo/${routeindex}/children`"
-              ><button>child路由</button></router-link
-            >
             <el-footer>
               <router-view name="A"></router-view>
             </el-footer>
