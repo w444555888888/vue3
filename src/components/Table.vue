@@ -1,11 +1,13 @@
 <!-- Table.vue -->
 <template>
     <Tablechild :tableHeads="tableHeads" :tableBody="tableBody">
-        <template #ithelpLink="{ index, props, value }">
-      <a :href="value" target="_blank">查看 </a>
+        <template #tableHeads[3]>
+                   查看 
+        </template>
 
-      <!-- <a :href="props.tableBody[index].ithelpLink" target="_blank"> 查看 </a> -->
-    </template>
+        <template #ithelpLink="{ index, props, value }">
+         <a :href="value" target="_blank">查看 </a>
+        </template>
     </Tablechild>
   </template>
 

@@ -4,7 +4,11 @@
       <thead>
         <th></th>
         <th v-for="tableHead in props.tableHeads" :key="tableHead">
-          {{ tableHead }}
+      
+          <span v-if="!Object.value(slots).includes(key)">
+              {{ tableHead }}
+            </span>
+            <slot v-else :name="key" :value="value" :index="itemIndex" :props="props"></slot>
         </th>
       </thead>
       <tbody>
