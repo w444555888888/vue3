@@ -62,8 +62,8 @@ import bus from 'vue3-eventbus'
 
 // eventbus
 const receivedMessage = ref('orginal receivedMessage')
-bus.on('message', (message) => {
-  receivedMessage.value = message
+bus.on('message', (value) => {
+  receivedMessage.value = value
 })
 
 

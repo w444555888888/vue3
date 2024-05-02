@@ -1,25 +1,17 @@
 // router.js
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import TodoList from '../components/TodoList.vue'
-import TodoDetail from '../components/TodoDetail.vue'
-import Cropper from '../components/Cropper.vue'
-import Login from '../components/Login.vue'
-import Register from '../components/Register.vue'
-import Table from '../components/Table.vue'
-import Tablechild from '../components/Tablechild.vue'
-
 
 const routes = [
     {
         path: '/',
         name: 'TodoList',
-        component: TodoList,
+        component: ()=>import('@/components/TodoList.vue'),
 
     },
     {
         path: '/todo/:index',
         name: 'TodoDetail',
-        component: TodoDetail,
+        component: ()=>import('@/components/TodoDetail.vue'),
         props: true,
         children: [
             {
@@ -33,29 +25,14 @@ const routes = [
         ]
     },
     {
-        path: '/todo/cropper',
-        name: 'Cropper',
-        component: Cropper,
-    },
-    {
         path: '/login',
         name: 'Login',
-        component: Login
+        component: ()=>import('@/components/Login.vue')
     },
     {
         path: '/register',
         name: 'Register',
-        component: Register
-    },
-    {
-        path: '/table',
-        name: 'Table',
-        component: Table
-    },
-    {
-        path: '/tablechild',
-        name: 'Tablechild',
-        component: Tablechild
+        component: ()=>import('@/components/Register.vue')
     }
 ]
 

@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-04-19 16:59:45
+ * @LastEditTime: 2024-05-02 12:15:04
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,7 +15,7 @@
         <option value="zh">zh-TW</option>
       </select>
     </nav>
-   
+
     <h1>{{ t("titleFirst") }}</h1>
     <form @submit.prevent="dispatchAddTodo">
       <input v-model.trim="store.newTodo" name="newTodo" autocomplete="off" />
@@ -24,7 +24,6 @@
 
     <h3>{{ t("titleSecond") }}</h3>
     <ul>
-    
       <li v-for="(todo, index) in pagesTodos" :key="todo.id">
         <span :class="todo.done ? 'done' : 'pending'">
           <span>
@@ -74,10 +73,6 @@
     <h4 v-if="store.todos.length === 0">No data</h4>
 
     <br />
-    <div>
-      <img src="~@/assets/apple.jpg" alt="">
-
-    </div>
     <!-- pages -->
     <div class="pagination-container">
       <el-pagination
