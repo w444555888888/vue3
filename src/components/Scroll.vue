@@ -14,8 +14,9 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, mounted, computed } from 'vue'
+import { ref, onBeforeMount, onMounted, computed } from 'vue'
 
+const container = ref(null); // Change made here
 
 const data = ref([])
 const visibleItems = ref([])
@@ -24,21 +25,19 @@ const itemsPerPage = ref(10)
 const currentPage = ref(1)
 const itemHeight = ref(50)
 
-
-
 onMounted(() => {
   generateData()
   updateVisibleItems()
 })
 
-
-function generateData () {
+function generateData() {
   for (let i = 1; i <= 100; i++) {
     data.value.push(`Item ${i}`)
   }
   totalHeight.value = data.value.length * itemHeight.value
 }
-function updateVisibleItems () {
+
+function updateVisibleItems() {
   const startIndex = (currentPage.value - 1) * itemsPerPage.value
   const endIndex = startIndex + itemsPerPage.value
   visibleItems.value = data.value
@@ -48,15 +47,13 @@ function updateVisibleItems () {
       offset: (startIndex + index) * itemHeight.value
     }))
 }
-function handleScroll () {
-  const container = ref.container.value
-  const scrollTop = container.scrollTop
+
+function handleScroll() {
+  const scrollTop = container.value.scrollTop; // Change made here
   const startIndex = Math.floor(scrollTop / itemHeight.value)
   currentPage.value = Math.ceil((startIndex + 1) / itemsPerPage.value)
   updateVisibleItems()
 }
-
-
 </script>
 
 <style>
