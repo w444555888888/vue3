@@ -30,9 +30,9 @@ const routes = [
         component: ()=>import('@/components/Login.vue')
     },
     {
-        path: '/register',
-        name: 'Register',
-        component: ()=>import('@/components/Register.vue')
+        path: '/scroll',
+        name: 'Scroll',
+        component: ()=>import('@/components/Scroll.vue')
     }
 ]
 
@@ -47,9 +47,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const authenticate = localStorage.getItem('token'); //localStorage token
 
-    if (!authenticate && to.name !== 'Login' && to.name !== 'Register') {
+    if (!authenticate && to.name !== 'Login' ) {
         next('/login');
-    } else if (authenticate && (to.name == 'Login' || to.name == 'Register')) {
+    } else if (authenticate && (to.name == 'Login')) {
         next('/');
     } else {
         next();

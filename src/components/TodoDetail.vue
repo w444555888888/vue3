@@ -85,7 +85,7 @@ function storeTheTodoList () {
       const dataId = response.data
       const ExistId = dataId.some(item => item.id === routeindex.value)
       if (ExistId) {
-        axios.put(`http://localhost:3000/comments/${routeindex.value}`, { text: storeTheTodoListArray.value })
+        axios.put(`http://localhost:3000/comments/${routeindex.value + 1}`, { text: storeTheTodoListArray.value })
           .then(response => {
             ElNotification({
               title: 'Success',
