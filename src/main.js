@@ -21,6 +21,9 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import eventBus from 'vue3-eventbus'
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
@@ -28,6 +31,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 // eventbus掛載全局
 app.use(eventBus)
+
+app.use(VueVirtualScroller)
 
 
 // vue的調適工具配置
