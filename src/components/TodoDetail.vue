@@ -3,16 +3,11 @@
   <div>
     <div class="container">
       <div v-if="currentPercentage < 100" class="demo-progress">
-        <el-progress
-          :text-inside="true"
-          :stroke-width="25"
-          :percentage="currentPercentage"
-          color="gray"
-        ></el-progress>
+        <el-progress :text-inside="true" :stroke-width="25" :percentage="currentPercentage" color="gray"></el-progress>
       </div>
       <div v-else class="common-layout">
         <el-container>
-          <TodoDetailNavbar :receivedMessage="receivedMessage"/>
+          <TodoDetailNavbar :receivedMessage="receivedMessage" />
           <el-container class="centered-container">
             <el-header class="table-header">
               <button @click="navigateToHome">回首頁</button>
@@ -20,13 +15,7 @@
             <el-main>
               <div class="demo-collapse">
                 <el-collapse>
-                  <el-radio-group
-                    v-model="workRadio"
-                    size="small"
-                    class="workRadio"
-                    text-color="white"
-                    fill="black"
-                  >
+                  <el-radio-group v-model="workRadio" size="small" class="workRadio" text-color="white" fill="black">
                     <el-radio-button label="優先度高" value="優先度高" />
                     <el-radio-button label="優先度中" value="優先度中" />
                     <el-radio-button label="優先度低" value="優先度低" />
@@ -40,7 +29,28 @@
               </div>
             </el-main>
             <el-footer>
-              <router-view name="A"></router-view>
+              <div class="virtual-container">
+                <div class="todo-list">
+                  <h2>待办事项</h2>
+                  <ul>
+                    <li v-for="(todo, index) in todos" :key="index">{{ todo.content }}</li>
+                  </ul>
+                </div>
+                <div class="virtual-list">
+                  <h2>虚拟列表</h2>
+                  <button @click="renderVirtualList">渲染虚拟列表</button>
+                  <DynamicScroller v-if="rendered" ref="scroller" :items="virtualItems" :min-item-size="24"
+                    class="scroller">
+                    <template #default="{ item, index, active }">
+                      <DynamicScrollerItem :item="item" :active="active" :data-index="index">
+                        <div class="message">
+                          {{ item }}
+                        </div>
+                      </DynamicScrollerItem>
+                    </template>
+                  </DynamicScroller>
+                </div>
+              </div>
             </el-footer>
           </el-container>
         </el-container>
@@ -66,7 +76,6 @@ bus.on('message', (value) => {
   receivedMessage.value = value
 })
 
-
 // textarea
 const workRadio = ref('優先度高')
 const storeTheTodoListArray = ref('')
@@ -77,9 +86,19 @@ const currentPercentage = ref(0)
 const route = useRoute()
 const routeindex = ref(route.params.index)
 
+const store = usePiniaStore()
+
+// 待办事项列表
+const todos = store.todos
+
+// 虚拟列表的数据
+const virtualItems = ref([])
+
+// 虚拟列表是否已经渲染
+const rendered = ref(false)
 
 // 儲存待辦事項
-function storeTheTodoList () {
+function storeTheTodoList() {
   axios.get('http://localhost:3000/comments')
     .then(response => {
       const dataId = response.data
@@ -125,15 +144,19 @@ function storeTheTodoList () {
     })
 }
 
-
 //router到首頁
 const appRouter = useRouter()
-function navigateToHome () {
+function navigateToHome() {
   appRouter.push({
     name: 'TodoList'
   })
 }
 
+// 点击按钮触发渲染虚拟列表的操作
+function renderVirtualList() {
+  virtualItems.value = Array(1000).fill().map((_, index) => `代辦事項${index + 1}`)
+  rendered.value = true
+}
 
 onMounted(async () => {
   const interval = setInterval(() => {
@@ -142,12 +165,9 @@ onMounted(async () => {
     }
   }, 1000)
 
-  // pinia
-  const store = usePiniaStore()
   await store.fetchCommentsApi()
   let apiCommentFilter = store.apiComments.filter(e => e.id === routeindex.value)
   storeTheTodoListArray.value = apiCommentFilter[0].text
-
 })
 
 onBeforeMount(() => {
@@ -157,27 +177,22 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
+/* 样式 */
 * {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   font-family: 'Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif';
 }
 
-span {
-  margin-right: 10px;
-  font-size: 12px;
-  margin-bottom: 20px;
-}
-
-.text {
-  font-weight: bold;
-  margin-right: 10px;
-  font-size: 12px;
-  line-height: 40px;
-}
-
 .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.virtual-container{
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -296,4 +311,6 @@ button {
 button:hover {
   background-color: rgb(172, 171, 171);
 }
+
+
 </style>
