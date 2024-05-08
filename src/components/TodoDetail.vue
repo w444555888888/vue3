@@ -29,28 +29,24 @@
               </div>
             </el-main>
             <el-footer>
+
               <div class="virtual-container">
-                <div class="todo-list">
-                  <h2>待办事项</h2>
-                  <ul>
-                    <li v-for="(todo, index) in todos" :key="index">{{ todo.content }}</li>
-                  </ul>
-                </div>
+                <h2>虛擬列表</h2>
+                <button @click="renderVirtualList">渲染虛擬列表</button>
                 <div class="virtual-list">
-                  <h2>虚拟列表</h2>
-                  <button @click="renderVirtualList">渲染虚拟列表</button>
-                  <DynamicScroller v-if="rendered" ref="scroller" :items="virtualItems" :min-item-size="24"
-                    class="scroller">
-                    <template #default="{ item, index, active }">
-                      <DynamicScrollerItem :item="item" :active="active" :data-index="index">
-                        <div class="message">
-                          {{ item }}
-                        </div>
-                      </DynamicScrollerItem>
-                    </template>
-                  </DynamicScroller>
-                </div>
+                <DynamicScroller v-if="rendered" ref="scroller" :items="virtualItems" :min-item-size="30" :buffer="50"
+                  class="scroller">
+                  <template #default="{ item, index, active }">
+                    <DynamicScrollerItem :item="item" :active="active" :data-index="index" :data-active="active">
+                      <div class="virtual-list">
+                        {{ item }}
+                      </div>
+                    </DynamicScrollerItem>
+                  </template>
+                </DynamicScroller>
               </div>
+              </div>
+
             </el-footer>
           </el-container>
         </el-container>
@@ -80,7 +76,7 @@ bus.on('message', (value) => {
 const workRadio = ref('優先度高')
 const storeTheTodoListArray = ref('')
 
-// 滾動條d
+// 滾動條
 const currentPercentage = ref(0)
 // 使用路由router 路由params
 const route = useRoute()
@@ -88,13 +84,11 @@ const routeindex = ref(route.params.index)
 
 const store = usePiniaStore()
 
-// 待办事项列表
-const todos = store.todos
 
-// 虚拟列表的数据
+// 虛擬列表數據
 const virtualItems = ref([])
 
-// 虚拟列表是否已经渲染
+// 虛擬列表渲染?
 const rendered = ref(false)
 
 // 儲存待辦事項
@@ -152,9 +146,9 @@ function navigateToHome() {
   })
 }
 
-// 点击按钮触发渲染虚拟列表的操作
+// 開啟虛擬列表 && 渲染虛擬列表
 function renderVirtualList() {
-  virtualItems.value = Array(1000).fill().map((_, index) => `代辦事項${index + 1}`)
+  virtualItems.value = Array(1000).fill().map((_, index) => `vue-virtual-scroller-DynamicScroller-代辦事項${index + 1}`)
   rendered.value = true
 }
 
@@ -177,7 +171,6 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-/* 样式 */
 * {
   margin: 0;
   padding: 0;
@@ -192,11 +185,12 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.virtual-container{
+.virtual-container {
+  flex: auto 1 1;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
 }
 
 .centered-container {
@@ -312,5 +306,50 @@ button:hover {
   background-color: rgb(172, 171, 171);
 }
 
+.virtual-container {
+  flex: auto 1 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.virtual-list {
+  flex: auto 1 1;
+  overflow: hidden;
+  height: 400px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
 
+.scroller {
+  flex: 1;
+}
+
+.notice {
+  padding: 24px;
+  font-size: 20px;
+  color: #999;
+}
+
+.virtual-list {
+  display: flex;
+  min-height: 32px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.index,
+.text {
+  flex: 1;
+}
+
+.text {
+  max-width: 400px;
+}
+
+.index span {
+  display: inline-block;
+  width: 160px;
+  text-align: right;
+}
 </style>
