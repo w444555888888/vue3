@@ -8,7 +8,7 @@
 -->
 <!-- TodoList -->
 <template>
-  <div id="indexPage">
+  <div id="TodoListPage">
     <nav>
       <select v-model="locale18n" @change="changeLocale">
         <option value="en">en-US</option>
@@ -185,10 +185,14 @@ $textColor: white;
 $primaryColor: #a0a4d9;
 $secondTextColor: #1f2023;
 
-#indexPage {
+#TodoListPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   background-color: rgb(245, 245, 245);
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
 
   select,

@@ -1,55 +1,46 @@
 <!-- TodoDetail.vue -->
 <template>
-  <div>
+  <div id="TodoDetailPage">
     <div class="container">
-      <div v-if="currentPercentage < 100" class="demo-progress">
-        <el-progress :text-inside="true" :stroke-width="25" :percentage="currentPercentage" color="gray"></el-progress>
-      </div>
-      <div v-else class="common-layout">
+      <div class="common-layout">
         <el-container>
-          <TodoDetailNavbar :receivedMessage="receivedMessage" />
-          <el-container class="centered-container">
-            <el-header class="table-header">
-              <button @click="navigateToHome">回首頁</button>
-            </el-header>
-            <el-main>
-              <div class="demo-collapse">
-                <el-collapse>
-                  <el-radio-group v-model="workRadio" size="small" class="workRadio" text-color="white" fill="black">
-                    <el-radio-button label="優先度高" value="優先度高" />
-                    <el-radio-button label="優先度中" value="優先度中" />
-                    <el-radio-button label="優先度低" value="優先度低" />
-                  </el-radio-group>
-                  <div>
-                    <span class="text">待辦事項:{{ workRadio }}</span>
-                    <textarea v-model="storeTheTodoListArray"></textarea>
-                    <button @click="storeTheTodoList">儲存</button>
-                  </div>
-                </el-collapse>
-              </div>
-            </el-main>
-            <el-footer>
-
-              <div class="virtual-container">
-                <h2>虛擬列表</h2>
-                <button @click="renderVirtualList">渲染虛擬列表</button>
-                <div class="virtual-list">
-                  <DynamicScroller v-if="rendered" ref="scroller" :items="virtualItems" :min-item-size="30" :buffer="50"
-                    class="scroller">
-                    <template #default="{ item, index, active }">
-                      <DynamicScrollerItem :item="item" :active="active" :data-index="index" :data-active="active">
-                        <div class="virtual-list">
-                          {{ item }}
-                        </div>
-                      </DynamicScrollerItem>
-                    </template>
-                  </DynamicScroller>
-                </div>
-              </div>
-
-            </el-footer>
-          </el-container>
+          <el-header>
+            <el-button type="primary" @click="navigateToHome">
+              <el-icon>
+                <LocationFilled />
+              </el-icon>首頁</el-button>
+          </el-header>
+          <el-main>
+            <el-radio-group v-model="RadioLevel" size="medium" class="RadioLevel" text-color="white" fill="black">
+              <el-radio-button label="優先度高" value="優先度高" />
+              <el-radio-button label="優先度中" value="優先度中" />
+              <el-radio-button label="優先度低" value="優先度低" />
+            </el-radio-group>
+            <div>
+              <el-input v-model="TodoDetailText" style="width: 500px" :rows="20" type="textarea"
+                class="custom-textarea"></el-input>
+            </div>
+          </el-main>
+          <el-footer>
+            <el-button @click="storeTheTodoList">儲存</el-button>
+          </el-footer>
         </el-container>
+        <div class="virtual-container">
+          <h2>虛擬列表</h2>
+          <button @click="renderVirtualList">渲染虛擬列表</button>
+          <div class="virtual-list">
+            <DynamicScroller v-if="rendered" ref="scroller" :items="virtualItems" :min-item-size="30" :buffer="50"
+              class="scroller">
+              <template #default="{ item, index, active }">
+                <DynamicScrollerItem :item="item" :active="active" :data-index="index" :data-active="active">
+                  <div class="virtual-list">
+                    {{ item }}
+                  </div>
+                </DynamicScrollerItem>
+              </template>
+            </DynamicScroller>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -63,21 +54,11 @@ import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
-import TodoDetailNavbar from './TodoDetailNavbar.vue'
-import bus from 'vue3-eventbus'
-
-// eventbus
-const receivedMessage = ref('orginal receivedMessage')
-bus.on('message', (value) => {
-  receivedMessage.value = value
-})
 
 // textarea
-const workRadio = ref('優先度高')
-const storeTheTodoListArray = ref('')
+const RadioLevel = ref('優先度高')
+const TodoDetailText = ref('')
 
-// 滾動條
-const currentPercentage = ref(0)
 // 使用路由router 路由params
 const route = useRoute()
 const routeindex = ref(route.params.index)
@@ -98,7 +79,7 @@ function storeTheTodoList() {
       const dataId = response.data
       const ExistId = dataId.some(item => item.id === routeindex.value)
       if (ExistId) {
-        axios.put(`http://localhost:3000/comments/${routeindex.value}`, { text: storeTheTodoListArray.value })
+        axios.put(`http://localhost:3000/comments/${routeindex.value}`, { text: TodoDetailText.value })
           .then(response => {
             ElNotification({
               title: 'Success',
@@ -114,7 +95,7 @@ function storeTheTodoList() {
             })
           })
       } else {
-        axios.post('http://localhost:3000/comments', { id: routeindex.value, text: storeTheTodoListArray.value })
+        axios.post('http://localhost:3000/comments', { id: routeindex.value, text: TodoDetailText.value })
           .then(response => {
             if (response.status === 201) {
               ElNotification({
@@ -153,15 +134,9 @@ function renderVirtualList() {
 }
 
 onMounted(async () => {
-  const interval = setInterval(() => {
-    if (currentPercentage.value < 100) {
-      currentPercentage.value += 50
-    }
-  }, 1000)
-
   await store.fetchCommentsApi()
   let apiCommentFilter = store.apiComments.filter(e => e.id === routeindex.value)
-  storeTheTodoListArray.value = apiCommentFilter[0].text
+  TodoDetailText.value = apiCommentFilter[0].text
 })
 
 onBeforeMount(() => {
@@ -171,14 +146,24 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif';
+} */
+
+#TodoDetailPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  background-color: rgb(245, 245, 245);
+  padding: 30px;
+  border-radius: 8px;
 }
 
-.container {
+.el-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -193,19 +178,13 @@ onBeforeMount(() => {
 
 }
 
-.centered-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.el-main {
+  height: 500px;
+  overflow: hidden;
 }
 
-.demo-progress .el-progress--line {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  width: 350px;
+.el-button {
+  padding: 10px;
 }
 
 .el-row {
@@ -225,8 +204,9 @@ onBeforeMount(() => {
   min-height: 36px;
 }
 
-.table-header {
+.el-header {
   margin-right: 5px;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -243,54 +223,14 @@ onBeforeMount(() => {
   font-size: 17px;
 }
 
-.gray:hover {
-  color: rgb(255, 255, 255);
-  background-color: rgb(67, 67, 67);
+.custom-textarea {
+  --el-input-focus-border-color: rgb(161, 161, 161);
+  border: 2px solid #e3e2e2;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
-textarea {
-  font-size: 1.125rem;
-  padding: 1rem 2rem;
-  background-color: #fff;
-  border-radius: 0.5rem;
-  margin-bottom: 1.5rem;
-  width: 500px;
-  height: 400px;
-  resize: none;
-  overflow: hidden;
-  word-wrap: break-word;
-  outline: none;
-}
-
-textarea:focus,
-textarea:valid {
-  color: black;
-  border: 4px solid #9f9f9f;
-}
-
-textarea:not(:focus) {
-  border: 4px solid #e3e2e2;
-}
-
-.el-collapse {
-  --el-collapse-border-color: var(--el-border-color-lighter);
-  --el-collapse-header-height: 48px;
-  --el-collapse-header-bg-color: var(--el-fill-color-blank);
-  --el-collapse-header-text-color: #050505;
-  --el-collapse-header-font-size: 12px;
-  --el-collapse-content-bg-color: var(--el-fill-color-blank);
-  --el-collapse-content-font-size: 12px;
-  --el-collapse-content-text-color: var(--el-text-color-primary);
-  border-top: 1px solid var(--el-collapse-border-color);
-  border-bottom: 1px solid var(--el-collapse-border-color);
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-}
-
-.workRadio {
-  margin-bottom: 5px;
-}
-
-button {
+.el-button {
   cursor: pointer;
   border: 1px solid #a0a4d9;
   color: #1f2023;
@@ -302,9 +242,6 @@ button {
   min-height: 25px;
 }
 
-button:hover {
-  background-color: rgb(172, 171, 171);
-}
 
 .virtual-container {
   flex: auto 1 1;
