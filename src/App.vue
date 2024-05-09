@@ -1,8 +1,6 @@
 <!-- App.vue -->
 <template>
-  <div id="app">
     <router-view></router-view>
-  </div>
 </template>
 
 
@@ -20,19 +18,20 @@ $size5: 48px;
 $backgroundColor: white;
 $secondTextColor: #1f2023;
 
-body {
+* {
   margin: 0;
   padding: 0;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: balck;
-  background-color: rgb(230, 230, 230);
+  box-sizing: border-box;
 
-  #app {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: balck;
+    background-color: rgb(230, 230, 230);
+
   }
 }
 </style>

@@ -22,45 +22,23 @@
       <button>{{ t("searchButton") }}</button>
     </form>
 
-    <h3>{{ t("titleSecond") }}</h3>
     <ul>
       <li v-for="(todo, index) in pagesTodos" :key="todo.id">
         <span :class="todo.done ? 'done' : 'pending'">
           <span>
-            <input
-              type="radio"
-              :checked="!todo.done"
-              :id="`pending${todo.id}`"
-              :name="`done${todo.id}`"
-              :value="false"
-              @change="dispatchtodoStatus(todo.id, false)"
-            />
+            <input type="radio" :checked="!todo.done" :id="`pending${todo.id}`" :name="`done${todo.id}`" :value="false"
+              @change="dispatchtodoStatus(todo.id, false)" />
             <label :for="`pending${todo.id}`">{{ t("undone") }}</label>
-            <input
-              type="radio"
-              :checked="todo.done"
-              :id="`done${todo.id}`"
-              :name="`done${todo.id}`"
-              :value="true"
-              @change="dispatchtodoStatus(todo.id, true)"
-            />
+            <input type="radio" :checked="todo.done" :id="`done${todo.id}`" :name="`done${todo.id}`" :value="true"
+              @change="dispatchtodoStatus(todo.id, true)" />
             <label :for="`done${todo.id}`">{{ t("done") }}</label>
           </span>
 
-          <div
-            class="li-data"
-            v-if="!todo.editing"
-            @dblclick="dispatchStartEditing(todo.id)"
-          >
+          <div class="li-data" v-if="!todo.editing" @dblclick="dispatchStartEditing(todo.id)">
             {{ todo.content }}
           </div>
-          <input
-            v-else
-            type="text"
-            v-model="store.editedContent"
-            @blur="dispatchStopEditing(todo.id)"
-            @keyup.enter="dispatchStopEditing(todo.id)"
-          />
+          <input v-else type="text" v-model="store.editedContent" @blur="dispatchStopEditing(todo.id)"
+            @keyup.enter="dispatchStopEditing(todo.id)" />
         </span>
         <div class="li-btn">
           <button @click="dispatchRemoveTodo(todo.id)">
@@ -75,14 +53,8 @@
     <br />
     <!-- pages -->
     <div class="pagination-container">
-      <el-pagination
-        v-model:currentPage="currentPage"
-        :total="totalItems"
-        :page-size="pageSize"
-        @current-change="handlePageChange"
-        background
-        small
-      />
+      <el-pagination v-model:currentPage="currentPage" :total="totalItems" :page-size="pageSize"
+        @current-change="handlePageChange" background small />
     </div>
   </div>
 </template>
@@ -122,23 +94,23 @@ const changeLocale = () => {
 }
 
 
-function dispatchAddTodo () {
+function dispatchAddTodo() {
   store.addTodo()
 }
 
-function dispatchRemoveTodo (todoId) {
+function dispatchRemoveTodo(todoId) {
   store.removeTodo(todoId)
 }
 
-function dispatchStartEditing (todoId) {
+function dispatchStartEditing(todoId) {
   store.startEditing(todoId)
 }
 
-function dispatchStopEditing (todoId) {
+function dispatchStopEditing(todoId) {
   store.stopEditing(todoId)
 }
 
-function dispatchtodoStatus (todoId, boolen) {
+function dispatchtodoStatus(todoId, boolen) {
   store.todoStatus(todoId, boolen)
 }
 
@@ -147,7 +119,7 @@ function dispatchtodoStatus (todoId, boolen) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail (id) {
+function navigateToDetail(id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
@@ -189,11 +161,17 @@ $secondTextColor: #1f2023;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   background-color: rgb(245, 245, 245);
   padding: 30px;
   border-radius: 8px;
+
+
+  nav {
+    display: flex;
+    justify-content:flex-start;
+    margin-bottom: 10px;
+  }
 
   select,
   option {

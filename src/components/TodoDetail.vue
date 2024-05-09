@@ -145,14 +145,7 @@ onBeforeMount(() => {
 
 </script>
 
-<style scoped>
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif';
-} */
-
+<style scoped lang="scss">
 #TodoDetailPage {
   display: flex;
   justify-content: center;
@@ -176,6 +169,14 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
 
+  .virtual-list {
+    flex: auto 1 1;
+    overflow: hidden;
+    height: 400px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .el-main {
@@ -185,14 +186,23 @@ onBeforeMount(() => {
 
 .el-button {
   padding: 10px;
+  cursor: pointer;
+  border: 1px solid #a0a4d9;
+  color: #1f2023;
+  font-weight: bold;
+  outline: none;
+  border-radius: 0.25rem;
+  background-color: #7e7e7e;
+  min-width: 60px;
+  min-height: 25px;
 }
 
 .el-row {
   margin-bottom: 20px;
-}
 
-.el-row:last-child {
-  margin-bottom: 0;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .el-col {
@@ -211,16 +221,16 @@ onBeforeMount(() => {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-}
 
-.gray {
-  margin-right: 20px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(161, 161, 161);
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 17px;
+  .gray {
+    margin-right: 20px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(161, 161, 161);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 17px;
+  }
 }
 
 .custom-textarea {
@@ -228,66 +238,9 @@ onBeforeMount(() => {
   border: 2px solid #e3e2e2;
   border-radius: 5px;
   font-size: 14px;
-}
 
-.el-button {
-  cursor: pointer;
-  border: 1px solid #a0a4d9;
-  color: #1f2023;
-  font-weight: bold;
-  outline: none;
-  border-radius: 0.25rem;
-  background-color: #7e7e7e;
-  min-width: 60px;
-  min-height: 25px;
-}
-
-
-.virtual-container {
-  flex: auto 1 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.virtual-list {
-  flex: auto 1 1;
-  overflow: hidden;
-  height: 400px;
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-}
-
-.scroller {
-  flex: 1;
-}
-
-.notice {
-  padding: 24px;
-  font-size: 20px;
-  color: #999;
-}
-
-.virtual-list {
-  display: flex;
-  min-height: 32px;
-  padding: 12px;
-  box-sizing: border-box;
-}
-
-.index,
-.text {
-  flex: 1;
-}
-
-.text {
-  max-width: 400px;
-}
-
-.index span {
-  display: inline-block;
-  width: 160px;
-  text-align: right;
+  .el-input__inner {
+    overflow: hidden;
+  }
 }
 </style>
