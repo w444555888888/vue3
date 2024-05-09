@@ -11,36 +11,21 @@
               </el-icon>首頁</el-button>
           </el-header>
           <el-main>
-            <el-radio-group v-model="RadioLevel" size="medium" class="RadioLevel" text-color="white" fill="black">
+            <el-radio-group v-model="RadioLevel" size="medium" class="RadioLevel" text-color="white" fill="black"
+              type="info">
               <el-radio-button label="優先度高" value="優先度高" />
               <el-radio-button label="優先度中" value="優先度中" />
               <el-radio-button label="優先度低" value="優先度低" />
             </el-radio-group>
             <div>
-              <el-input v-model="TodoDetailText" style="width: 500px" :rows="20" type="textarea"
-                class="custom-textarea"></el-input>
+              <el-input v-model="TodoDetailText" style="width: 500px" :rows="20" type="textarea" class="custom-textarea"
+                input-style="color:black"></el-input>
             </div>
           </el-main>
           <el-footer>
             <el-button @click="storeTheTodoList">儲存</el-button>
           </el-footer>
         </el-container>
-        <div class="virtual-container">
-          <h2>虛擬列表</h2>
-          <button @click="renderVirtualList">渲染虛擬列表</button>
-          <div class="virtual-list">
-            <DynamicScroller v-if="rendered" ref="scroller" :items="virtualItems" :min-item-size="30" :buffer="50"
-              class="scroller">
-              <template #default="{ item, index, active }">
-                <DynamicScrollerItem :item="item" :active="active" :data-index="index" :data-active="active">
-                  <div class="virtual-list">
-                    {{ item }}
-                  </div>
-                </DynamicScrollerItem>
-              </template>
-            </DynamicScroller>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -66,11 +51,6 @@ const routeindex = ref(route.params.index)
 const store = usePiniaStore()
 
 
-// 虛擬列表數據
-const virtualItems = ref([])
-
-// 虛擬列表渲染?
-const rendered = ref(false)
 
 // 儲存待辦事項
 function storeTheTodoList() {
@@ -127,11 +107,7 @@ function navigateToHome() {
   })
 }
 
-// 開啟虛擬列表 && 渲染虛擬列表
-function renderVirtualList() {
-  virtualItems.value = Array(1000).fill().map((_, index) => `vue-virtual-scroller-DynamicScroller-代辦事項${index + 1}`)
-  rendered.value = true
-}
+
 
 onMounted(async () => {
   await store.fetchCommentsApi()
@@ -163,24 +139,7 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.virtual-container {
-  flex: auto 1 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  .virtual-list {
-    flex: auto 1 1;
-    overflow: hidden;
-    height: 400px;
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-  }
-}
-
 .el-main {
-  height: 500px;
   overflow: hidden;
 }
 
@@ -221,26 +180,18 @@ onBeforeMount(() => {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-
-  .gray {
-    margin-right: 20px;
-    color: rgb(255, 255, 255);
-    background-color: rgb(161, 161, 161);
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 17px;
-  }
 }
 
 .custom-textarea {
   --el-input-focus-border-color: rgb(161, 161, 161);
   border: 2px solid #e3e2e2;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 15px;
+}
 
-  .el-input__inner {
-    overflow: hidden;
-  }
+
+
+.el-radio-button:hover .el-radio-button__inner{
+  --el-radio-button-hover: red;
 }
 </style>

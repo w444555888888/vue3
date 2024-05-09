@@ -15,7 +15,6 @@ import i18n from './i18n'
 import { createPinia } from 'pinia'
 import store from './store/store.js'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import VueCropper from 'vue-cropper'
 import 'vue-cropper/dist/index.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -49,8 +48,6 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 
-// 剪裁圖片Cropper
-app.use(VueCropper)
 // element-plus
 app.use(ElementPlus)
 app.use(i18n)
