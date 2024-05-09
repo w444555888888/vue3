@@ -191,7 +191,7 @@ onBeforeMount(() => {
 
 
 
-.el-radio-button:hover .el-radio-button__inner{
-  --el-radio-button-hover: red;
+::v-deep .el-radio-button__inner:hover {
+  color: rgb(161, 161, 161);
 }
 </style>
