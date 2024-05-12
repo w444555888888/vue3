@@ -29,7 +29,13 @@ export const usePiniaStore = defineStore({
                 this.saveData(this.todos)
                 return updatedTodo
             }
-        },
+
+            //  this.todos = [
+            //     ...this.todos.slice(0, editedIndex),
+            //     updatedTodo,
+            //     ...this.todos.slice(editedIndex + 1)
+            // ];
+        },   
         editTodo (todoId) {
             return this.todos.find(todo => todo.id === todoId)
         }
