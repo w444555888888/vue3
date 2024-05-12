@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-12 20:47:13
+ * @LastEditTime: 2024-05-12 21:21:02
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -54,8 +54,8 @@
           <el-input v-model="form.title"></el-input>
         </el-form-item>
         <el-form-item label="完成狀態" required>
-          <el-radio v-model="form.done" label="false" value="false">未完成</el-radio>
-          <el-radio v-model="form.done" label="true" value="true">完成</el-radio>
+          <el-radio v-model="form.done" :label="false">未完成</el-radio>
+          <el-radio v-model="form.done" :label="true">完成</el-radio>
         </el-form-item>
         <el-form-item label="內容" required>
           <el-input v-model="form.content"></el-input>
@@ -98,23 +98,19 @@ function openDrawer () {
 function submitTodo () {
   const { id, title, content, done } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
-    // if (store.todos.some(todo => todo.id === id)) {
-    //   store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done })
-    // } else {
-    //   store.addTodo({
-    //     id: uuidv4(),
-    //     done: done,
-    //     todoTitle: title.trim(),
-    //     todoContent: content.trim()
-    //   })
-    // }
-    store.addTodo({
+    // 有id代表是編輯
+    if (id) {
+      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done })
+    } else {
+      store.addTodo({
         id: uuidv4(),
         done: done,
         todoTitle: title.trim(),
         todoContent: content.trim()
       })
+    }
 
+    form.value.id = ''
     form.value.title = ''
     form.value.content = ''
     form.value.done = false
