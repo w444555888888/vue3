@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-02 12:15:04
+ * @LastEditTime: 2024-05-12 20:47:13
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -17,34 +17,23 @@
     </nav>
 
     <h1>{{ t("titleFirst") }}</h1>
-    <form @submit.prevent="dispatchAddTodo">
-      <input v-model.trim="store.newTodo" name="newTodo" autocomplete="off" />
+    <form @click="openDrawer">
       <button>{{ t("searchButton") }}</button>
     </form>
 
     <ul>
       <li v-for="(todo, index) in pagesTodos" :key="todo.id">
         <span :class="todo.done ? 'done' : 'pending'">
-          <span>
-            <input type="radio" :checked="!todo.done" :id="`pending${todo.id}`" :name="`done${todo.id}`" :value="false"
-              @change="dispatchtodoStatus(todo.id, false)" />
-            <label :for="`pending${todo.id}`">{{ t("undone") }}</label>
-            <input type="radio" :checked="todo.done" :id="`done${todo.id}`" :name="`done${todo.id}`" :value="true"
-              @change="dispatchtodoStatus(todo.id, true)" />
-            <label :for="`done${todo.id}`">{{ t("done") }}</label>
-          </span>
-
-          <div class="li-data" v-if="!todo.editing" @dblclick="dispatchStartEditing(todo.id)">
-            {{ todo.content }}
+          <div class="li-data" v-if="!todo.editing">
+            {{ todo.todoTitle }}
           </div>
-          <input v-else type="text" v-model="store.editedContent" @blur="dispatchStopEditing(todo.id)"
-            @keyup.enter="dispatchStopEditing(todo.id)" />
         </span>
         <div class="li-btn">
           <button @click="dispatchRemoveTodo(todo.id)">
             {{ t("delete") }}
           </button>
           <button @click="navigateToDetail(todo.id)">{{ t("detail") }}</button>
+          <button @click="editToForm(todo.id)">{{ t("edit") }}</button>
         </div>
       </li>
     </ul>
@@ -57,6 +46,26 @@
         @current-change="handlePageChange" background small />
     </div>
   </div>
+
+  <div>
+    <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="50%">
+      <el-form ref="todoFormRef" :model="form" label-width="80px" style="justify-content: flex-start">
+        <el-form-item label="標題" required>
+          <el-input v-model="form.title"></el-input>
+        </el-form-item>
+        <el-form-item label="完成狀態" required>
+          <el-radio v-model="form.done" label="false" value="false">未完成</el-radio>
+          <el-radio v-model="form.done" label="true" value="true">完成</el-radio>
+        </el-form-item>
+        <el-form-item label="內容" required>
+          <el-input v-model="form.content"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitTodo">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </el-drawer>
+  </div>
 </template>
 
 
@@ -66,15 +75,69 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
+import { v4 as uuidv4 } from 'uuid'
 import { ElNotification } from 'element-plus'
-import VuePictureCropper, { cropper } from 'vue-picture-cropper'
+
+// pinia
+const store = usePiniaStore()
+
+const todoFormRef = ref('')
+const drawer = ref(false)
+const form = ref({
+  id: '',
+  title: '',
+  content: '',
+  done: false,
+})
+
+function openDrawer () {
+  drawer.value = true
+}
+
+
+function submitTodo () {
+  const { id, title, content, done } = form.value
+  if (title.trim() !== '' && content.trim() !== '' && done !== '') {
+    // if (store.todos.some(todo => todo.id === id)) {
+    //   store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done })
+    // } else {
+    //   store.addTodo({
+    //     id: uuidv4(),
+    //     done: done,
+    //     todoTitle: title.trim(),
+    //     todoContent: content.trim()
+    //   })
+    // }
+    store.addTodo({
+        id: uuidv4(),
+        done: done,
+        todoTitle: title.trim(),
+        todoContent: content.trim()
+      })
+
+    form.value.title = ''
+    form.value.content = ''
+    form.value.done = false
+    drawer.value = false
+  }
+}
+
+
+function editToForm (id) {
+  drawer.value = true
+  const todo = store.editTodo(id)
+  form.value.id = id
+  form.value.title = todo.todoTitle
+  form.value.content = todo.todoContent
+  form.value.done = todo.done
+}
+
 
 const currentPage = ref(1)
 const locale18n = ref(i18n.global.locale)
 
-// pinia
-const store = usePiniaStore()
-const pageSize = 5
+
+const pageSize = 10
 const totalItems = computed(() => store.todos.length)
 const pagesTodos = computed(() => {
   const startIndex = (currentPage.value - 1) * pageSize
@@ -94,23 +157,23 @@ const changeLocale = () => {
 }
 
 
-function dispatchAddTodo() {
+function dispatchAddTodo () {
   store.addTodo()
 }
 
-function dispatchRemoveTodo(todoId) {
+function dispatchRemoveTodo (todoId) {
   store.removeTodo(todoId)
 }
 
-function dispatchStartEditing(todoId) {
+function dispatchStartEditing (todoId) {
   store.startEditing(todoId)
 }
 
-function dispatchStopEditing(todoId) {
+function dispatchStopEditing (todoId) {
   store.stopEditing(todoId)
 }
 
-function dispatchtodoStatus(todoId, boolen) {
+function dispatchtodoStatus (todoId, boolen) {
   store.todoStatus(todoId, boolen)
 }
 
@@ -119,7 +182,7 @@ function dispatchtodoStatus(todoId, boolen) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail(id) {
+function navigateToDetail (id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
@@ -166,10 +229,9 @@ $secondTextColor: #1f2023;
   padding: 30px;
   border-radius: 8px;
 
-
   nav {
     display: flex;
-    justify-content:flex-start;
+    justify-content: flex-start;
     margin-bottom: 10px;
   }
 

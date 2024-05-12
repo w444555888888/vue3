@@ -7,64 +7,33 @@ export const usePiniaStore = defineStore({
     id: 'pinia',
     state: () => ({
         locale: 'en',
-        newTodo: '',
         todos: [],
-        editedContent: '',
         apiComments: [],
-        editing: false,
     }),
     actions: {
-        // 新增輸入框
-        setNewTodo (newTodo) {
-            this.newTodo = newTodo
-        },
         setTodos (todos) {
             this.todos = todos
         },
-        todoStatus(todoId, boolen){
-            const findtodoId = this.todos.find(todo => todo.id === todoId)
-            console.log(findtodoId);
-            if (findtodoId) {
-                findtodoId.done = boolen;
-                this.saveData(this.todos);
-              } 
-        },
-        addTodo () {
-            if (this.newTodo.trim() !== '') {
-                this.todos.push({
-                    id: uuidv4(),
-                    done: false,
-                    content: this.newTodo.trim(),
-                    editing: false,
-                })
-                this.setNewTodo('')
-                this.saveData(this.todos)
-            }
+        addTodo (newTodo) {
+            this.todos.push(newTodo)
+            this.saveData(this.todos)
         },
         removeTodo (todoId) {
-            this.todos = this.todos.filter(todo => todo.id !== todoId);
-            this.saveData(this.todos);
-          }
-          ,
-        startEditing (todoId) {
-            const todoToEdit = this.todos.find(todo => todo.id === todoId)
-            if (todoToEdit) {
-                todoToEdit.editing = true
-                this.editedContent = todoToEdit.content
+            this.todos = this.todos.filter(todo => todo.id !== todoId)
+            this.saveData(this.todos)
+        },
+        editUpdateTodo (todoId, updatedTodo) {
+            const editedIndex = this.todos.findIndex(todo => todo.id === todoId)
+            if (editedIndex !== -1) {
+                this.todos.splice(editedIndex, 1, updatedTodo)
                 this.saveData(this.todos)
+                return updatedTodo
             }
         },
-
-        stopEditing (todoId) {
-            const todoToStopEdit = this.todos.find(todo => todo.id === todoId)
-            if (todoToStopEdit) {
-                todoToStopEdit.editing = false
-                if (this.editedContent !== '') {
-                    todoToStopEdit.content = this.editedContent.trim()
-                }
-                this.saveData(this.todos)
-            }
-        },
+        editTodo (todoId) {
+            return this.todos.find(todo => todo.id === todoId)
+        }
+        ,
         initializeTodos () {
             // parse解析陣列
             const todosData = JSON.parse(localStorage.getItem('todos')) || []
@@ -89,10 +58,10 @@ export const usePiniaStore = defineStore({
         },
         getDefaultTodo () {
             return [
-                { id: 1, done: true, content: 'Lotus Elise' },
-                { id: 2, done: false, content: 'Lotus Exige' },
-                { id: 3, done: false, content: 'Lotus Caterham 620' },
-                { id: 4, done: false, content: 'Lotus Emira' },
+                { id: 1, done: false, todoTitle: 'Lotus Elise', todoContent: 'Lotus Elise跑車' },
+                { id: 2, done: false, todoTitle: 'Lotus Exige', todoContent: 'Lotus Exige跑車' },
+                { id: 3, done: false, todoTitle: 'Lotus Caterham 620', todoContent: 'Lotus Caterham 620跑車' },
+                { id: 4, done: false, todoTitle: 'Lotus Emira', todoContent: 'Lotus Emira跑車' },
             ]
         },
     },
