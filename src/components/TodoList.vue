@@ -122,15 +122,22 @@ function submitTodo() {
 
 
 function editToForm(id) {
-  // id判斷是新增還是編輯
   drawer.value = true
-  if(id){
-  const todo = store.editTodo(id)
-  form.value.id = id
-  form.value.done = todo.done
-  form.value.title = todo.todoTitle
-  form.value.content = todo.todoContent
-  form.value.datePicker = todo.datePicker
+  // id判斷是新增還是編輯
+  let existId = store.todos.find(todo  => todo.id===id)
+  if (existId) {
+    const todo = store.editTodo(id)
+    form.value.id = id
+    form.value.done = todo.done
+    form.value.title = todo.todoTitle
+    form.value.content = todo.todoContent
+    form.value.datePicker = todo.datePicker
+  } else {
+    form.value.id = ''
+    form.value.done = false
+    form.value.title = ''
+    form.value.content = ''
+    form.value.datePicker = ''
   }
 }
 
