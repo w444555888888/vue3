@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-12 22:05:22
+ * @LastEditTime: 2024-05-13 21:54:55
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -60,7 +60,7 @@
           <el-radio v-model="form.done" :label="true">完成</el-radio>
         </el-form-item>
         <el-form-item label="內容" required>
-        <QuillEditor theme="snow" v-model:content="form.content"  contentType="html"/>
+          <QuillEditor theme="snow" v-model:content="form.content" contentType="html" ref="quillEditorRef" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
@@ -80,7 +80,7 @@ import i18n from '../i18n.js'
 import { v4 as uuidv4 } from 'uuid'
 import { ElNotification } from 'element-plus'
 import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 // pinia
 const store = usePiniaStore()
@@ -95,10 +95,11 @@ const form = ref({
   datePicker: '',
 })
 
+const quillEditorRef = ref(null)
 
 
 
-function submitTodo() {
+function submitTodo () {
   const { id, title, content, done, datePicker } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     // 有id代表是編輯
@@ -124,7 +125,7 @@ function submitTodo() {
 }
 
 
-function editToForm(id) {
+function editToForm (id) {
   drawer.value = true
   // id判斷是新增還是編輯
   let existId = store.todos.find(todo => todo.id === id)
@@ -133,7 +134,7 @@ function editToForm(id) {
     form.value.id = id
     form.value.done = todo.done
     form.value.title = todo.todoTitle
-    form.value.content = todo.todoContent;
+    form.value.content = todo.todoContent
     form.value.datePicker = todo.datePicker
   } else {
     form.value.id = ''
@@ -141,6 +142,7 @@ function editToForm(id) {
     form.value.title = ''
     form.value.content = ''
     form.value.datePicker = ''
+    quillEditorRef.value.setText('')
   }
 }
 
@@ -170,23 +172,23 @@ const changeLocale = () => {
 }
 
 
-function dispatchAddTodo() {
+function dispatchAddTodo () {
   store.addTodo()
 }
 
-function dispatchRemoveTodo(todoId) {
+function dispatchRemoveTodo (todoId) {
   store.removeTodo(todoId)
 }
 
-function dispatchStartEditing(todoId) {
+function dispatchStartEditing (todoId) {
   store.startEditing(todoId)
 }
 
-function dispatchStopEditing(todoId) {
+function dispatchStopEditing (todoId) {
   store.stopEditing(todoId)
 }
 
-function dispatchtodoStatus(todoId, boolen) {
+function dispatchtodoStatus (todoId, boolen) {
   store.todoStatus(todoId, boolen)
 }
 
@@ -195,7 +197,7 @@ function dispatchtodoStatus(todoId, boolen) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail(id) {
+function navigateToDetail (id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
@@ -409,10 +411,9 @@ $secondTextColor: #1f2023;
 ::v-deep .ql-toolbar {
   width: calc(100% - 60px);
 }
+
 ::v-deep .ql-container {
   height: 300px;
   width: calc(100% - 60px);
 }
-
-
 </style>
