@@ -50,6 +50,9 @@
   <div>
     <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="50%">
       <el-form ref="todoFormRef" :model="form" label-width="80px" style="justify-content: flex-start">
+        <el-form-item label="日期" required>
+          <el-date-picker v-model="form.datePicker" type="datetime" placeholder="Select date and time" />
+        </el-form-item>
         <el-form-item label="標題" required>
           <el-input v-model="form.title"></el-input>
         </el-form-item>
@@ -88,44 +91,51 @@ const form = ref({
   title: '',
   content: '',
   done: false,
+  datePicker: '',
 })
 
-function openDrawer () {
+
+
+function openDrawer() {
   drawer.value = true
 }
 
 
-function submitTodo () {
-  const { id, title, content, done } = form.value
+function submitTodo() {
+  const { id, title, content, done, datePicker } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     // 有id代表是編輯
     if (id) {
-      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done })
+      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker })
     } else {
       store.addTodo({
         id: uuidv4(),
         done: done,
         todoTitle: title.trim(),
-        todoContent: content.trim()
+        todoContent: content.trim(),
+        datePicker: datePicker
       })
     }
 
     form.value.id = ''
+    form.value.done = false
     form.value.title = ''
     form.value.content = ''
-    form.value.done = false
+    form.value.datePicker = ''
     drawer.value = false
   }
 }
 
 
-function editToForm (id) {
+function editToForm(id) {
   drawer.value = true
   const todo = store.editTodo(id)
   form.value.id = id
+  form.value.done = todo.done
   form.value.title = todo.todoTitle
   form.value.content = todo.todoContent
-  form.value.done = todo.done
+  form.value.datePicker = todo.datePicker
+
 }
 
 
@@ -153,23 +163,23 @@ const changeLocale = () => {
 }
 
 
-function dispatchAddTodo () {
+function dispatchAddTodo() {
   store.addTodo()
 }
 
-function dispatchRemoveTodo (todoId) {
+function dispatchRemoveTodo(todoId) {
   store.removeTodo(todoId)
 }
 
-function dispatchStartEditing (todoId) {
+function dispatchStartEditing(todoId) {
   store.startEditing(todoId)
 }
 
-function dispatchStopEditing (todoId) {
+function dispatchStopEditing(todoId) {
   store.stopEditing(todoId)
 }
 
-function dispatchtodoStatus (todoId, boolen) {
+function dispatchtodoStatus(todoId, boolen) {
   store.todoStatus(todoId, boolen)
 }
 
@@ -178,7 +188,7 @@ function dispatchtodoStatus (todoId, boolen) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail (id) {
+function navigateToDetail(id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },

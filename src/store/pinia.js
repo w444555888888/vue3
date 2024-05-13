@@ -11,18 +11,18 @@ export const usePiniaStore = defineStore({
         apiComments: [],
     }),
     actions: {
-        setTodos (todos) {
+        setTodos(todos) {
             this.todos = todos
         },
-        addTodo (newTodo) {
+        addTodo(newTodo) {
             this.todos.push(newTodo)
             this.saveData(this.todos)
         },
-        removeTodo (todoId) {
+        removeTodo(todoId) {
             this.todos = this.todos.filter(todo => todo.id !== todoId)
             this.saveData(this.todos)
         },
-        editUpdateTodo (todoId, updatedTodo) {
+        editUpdateTodo(todoId, updatedTodo) {
             const editedIndex = this.todos.findIndex(todo => todo.id === todoId)
             if (editedIndex !== -1) {
                 this.todos.splice(editedIndex, 1, updatedTodo)
@@ -35,12 +35,12 @@ export const usePiniaStore = defineStore({
             //     updatedTodo,
             //     ...this.todos.slice(editedIndex + 1)
             // ];
-        },   
-        editTodo (todoId) {
+        },
+        editTodo(todoId) {
             return this.todos.find(todo => todo.id === todoId)
         }
         ,
-        initializeTodos () {
+        initializeTodos() {
             // parse解析陣列
             const todosData = JSON.parse(localStorage.getItem('todos')) || []
             if (todosData.length === 0) {
@@ -49,7 +49,7 @@ export const usePiniaStore = defineStore({
                 this.setTodos(todosData)
             }
         },
-        async fetchCommentsApi () {
+        async fetchCommentsApi() {
             try {
                 const commentsResponse = await axios.get('http://localhost:3000/comments')
                 this.apiComments = commentsResponse.data
@@ -57,17 +57,17 @@ export const usePiniaStore = defineStore({
                 console.error('Error axios data from API', error)
             }
         },
-        saveData (todos) {
+        saveData(todos) {
             // stringify儲存字串
             const storageData = JSON.stringify(todos)
             localStorage.setItem('todos', storageData)
         },
-        getDefaultTodo () {
+        getDefaultTodo() {
             return [
-                { id: 1, done: false, todoTitle: 'Lotus Elise', todoContent: 'Lotus Elise跑車' },
-                { id: 2, done: false, todoTitle: 'Lotus Exige', todoContent: 'Lotus Exige跑車' },
-                { id: 3, done: false, todoTitle: 'Lotus Caterham 620', todoContent: 'Lotus Caterham 620跑車' },
-                { id: 4, done: false, todoTitle: 'Lotus Emira', todoContent: 'Lotus Emira跑車' },
+                { id: 1, done: false, todoTitle: 'Lotus Elise', todoContent: 'Lotus Elise跑車', datePicker: '2024-05-16 00:00:00' },
+                { id: 2, done: false, todoTitle: 'Lotus Exige', todoContent: 'Lotus Exige跑車', datePicker: '2024-05-16 00:00:00' },
+                { id: 3, done: false, todoTitle: 'Lotus Caterham 620', todoContent: 'Lotus Caterham 620跑車', datePicker: '2024-05-16 00:00:00' },
+                { id: 4, done: false, todoTitle: 'Lotus Emira', todoContent: 'Lotus Emira跑車', datePicker: '2024-05-16 00:00:00' },
             ]
         },
     },
