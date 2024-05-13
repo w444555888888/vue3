@@ -22,6 +22,7 @@ import eventBus from 'vue3-eventbus'
 import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
@@ -29,24 +30,15 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 // eventbus掛載全局
 app.use(eventBus)
-
 app.use(VueVirtualScroller)
-
-
 // vue的調適工具配置
 app.config.devtools = true
-
-
 // vuex
 app.use(store)
-
-
 // Pinia
 // 持久化piniaPluginPersistedstate
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-
-
 // element-plus
 app.use(ElementPlus)
 app.use(i18n)

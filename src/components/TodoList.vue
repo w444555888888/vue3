@@ -38,7 +38,6 @@
       </li>
     </ul>
     <h4 v-if="store.todos.length === 0">No data</h4>
-
     <br />
     <!-- pages -->
     <div class="pagination-container">
@@ -61,7 +60,7 @@
           <el-radio v-model="form.done" :label="true">完成</el-radio>
         </el-form-item>
         <el-form-item label="內容" required>
-          <el-input v-model="form.content"></el-input>
+        <QuillEditor theme="snow" v-model:content="form.content"  contentType="html"/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
@@ -80,6 +79,8 @@ import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
 import { v4 as uuidv4 } from 'uuid'
 import { ElNotification } from 'element-plus'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 // pinia
 const store = usePiniaStore()
@@ -93,6 +94,8 @@ const form = ref({
   done: false,
   datePicker: '',
 })
+
+
 
 
 function submitTodo() {
@@ -124,13 +127,13 @@ function submitTodo() {
 function editToForm(id) {
   drawer.value = true
   // id判斷是新增還是編輯
-  let existId = store.todos.find(todo  => todo.id===id)
+  let existId = store.todos.find(todo => todo.id === id)
   if (existId) {
     const todo = store.editTodo(id)
     form.value.id = id
     form.value.done = todo.done
     form.value.title = todo.todoTitle
-    form.value.content = todo.todoContent
+    form.value.content = todo.todoContent;
     form.value.datePicker = todo.datePicker
   } else {
     form.value.id = ''
@@ -402,4 +405,14 @@ $secondTextColor: #1f2023;
     margin-bottom: 10px;
   }
 }
+
+::v-deep .ql-toolbar {
+  width: calc(100% - 60px);
+}
+::v-deep .ql-container {
+  height: 300px;
+  width: calc(100% - 60px);
+}
+
+
 </style>
