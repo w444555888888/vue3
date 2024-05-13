@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-13 21:54:55
+ * @LastEditTime: 2024-05-13 23:52:06
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -60,7 +60,8 @@
           <el-radio v-model="form.done" :label="true">完成</el-radio>
         </el-form-item>
         <el-form-item label="內容" required>
-          <QuillEditor theme="snow" v-model:content="form.content" contentType="html" ref="quillEditorRef" />
+          <QuillEditor theme="snow" toolbar=""  v-model:content="form.content" contentType="html" ref="quillEditorRef">
+          </QuillEditor>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
@@ -96,7 +97,6 @@ const form = ref({
 })
 
 const quillEditorRef = ref(null)
-
 
 
 function submitTodo () {
