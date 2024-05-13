@@ -17,7 +17,7 @@
     </nav>
 
     <h1>{{ t("titleFirst") }}</h1>
-    <form @click="openDrawer">
+    <form @click="editToForm">
       <button>{{ t("searchButton") }}</button>
     </form>
 
@@ -95,12 +95,6 @@ const form = ref({
 })
 
 
-
-function openDrawer() {
-  drawer.value = true
-}
-
-
 function submitTodo() {
   const { id, title, content, done, datePicker } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
@@ -128,15 +122,18 @@ function submitTodo() {
 
 
 function editToForm(id) {
+  // id判斷是新增還是編輯
   drawer.value = true
+  if(id){
   const todo = store.editTodo(id)
   form.value.id = id
   form.value.done = todo.done
   form.value.title = todo.todoTitle
   form.value.content = todo.todoContent
   form.value.datePicker = todo.datePicker
-
+  }
 }
+
 
 
 const currentPage = ref(1)
