@@ -98,6 +98,9 @@ const form = ref({
 
 const quillEditorRef = ref(null)
 
+// uuid全局容器
+let globalUuid=null;
+
 
 function submitTodo() {
   const { id, title, content, done, datePicker } = form.value
@@ -106,13 +109,16 @@ function submitTodo() {
     if (id) {
       store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker })
     } else {
+      const uuidTodoId = uuidv4();
       store.addTodo({
-        id: uuidv4(),
+        id: uuidTodoId,
         done: done,
         todoTitle: title.trim(),
         todoContent: content.trim(),
         datePicker: datePicker
       })
+
+      globalUuid=uuidTodoId
     }
 
     form.value.id = ''
@@ -123,10 +129,11 @@ function submitTodo() {
     drawer.value = false
   }
 
+  // 資料儲存到comments後端
   axios.get('http://localhost:3000/comments')
     .then(response => {
       const data = response.data
-      const ExistId = data.some(item => item.id === form.value.id)
+      const ExistId = data.some(item => item.id == id)
       if (ExistId) {
         axios.put(`http://localhost:3000/comments/${id}`, { todoTitle: title, done: done, todoContent: content, datePicker: datePicker })
           .then(response => {
@@ -144,7 +151,7 @@ function submitTodo() {
             })
           })
       } else {
-        axios.post('http://localhost:3000/comments', { id: uuidv4(), todoTitle: title, done: done, todoContent: content, datePicker: datePicker })
+        axios.post('http://localhost:3000/comments', { id: globalUuid, todoTitle: title, done: done, todoContent: content, datePicker: datePicker })
           .then(response => {
             if (response.status === 201) {
               ElNotification({
@@ -180,7 +187,7 @@ function editToForm(id) {
     form.value.title = todo.todoTitle
     form.value.content = todo.todoContent
     form.value.datePicker = todo.datePicker
-    quillEditorRef.value.setText(todo.todoContent);
+
   } else {
     form.value.id = ''
     form.value.done = false
@@ -223,20 +230,22 @@ function dispatchAddTodo() {
 
 function dispatchRemoveTodo(todoId) {
   store.removeTodo(todoId)
+  axios.delete(`http://localhost:3000/comments/${String(todoId)}`)
+    .then(response => {
+      ElNotification({
+        title: 'Success',
+        message: 'Delete Success',
+        type: 'success',
+      })
+    })
+    .catch(error => {
+      ElNotification({
+        title: 'Error',
+        message: 'Delete Fail',
+        type: 'error',
+      })
+    })
 }
-
-function dispatchStartEditing(todoId) {
-  store.startEditing(todoId)
-}
-
-function dispatchStopEditing(todoId) {
-  store.stopEditing(todoId)
-}
-
-function dispatchtodoStatus(todoId, boolen) {
-  store.todoStatus(todoId, boolen)
-}
-
 
 
 

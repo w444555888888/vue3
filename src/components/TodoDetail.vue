@@ -11,19 +11,22 @@
               </el-icon>首頁</el-button>
           </el-header>
           <el-main>
-            <el-radio-group v-model="RadioLevel" size="medium" class="RadioLevel" text-color="white" fill="black"
-              type="info">
-              <el-radio-button label="優先度高" value="優先度高" />
-              <el-radio-button label="優先度中" value="優先度中" />
-              <el-radio-button label="優先度低" value="優先度低" />
-            </el-radio-group>
-            <div>
-              <el-input v-model="TodoDetailText" style="width: 500px" :rows="20" type="textarea" class="custom-textarea"
-                input-style="color:black"></el-input>
+            <div >
+              <el-descriptions class="DetailDescription" title="TodoDetail" :column="2" :size="size" direction="vertical"
+                :style="blockMargin" >
+                <el-descriptions-item label="todoTitle"><el-tag size="large">{{apiCommentFilter[0].todoTitle}}</el-tag></el-descriptions-item>
+                <el-descriptions-item label="datePicker"><el-tag size="large">{{apiCommentFilter[0].datePicker}}</el-tag></el-descriptions-item>
+                <el-descriptions-item label="todoContent" :span="5">{{ apiCommentFilter[0].todoContent }}</el-descriptions-item>
+                <el-descriptions-item label="id">
+                  <el-tag size="large">{{apiCommentFilter[0].id}}</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item label="done">
+                  <el-tag size="large">{{apiCommentFilter[0].done}}</el-tag>
+                </el-descriptions-item>
+              </el-descriptions>
             </div>
           </el-main>
           <el-footer>
-            <el-button @click="storeTheTodoList">儲存</el-button>
           </el-footer>
         </el-container>
       </div>
@@ -40,64 +43,15 @@ import { usePiniaStore } from '../store/pinia.js'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 
-// textarea
-const RadioLevel = ref('優先度高')
-const TodoDetailText = ref('')
+
+const apiCommentFilter = ref('')
 
 // 使用路由router 路由params
 const route = useRoute()
 const routeindex = ref(route.params.index)
-
+// pinia
 const store = usePiniaStore()
-let existId = store.todos.find(todo => todo.id === id)
 
-
-// 儲存待辦事項
-function storeTheTodoList() {
-  axios.get('http://localhost:3000/comments')
-    .then(response => {
-      const data = response.data
-      const ExistId = data.some(item => item.id === routeindex.value)
-      if (ExistId) {
-        axios.put(`http://localhost:3000/comments/${routeindex.value}`, { text: TodoDetailText.value })
-          .then(response => {
-            ElNotification({
-              title: 'Success',
-              message: 'Update Success',
-              type: 'success',
-            })
-          })
-          .catch(error => {
-            ElNotification({
-              title: 'Error',
-              message: 'Update Fail',
-              type: 'error',
-            })
-          })
-      } else {
-        axios.post('http://localhost:3000/comments', { id: routeindex.value, text: TodoDetailText.value })
-          .then(response => {
-            if (response.status === 201) {
-              ElNotification({
-                title: 'Success',
-                message: 'Store Success',
-                type: 'success',
-              })
-            }
-          })
-          .catch(error => {
-            ElNotification({
-              title: 'Error',
-              message: 'Store Fail',
-              type: 'error',
-            })
-          })
-      }
-    })
-    .catch(error => {
-      console.error('Error', error)
-    })
-}
 
 //router到首頁
 const appRouter = useRouter()
@@ -109,14 +63,13 @@ function navigateToHome() {
 
 
 
-onMounted(async () => {
-  await store.fetchCommentsApi()
-  let apiCommentFilter = store.apiComments.filter(e => e.id === routeindex.value)
-  TodoDetailText.value = apiCommentFilter[0].text
+onMounted( () => {
+  
 })
 
 onBeforeMount(() => {
-
+  store.fetchCommentsApi()
+  apiCommentFilter.value = store.apiComments.filter(e => e.id === routeindex.value)
 });
 
 </script>
@@ -182,16 +135,9 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.custom-textarea {
-  --el-input-focus-border-color: rgb(161, 161, 161);
-  border: 2px solid #e3e2e2;
-  border-radius: 5px;
-  font-size: 15px;
+.DetailDescription{
+  padding: 30px
 }
 
 
-
-::v-deep .el-radio-button__inner:hover {
-  color: rgb(161, 161, 161);
-}
 </style>
