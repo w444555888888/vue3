@@ -60,7 +60,7 @@
           <el-radio v-model="form.done" :label="true">完成</el-radio>
         </el-form-item>
         <el-form-item label="內容" required>
-          <QuillEditor theme="snow" toolbar=""  v-model:content="form.content" contentType="html" ref="quillEditorRef">
+          <QuillEditor theme="snow" toolbar="" v-model:content="form.content" contentType="html" ref="quillEditorRef">
           </QuillEditor>
         </el-form-item>
         <el-form-item>
@@ -99,7 +99,7 @@ const form = ref({
 const quillEditorRef = ref(null)
 
 
-function submitTodo () {
+function submitTodo() {
   const { id, title, content, done, datePicker } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     // 有id代表是編輯
@@ -122,10 +122,54 @@ function submitTodo () {
     form.value.datePicker = ''
     drawer.value = false
   }
+
+  axios.get('http://localhost:3000/comments')
+    .then(response => {
+      const data = response.data
+      const ExistId = data.some(item => item.id === form.value.id)
+      if (ExistId) {
+        axios.put(`http://localhost:3000/comments/${id}`, { todoTitle: title, done: done, todoContent: content, datePicker: datePicker })
+          .then(response => {
+            ElNotification({
+              title: 'Success',
+              message: 'Update Success',
+              type: 'success',
+            })
+          })
+          .catch(error => {
+            ElNotification({
+              title: 'Error',
+              message: 'Update Fail',
+              type: 'error',
+            })
+          })
+      } else {
+        axios.post('http://localhost:3000/comments', { id: uuidv4(), todoTitle: title, done: done, todoContent: content, datePicker: datePicker })
+          .then(response => {
+            if (response.status === 201) {
+              ElNotification({
+                title: 'Success',
+                message: 'Store Success',
+                type: 'success',
+              })
+            }
+          })
+          .catch(error => {
+            ElNotification({
+              title: 'Error',
+              message: 'Store Fail',
+              type: 'error',
+            })
+          })
+      }
+    })
+    .catch(error => {
+      console.error('Error', error)
+    })
 }
 
 
-function editToForm (id) {
+function editToForm(id) {
   drawer.value = true
   // id判斷是新增還是編輯
   let existId = store.todos.find(todo => todo.id === id)
@@ -136,6 +180,7 @@ function editToForm (id) {
     form.value.title = todo.todoTitle
     form.value.content = todo.todoContent
     form.value.datePicker = todo.datePicker
+    quillEditorRef.value.setText(todo.todoContent);
   } else {
     form.value.id = ''
     form.value.done = false
@@ -172,23 +217,23 @@ const changeLocale = () => {
 }
 
 
-function dispatchAddTodo () {
+function dispatchAddTodo() {
   store.addTodo()
 }
 
-function dispatchRemoveTodo (todoId) {
+function dispatchRemoveTodo(todoId) {
   store.removeTodo(todoId)
 }
 
-function dispatchStartEditing (todoId) {
+function dispatchStartEditing(todoId) {
   store.startEditing(todoId)
 }
 
-function dispatchStopEditing (todoId) {
+function dispatchStopEditing(todoId) {
   store.stopEditing(todoId)
 }
 
-function dispatchtodoStatus (todoId, boolen) {
+function dispatchtodoStatus(todoId, boolen) {
   store.todoStatus(todoId, boolen)
 }
 
@@ -197,7 +242,7 @@ function dispatchtodoStatus (todoId, boolen) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail (id) {
+function navigateToDetail(id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },

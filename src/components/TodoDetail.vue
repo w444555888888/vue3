@@ -49,15 +49,15 @@ const route = useRoute()
 const routeindex = ref(route.params.index)
 
 const store = usePiniaStore()
-
+let existId = store.todos.find(todo => todo.id === id)
 
 
 // 儲存待辦事項
 function storeTheTodoList() {
   axios.get('http://localhost:3000/comments')
     .then(response => {
-      const dataId = response.data
-      const ExistId = dataId.some(item => item.id === routeindex.value)
+      const data = response.data
+      const ExistId = data.some(item => item.id === routeindex.value)
       if (ExistId) {
         axios.put(`http://localhost:3000/comments/${routeindex.value}`, { text: TodoDetailText.value })
           .then(response => {
