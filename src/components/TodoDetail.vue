@@ -11,17 +11,21 @@
               </el-icon>首頁</el-button>
           </el-header>
           <el-main>
-            <div >
-              <el-descriptions class="DetailDescription" title="TodoDetail" :column="2" :size="size" direction="vertical"
-                :style="blockMargin" >
-                <el-descriptions-item label="todoTitle"><el-tag size="large">{{apiCommentFilter[0].todoTitle}}</el-tag></el-descriptions-item>
-                <el-descriptions-item label="datePicker"><el-tag size="large">{{apiCommentFilter[0].datePicker}}</el-tag></el-descriptions-item>
-                <el-descriptions-item label="todoContent" :span="5">{{ apiCommentFilter[0].todoContent }}</el-descriptions-item>
+            <div v-if="isLoading" v-loading="isLoading"></div>
+            <div v-else>
+              <el-descriptions class="DetailDescription" title="TodoDetail" :column="2" :size="size"
+                direction="vertical" :style="blockMargin">
+                <el-descriptions-item label="todoTitle"><el-tag size="large">{{ apiCommentFilter[0].todoTitle
+                    }}</el-tag></el-descriptions-item>
+                <el-descriptions-item label="datePicker"><el-tag size="large">{{ apiCommentFilter[0].datePicker
+                    }}</el-tag></el-descriptions-item>
+                <el-descriptions-item label="todoContent" :span="5">{{ apiCommentFilter[0].todoContent
+                  }}</el-descriptions-item>
                 <el-descriptions-item label="id">
-                  <el-tag size="large">{{apiCommentFilter[0].id}}</el-tag>
+                  <el-tag size="large">{{ apiCommentFilter[0].id }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="done">
-                  <el-tag size="large">{{apiCommentFilter[0].done}}</el-tag>
+                  <el-tag size="large">{{ apiCommentFilter[0].done }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
             </div>
@@ -45,7 +49,7 @@ import axios from 'axios'
 
 
 const apiCommentFilter = ref('')
-
+const isLoading = ref(true)
 // 使用路由router 路由params
 const route = useRoute()
 const routeindex = ref(route.params.index)
@@ -55,7 +59,7 @@ const store = usePiniaStore()
 
 //router到首頁
 const appRouter = useRouter()
-function navigateToHome() {
+function navigateToHome () {
   appRouter.push({
     name: 'TodoList'
   })
@@ -63,13 +67,20 @@ function navigateToHome() {
 
 
 
-onMounted( () => {
-  
+onMounted(() => {
+
 })
 
-onBeforeMount(() => {
-  store.fetchCommentsApi()
-  apiCommentFilter.value = store.apiComments.filter(e => e.id === routeindex.value)
+onBeforeMount(async () => {
+  try {
+    isLoading.value = true
+    await store.fetchCommentsApi()
+    apiCommentFilter.value = store.apiComments.filter(e => e.id === routeindex.value)
+    isLoading.value = false
+  } catch (error) {
+    console.error(error)
+    isLoading.value = false
+  }
 });
 
 </script>
@@ -135,9 +146,7 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.DetailDescription{
+.DetailDescription {
   padding: 30px
 }
-
-
 </style>
