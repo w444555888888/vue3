@@ -8,7 +8,8 @@
 -->
 <!-- TodoList -->
 <template>
-  <div id="TodoListPage">
+  <div v-if="isLoading" v-loading="isLoading"></div>
+  <div v-else id="TodoListPage">
     <nav>
       <select v-model="locale18n" @change="changeLocale">
         <option value="en">en-US</option>
@@ -37,7 +38,6 @@
         </div>
       </li>
     </ul>
-    <h4 v-if="store.todos.length === 0">No data</h4>
     <br />
     <!-- pages -->
     <div class="pagination-container">
@@ -46,6 +46,7 @@
     </div>
   </div>
 
+  <!-- drawer modal -->
   <div>
     <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="50%">
       <el-form ref="todoFormRef" :model="form" label-width="80px" style="justify-content: flex-start">
@@ -85,7 +86,6 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 // pinia
 const store = usePiniaStore()
-
 const todoFormRef = ref('')
 const drawer = ref(false)
 const form = ref({
@@ -95,11 +95,12 @@ const form = ref({
   done: false,
   datePicker: '',
 })
-
+// drawer ref實例
 const quillEditorRef = ref(null)
-
 // uuid全局容器
 let globalUuid=null;
+// loading
+const isLoading = ref(false);
 
 
 function submitTodo() {
@@ -252,9 +253,12 @@ function dispatchRemoveTodo(todoId) {
 // 使用路由useRouter
 const appRouter = useRouter()
 function navigateToDetail(id) {
+  isLoading.value = true;
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
+  }).then(()=>{
+    isLoading.value = false;
   })
 }
 

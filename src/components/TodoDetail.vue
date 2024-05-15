@@ -13,18 +13,18 @@
           <el-main>
             <div v-if="isLoading" v-loading="isLoading"></div>
             <div v-else>
-              <el-descriptions class="DetailDescription" title="TodoDetail" :column="2" :size="size"
-                direction="vertical" :style="blockMargin">
-                <el-descriptions-item label="todoTitle"><el-tag size="large">{{ apiCommentFilter[0].todoTitle
+              <el-descriptions title="TodoDetail" :column="2" :size="size" direction="vertical" border>
+                <el-descriptions-item label="todoTitle" min-width="400px"><el-tag size="large">{{ apiCommentFilter[0].todoTitle
                     }}</el-tag></el-descriptions-item>
-                <el-descriptions-item label="datePicker"><el-tag size="large">{{ apiCommentFilter[0].datePicker
+                <el-descriptions-item label="datePicker" min-width="400px"><el-tag size="large">{{ apiCommentFilter[0].datePicker
                     }}</el-tag></el-descriptions-item>
-                <el-descriptions-item label="todoContent" :span="5">{{ apiCommentFilter[0].todoContent
-                  }}</el-descriptions-item>
-                <el-descriptions-item label="id">
+                <el-descriptions-item label="todoContent" :span="5" min-width="400px">
+                  <div v-html="apiCommentFilter[0].todoContent"></div>
+                </el-descriptions-item>
+                <el-descriptions-item label="id" min-width="400px">
                   <el-tag size="large">{{ apiCommentFilter[0].id }}</el-tag>
                 </el-descriptions-item>
-                <el-descriptions-item label="done">
+                <el-descriptions-item label="done" min-width="400px">
                   <el-tag size="large">{{ apiCommentFilter[0].done }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
@@ -47,7 +47,6 @@ import { usePiniaStore } from '../store/pinia.js'
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 
-
 const apiCommentFilter = ref('')
 const isLoading = ref(true)
 // 使用路由router 路由params
@@ -59,7 +58,7 @@ const store = usePiniaStore()
 
 //router到首頁
 const appRouter = useRouter()
-function navigateToHome () {
+function navigateToHome() {
   appRouter.push({
     name: 'TodoList'
   })
@@ -94,7 +93,9 @@ onBeforeMount(async () => {
   background-color: rgb(245, 245, 245);
   padding: 30px;
   border-radius: 8px;
+  width:100%; 
 }
+
 
 .el-container {
   display: flex;
@@ -147,6 +148,12 @@ onBeforeMount(async () => {
 }
 
 .DetailDescription {
-  padding: 30px
+  padding: 20px;
+  min-width: 500px;
+}
+
+::v-deep .el-descriptions {
+  padding: 20px;
+  width: 100%;
 }
 </style>

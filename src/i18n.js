@@ -7,7 +7,6 @@ const i18n = createI18n({
     messages: {
         en: {
             titleFirst: 'Create New Item',
-            titleSecond: 'New Item',
             searchButton: 'Add New Item',
             delete: 'delete',
             detail: 'detail',
@@ -17,9 +16,8 @@ const i18n = createI18n({
 
         },
         zh: {
-            titleFirst: '創建待辦事項',
-            titleSecond: '待辦記事本',
-            searchButton: '新增待辦事項',
+            titleFirst: '創建項目',
+            searchButton: '新增項目',
             delete: '刪除項目',
             detail: '詳情',
             undone: '待辦',
