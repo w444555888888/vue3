@@ -1,6 +1,7 @@
 <!-- TodoDetail.vue -->
 <template>
-  <div id="TodoDetailPage">
+  <div v-if="isLoading"></div>
+  <div v-else id="TodoDetailPage">
     <div class="container">
       <div class="common-layout">
         <el-container>
@@ -11,13 +12,14 @@
               </el-icon>首頁</el-button>
           </el-header>
           <el-main>
-            <div v-if="isLoading" v-loading="isLoading"></div>
-            <div v-else>
+            <div>
               <el-descriptions title="TodoDetail" :column="2" :size="size" direction="vertical" border>
-                <el-descriptions-item label="todoTitle" min-width="400px"><el-tag size="large">{{ apiCommentFilter[0].todoTitle
-                    }}</el-tag></el-descriptions-item>
-                <el-descriptions-item label="datePicker" min-width="400px"><el-tag size="large">{{ apiCommentFilter[0].datePicker
-                    }}</el-tag></el-descriptions-item>
+                <el-descriptions-item label="todoTitle" min-width="400px"><el-tag size="large">{{
+    apiCommentFilter[0].todoTitle
+  }}</el-tag></el-descriptions-item>
+                <el-descriptions-item label="datePicker" min-width="400px"><el-tag size="large">{{
+      apiCommentFilter[0].datePicker
+    }}</el-tag></el-descriptions-item>
                 <el-descriptions-item label="todoContent" :span="5" min-width="400px">
                   <div v-html="apiCommentFilter[0].todoContent"></div>
                 </el-descriptions-item>
@@ -44,8 +46,8 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
-import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
+import { ElLoading } from 'element-plus'
 
 const apiCommentFilter = ref('')
 const isLoading = ref(true)
@@ -65,19 +67,28 @@ function navigateToHome() {
 }
 
 
-
 onMounted(() => {
+
 
 })
 
 onBeforeMount(async () => {
   try {
     isLoading.value = true
+    isLoading.value = ElLoading.service({
+      lock: true,
+      text: 'Loading',
+      background: 'rgba(0, 0, 0, 0.7)',
+    })
     await store.fetchCommentsApi()
     apiCommentFilter.value = store.apiComments.filter(e => e.id === routeindex.value)
-    isLoading.value = false
+    setTimeout(() => {
+      isLoading.value.close()
+      isLoading.value = false
+    }, 1000)
   } catch (error) {
     console.error(error)
+    isLoading.value.close()
     isLoading.value = false
   }
 });
@@ -93,7 +104,7 @@ onBeforeMount(async () => {
   background-color: rgb(245, 245, 245);
   padding: 30px;
   border-radius: 8px;
-  width:100%; 
+  width: 100%;
 }
 
 

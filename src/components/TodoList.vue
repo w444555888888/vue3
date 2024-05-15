@@ -8,8 +8,7 @@
 -->
 <!-- TodoList -->
 <template>
-  <div v-if="isLoading" v-loading="isLoading"></div>
-  <div v-else id="TodoListPage">
+  <div id="TodoListPage">
     <nav>
       <select v-model="locale18n" @change="changeLocale">
         <option value="en">en-US</option>
@@ -99,8 +98,7 @@ const form = ref({
 const quillEditorRef = ref(null)
 // uuid全局容器
 let globalUuid=null;
-// loading
-const isLoading = ref(false);
+
 
 
 function submitTodo() {
@@ -252,13 +250,13 @@ function dispatchRemoveTodo(todoId) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
+console.log(appRouter,'appRouter');
 function navigateToDetail(id) {
-  isLoading.value = true;
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
   }).then(()=>{
-    isLoading.value = false;
+    
   })
 }
 
