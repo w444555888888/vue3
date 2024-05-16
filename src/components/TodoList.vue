@@ -11,7 +11,7 @@
 
 <div id="TodoListPage">
           <nav>
-            <select v-model="locale18n" @change="changeLocale">
+            <select v-model="locale18n">
               <option value="en">en-US</option>
               <option value="zh">zh-TW</option>
             </select>
@@ -94,10 +94,14 @@ const form = ref({
   done: false,
   datePicker: '',
 })
+// i18n語系  
+const locale18n = ref(i18n.global.locale)
+const { t } = i18n.global
 // drawer ref實例
 const quillEditorRef = ref(null)
 // uuid全局容器
 let globalUuid = null;
+
 
 
 
@@ -209,19 +213,6 @@ const pagesTodos = computed(() => {
 
 const handlePageChange = (newPage) => {
   currentPage.value = newPage
-}
-
-
-// i18n語系  
-const locale18n = ref(i18n.global.locale)
-const { t } = i18n.global
-const changeLocale = () => {
-  store.locale = i18n.global.locale.value
-}
-
-
-function dispatchAddTodo() {
-  store.addTodo()
 }
 
 function dispatchRemoveTodo(todoId) {

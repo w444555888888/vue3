@@ -9,11 +9,11 @@
             <el-button type="primary" @click="navigateToHome">
               <el-icon>
                 <LocationFilled />
-              </el-icon>首頁</el-button>
+              </el-icon>{{t("home")}}</el-button>
           </el-header>
           <el-main>
             <div>
-              <el-descriptions title="TodoDetail" :column="2" :size="size" direction="vertical" border>
+              <el-descriptions title="" :column="2" :size="size" direction="vertical" border>
                 <el-descriptions-item label="todoTitle" min-width="400px"><el-tag size="large">{{
     apiCommentFilter[0].todoTitle
   }}</el-tag></el-descriptions-item>
@@ -48,6 +48,9 @@ import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
 import axios from 'axios'
 import { ElLoading } from 'element-plus'
+import i18n from '../i18n.js'
+// i18n
+const { t } = i18n.global
 
 const apiCommentFilter = ref('')
 const isLoading = ref(true)
