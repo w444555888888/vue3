@@ -2,49 +2,49 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-13 23:52:06
+ * @LastEditTime: 2024-05-17 01:03:13
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <!-- TodoList -->
 <template>
 
-<div id="TodoListPage">
-          <nav>
-            <select v-model="locale18n">
-              <option value="en">en-US</option>
-              <option value="zh">zh-TW</option>
-            </select>
-          </nav>
+  <div id="TodoListPage">
+    <nav>
+      <select v-model="locale18n">
+        <option value="en">en-US</option>
+        <option value="zh">zh-TW</option>
+      </select>
+    </nav>
 
-          <h1>{{ t("titleFirst") }}</h1>
-          <form @click="editToForm">
-            <button>{{ t("searchButton") }}</button>
-          </form>
+    <h1>{{ t("titleFirst") }}</h1>
+    <form @click="editToForm">
+      <button>{{ t("searchButton") }}</button>
+    </form>
 
-          <ul>
-            <li v-for="(todo, index) in pagesTodos" :key="todo.id">
-              <span :class="todo.done ? 'done' : 'pending'">
-                <div class="li-data" v-if="!todo.editing">
-                  {{ todo.todoTitle }}
-                </div>
-              </span>
-              <div class="li-btn">
-                <button @click="dispatchRemoveTodo(todo.id)">
-                  {{ t("delete") }}
-                </button>
-                <button @click="navigateToDetail(todo.id)">{{ t("detail") }}</button>
-                <button @click="editToForm(todo.id)">{{ t("edit") }}</button>
-              </div>
-            </li>
-          </ul>
-          <br />
-          <!-- pages -->
-          <div class="pagination-container">
-            <el-pagination v-model:currentPage="currentPage" :total="totalItems" :page-size="pageSize"
-              @current-change="handlePageChange" background small />
+    <ul>
+      <li v-for="(todo, index) in pagesTodos" :key="todo.id">
+        <span :class="todo.done ? 'done' : 'pending'">
+          <div class="li-data" v-if="!todo.editing">
+            {{ todo.todoTitle }}
           </div>
+        </span>
+        <div class="li-btn">
+          <button @click="dispatchRemoveTodo(todo.id)">
+            {{ t("delete") }}
+          </button>
+          <button @click="navigateToDetail(todo.id)">{{ t("detail") }}</button>
+          <button @click="editToForm(todo.id)">{{ t("edit") }}</button>
         </div>
+      </li>
+    </ul>
+    <br />
+    <!-- pages -->
+    <div class="pagination-container">
+      <el-pagination v-model:currentPage="currentPage" :total="totalItems" :page-size="pageSize"
+        @current-change="handlePageChange" background small />
+    </div>
+  </div>
   <!-- drawer modal -->
   <div>
     <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="33%">
@@ -100,19 +100,19 @@ const { t } = i18n.global
 // drawer ref實例
 const quillEditorRef = ref(null)
 // uuid全局容器
-let globalUuid = null;
+let globalUuid = null
 
 
 
 
-function submitTodo() {
+function submitTodo () {
   const { id, title, content, done, datePicker } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     // 有id代表是編輯
     if (id) {
       store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker })
     } else {
-      const uuidTodoId = uuidv4();
+      const uuidTodoId = uuidv4()
       store.addTodo({
         id: uuidTodoId,
         done: done,
@@ -179,7 +179,7 @@ function submitTodo() {
 }
 
 
-function editToForm(id) {
+function editToForm (id) {
   drawer.value = true
   // id判斷是新增還是編輯
   let existId = store.todos.find(todo => todo.id === id)
@@ -215,7 +215,7 @@ const handlePageChange = (newPage) => {
   currentPage.value = newPage
 }
 
-function dispatchRemoveTodo(todoId) {
+function dispatchRemoveTodo (todoId) {
   store.removeTodo(todoId)
   axios.delete(`http://localhost:3000/comments/${String(todoId)}`)
     .then(response => {
@@ -236,10 +236,10 @@ function dispatchRemoveTodo(todoId) {
 
 
 
+const gtm = useGtm()
 // 使用路由useRouter
 const appRouter = useRouter()
-console.log(appRouter, 'appRouter');
-function navigateToDetail(id) {
+function navigateToDetail (id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
@@ -280,176 +280,176 @@ $primaryColor: #a0a4d9;
 $secondTextColor: #1f2023;
 
 #TodoListPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgb(245, 245, 245);
+  padding: 30px;
+  border-radius: 8px;
+
+  nav {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+
+  select,
+  option {
+    background-color: rgb(22, 22, 22);
+    color: white;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-weight: bold;
+    font-size: 28px;
+    text-align: center;
+  }
+
+  form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    background-color: rgb(245, 245, 245);
-    padding: 30px;
-    border-radius: 8px;
+    width: 100%;
+    margin: 5px 0px;
 
-    nav {
-      display: flex;
-      justify-content: flex-start;
-      margin-bottom: 10px;
-    }
-
-    select,
-    option {
-      background-color: rgb(22, 22, 22);
-      color: white;
-      border-radius: 5px;
-    }
-
-    h1 {
-      font-weight: bold;
-      font-size: 28px;
-      text-align: center;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      margin: 5px 0px;
-
-      input {
-        font-size: 1.125rem;
-        padding: 1rem 1.5rem;
-        background-color: #fff;
-        border-radius: 0.5rem;
-        margin-bottom: 1.5rem;
-      }
-
-      button {
-        height: $size5;
-        box-shadow: none;
-        outline: none;
-        padding-left: $size2;
-        padding-right: $size2;
-        border-radius: $size1;
-        font-size: 18px;
-        margin-top: $size1;
-        margin-bottom: $size2;
-      }
+    input {
+      font-size: 1.125rem;
+      padding: 1rem 1.5rem;
+      background-color: #fff;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
     }
 
     button {
-      cursor: pointer;
-      border: 1px solid $primaryColor;
-      color: $secondTextColor;
-      font-weight: bold;
+      height: $size5;
+      box-shadow: none;
       outline: none;
+      padding-left: $size2;
+      padding-right: $size2;
       border-radius: $size1;
-      background-color: #7e7e7e;
+      font-size: 18px;
+      margin-top: $size1;
+      margin-bottom: $size2;
     }
+  }
 
-    button:hover {
-      background-color: rgb(172, 171, 171);
-    }
+  button {
+    cursor: pointer;
+    border: 1px solid $primaryColor;
+    color: $secondTextColor;
+    font-weight: bold;
+    outline: none;
+    border-radius: $size1;
+    background-color: #7e7e7e;
+  }
 
-    h2 {
-      font-size: 22px;
-      border-bottom: $border;
-      padding-bottom: $size1;
-    }
+  button:hover {
+    background-color: rgb(172, 171, 171);
+  }
 
-    ul {
-      padding: 10px;
+  h2 {
+    font-size: 22px;
+    border-bottom: $border;
+    padding-bottom: $size1;
+  }
 
-      li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: $border;
-        padding: $size2 22px;
-        border-radius: $size1;
-        margin-bottom: $size2;
+  ul {
+    padding: 10px;
 
-        span {
-          cursor: pointer;
-          display: flex;
-        }
-
-        .li-data {
-          margin: 2px 15px;
-          flex-shrink: 0;
-        }
-
-        input {
-          margin: 2px 2px;
-          flex-shrink: 0;
-        }
-
-        .li-btn {
-          margin: 0 1px;
-          flex-shrink: 0;
-        }
-
-        button {
-          font-size: $size2;
-          padding: $size1;
-          margin: 0 6px;
-        }
-      }
-    }
-
-    h4 {
-      text-align: center;
-      opacity: 0.5;
-      margin: 0;
-    }
-
-    input[type="text"] {
-      display: block;
-      width: 95%;
-      margin-bottom: 10px;
-      border-radius: $size1;
-      padding: 10px;
-    }
-
-    .pagination-container {
-      display: flex;
-      justify-content: center;
-    }
-
-    .modal-wrap {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    .modal-scroll-view {
-      overflow-y: auto;
-    }
-
-    .modal {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 5px;
-    }
-
-    .modal-title {
+    li {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      border: $border;
+      padding: $size2 22px;
+      border-radius: $size1;
+      margin-bottom: $size2;
+
+      span {
+        cursor: pointer;
+        display: flex;
+      }
+
+      .li-data {
+        margin: 2px 15px;
+        flex-shrink: 0;
+      }
+
+      input {
+        margin: 2px 2px;
+        flex-shrink: 0;
+      }
+
+      .li-btn {
+        margin: 0 1px;
+        flex-shrink: 0;
+      }
+
+      button {
+        font-size: $size2;
+        padding: $size1;
+        margin: 0 6px;
+      }
     }
   }
+
+  h4 {
+    text-align: center;
+    opacity: 0.5;
+    margin: 0;
+  }
+
+  input[type="text"] {
+    display: block;
+    width: 95%;
+    margin-bottom: 10px;
+    border-radius: $size1;
+    padding: 10px;
+  }
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .modal-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .modal-scroll-view {
+    overflow-y: auto;
+  }
+
+  .modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  .modal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+}
 
 ::v-deep .ql-toolbar {
   width: calc(100% - 60px);

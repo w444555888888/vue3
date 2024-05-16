@@ -11,7 +11,8 @@
                                 </el-icon> {{ t("menu") }}
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="1-1"><router-link to="/" class="visited">{{ t("home") }}</router-link>
+                                <el-menu-item index="1-1"><router-link to="/" class="visited">{{ t("home")
+                                        }}</router-link>
                                 </el-menu-item>
                                 <el-menu-item index="1-2">Option 2</el-menu-item>
                                 <el-menu-item index="1-3">Option 3</el-menu-item>
@@ -29,7 +30,7 @@
 
 
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import i18n from '../i18n.js'
 const { t } = i18n.global
 </script>
@@ -53,21 +54,29 @@ $secondTextColor: #1f2023;
     height: 100vh;
 
     .el-aside {
-        border-radius: 8px;
         height: 100vh;
 
-        .el-sub-menu,
-        .el-menu-item-group {
-            background-color: rgb(245, 245, 245);
-            border-radius: 8px;
+        .el-scrollbar {
+            padding-top: 20px;
+
+            .el-scrollbar__view {
+                border-radius: 8px;
+
+                .el-sub-menu,
+                .el-menu-item-group {
+                    background-color: rgb(245, 245, 245);
+
+                }
+            }
         }
+
+
     }
 }
 
 // 移除預設超連結樣式
 .visited {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
-
 </style>

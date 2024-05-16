@@ -9,17 +9,17 @@
             <el-button type="primary" @click="navigateToHome">
               <el-icon>
                 <LocationFilled />
-              </el-icon>{{t("home")}}</el-button>
+              </el-icon>{{ t("home") }}</el-button>
           </el-header>
           <el-main>
             <div>
-              <el-descriptions title="" :column="2" :size="size" direction="vertical" border>
+              <el-descriptions title="" :column="2"  direction="vertical" border>
                 <el-descriptions-item label="todoTitle" min-width="400px"><el-tag size="large">{{
-    apiCommentFilter[0].todoTitle
-  }}</el-tag></el-descriptions-item>
+                  apiCommentFilter[0].todoTitle
+                    }}</el-tag></el-descriptions-item>
                 <el-descriptions-item label="datePicker" min-width="400px"><el-tag size="large">{{
-      apiCommentFilter[0].datePicker
-    }}</el-tag></el-descriptions-item>
+                  apiCommentFilter[0].datePicker
+                    }}</el-tag></el-descriptions-item>
                 <el-descriptions-item label="todoContent" :span="5" min-width="400px">
                   <div v-html="apiCommentFilter[0].todoContent"></div>
                 </el-descriptions-item>
@@ -63,7 +63,7 @@ const store = usePiniaStore()
 
 //router到首頁
 const appRouter = useRouter()
-function navigateToHome() {
+function navigateToHome () {
   appRouter.push({
     name: 'TodoList'
   })

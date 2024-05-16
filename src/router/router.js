@@ -45,15 +45,15 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    const authenticate = localStorage.getItem('token'); //localStorage token
+    const authenticate = localStorage.getItem('token') //localStorage token
 
     if (!authenticate && to.name !== 'Login') {
-        next('/login');
+        next('/login')
     } else if (authenticate && (to.name == 'Login')) {
-        next('/');
+        next('/')
     } else {
-        next();
+        next()
     }
-});
+})
 
 export default router
