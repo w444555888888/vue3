@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-17 01:03:13
+ * @LastEditTime: 2024-05-17 01:31:19
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -236,7 +236,7 @@ function dispatchRemoveTodo (todoId) {
 
 
 
-const gtm = useGtm()
+
 // 使用路由useRouter
 const appRouter = useRouter()
 function navigateToDetail (id) {
