@@ -14,6 +14,8 @@
                                 <el-menu-item index="1-1"><router-link to="/" class="visited">{{ t("home") }}</router-link>
                                 </el-menu-item>
                                 <el-menu-item index="1-2">Option 2</el-menu-item>
+                                <el-menu-item index="1-3">Option 3</el-menu-item>
+                                <el-menu-item index="1-4">Option 4</el-menu-item>
                             </el-menu-item-group>
                         </el-sub-menu>
                     </el-menu>
@@ -27,6 +29,7 @@
 
 
 <script setup>
+import {ref} from 'vue'
 import i18n from '../i18n.js'
 const { t } = i18n.global
 </script>

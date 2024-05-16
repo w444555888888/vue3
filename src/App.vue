@@ -1,7 +1,6 @@
 <!-- App.vue -->
 <template>
   <SiderBar>
-
   </SiderBar>
 </template>
 

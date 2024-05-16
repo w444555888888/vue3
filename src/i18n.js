@@ -14,7 +14,7 @@ const i18n = createI18n({
             done: 'done',
             edit: 'deit',
             menu: 'menu',
-            home: 'home',
+            home: 'Home',
 
         },
         zh: {
