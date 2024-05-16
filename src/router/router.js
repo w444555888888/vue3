@@ -5,20 +5,20 @@ const routes = [
     {
         path: '/',
         name: 'TodoList',
-        component: ()=>import('@/components/TodoList.vue'),
+        component: () => import('@/components/TodoList.vue'),
 
     },
     {
         path: '/todo/:index',
         name: 'TodoDetail',
-        component: ()=>import('@/components/TodoDetail.vue'),
+        component: () => import('@/components/TodoDetail.vue'),
         props: true,
         children: [
             {
                 path: 'children',
                 name: 'children',
                 components: {
-                   
+
                 }
 
             }
@@ -27,7 +27,12 @@ const routes = [
     {
         path: '/login',
         name: 'Login',
-        component: ()=>import('@/components/Login.vue')
+        component: () => import('@/components/Login.vue')
+    },
+    {
+        path: '/scroll',
+        name: 'Scroll',
+        component: () => import('@/components/Scroll.vue')
     }
 ]
 
@@ -42,7 +47,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const authenticate = localStorage.getItem('token'); //localStorage token
 
-    if (!authenticate && to.name !== 'Login' ) {
+    if (!authenticate && to.name !== 'Login') {
         next('/login');
     } else if (authenticate && (to.name == 'Login')) {
         next('/');

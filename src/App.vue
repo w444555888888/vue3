@@ -1,10 +1,13 @@
 <!-- App.vue -->
 <template>
-    <router-view></router-view>
+  <SiderBar>
+
+  </SiderBar>
 </template>
 
 
 <script setup>
+import SiderBar from './components/SiderBar.vue'
 </script>
 
 

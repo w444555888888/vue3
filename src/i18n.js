@@ -13,6 +13,8 @@ const i18n = createI18n({
             undone: 'undone',
             done: 'done',
             edit: 'deit',
+            menu: 'menu',
+            home: 'home',
 
         },
         zh: {
@@ -23,6 +25,8 @@ const i18n = createI18n({
             undone: '待辦',
             done: '已完成',
             edit: '編輯',
+            menu: '選單',
+            home: '首頁',
 
         }
     },

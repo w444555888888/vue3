@@ -1,0 +1,70 @@
+<!-- SiderBar -->
+<template>
+    <div class="common-layout">
+        <el-container>
+            <el-aside width="300px"> <el-scrollbar>
+                    <el-menu :default-openeds="['1']">
+                        <el-sub-menu index="1">
+                            <template #title>
+                                <el-icon>
+                                    <Menu />
+                                </el-icon> {{ t("menu") }}
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="1-1"><router-link to="/" class="visited">{{ t("home") }}</router-link>
+                                </el-menu-item>
+                                <el-menu-item index="1-2">Option 2</el-menu-item>
+                            </el-menu-item-group>
+                        </el-sub-menu>
+                    </el-menu>
+                </el-scrollbar></el-aside>
+            <el-main>
+                <router-view></router-view>
+            </el-main>
+        </el-container>
+    </div>
+</template>
+
+
+<script setup>
+import i18n from '../i18n.js'
+const { t } = i18n.global
+</script>
+
+
+<style scoped lang="scss">
+$border: 2px solid rgba(219, 219, 219, 0.4);
+$size1: 6px;
+$size2: 12px;
+$size3: 18px;
+$size4: 24px;
+$size5: 48px;
+$backgroundColor: #27292d;
+$textColor: white;
+$primaryColor: #a0a4d9;
+$secondTextColor: #1f2023;
+
+.common-layout {
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    width: 100%;
+    height: 100vh;
+
+    .el-aside {
+        border-radius: 8px;
+        height: 100vh;
+
+        .el-sub-menu,
+        .el-menu-item-group {
+            background-color: rgb(245, 245, 245);
+            border-radius: 8px;
+        }
+    }
+}
+
+// 移除預設超連結樣式
+.visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+</style>
