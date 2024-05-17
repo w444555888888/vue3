@@ -11,7 +11,7 @@
                                 </el-icon> {{ t("menu") }}
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="1-1"><router-link to="/" class="visited">{{ t("home")
+                                <el-menu-item index="1-1"><router-link to="/TodoList" class="visited">{{ t("home")
                                         }}</router-link>
                                 </el-menu-item>
                                 <el-menu-item index="1-2">Option 2</el-menu-item>

@@ -4,6 +4,12 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 const routes = [
     {
         path: '/',
+        name: 'Index',
+        component: () => import('@/components/Index.vue'),
+
+    },
+    {
+        path: '/TodoList',
         name: 'TodoList',
         component: () => import('@/components/TodoList.vue'),
 
