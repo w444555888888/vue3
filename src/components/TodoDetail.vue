@@ -161,10 +161,6 @@ onBeforeMount(async () => {
   align-items: center;
 }
 
-.DetailDescription {
-  padding: 20px;
-  min-width: 500px;
-}
 
 ::v-deep .el-descriptions {
   padding: 20px;

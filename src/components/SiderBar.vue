@@ -59,20 +59,22 @@ $secondTextColor: #1f2023;
         .el-scrollbar {
             padding-top: 20px;
 
-            .el-scrollbar__view {
-                border-radius: 8px;
+            .el-menu--inline {
 
                 .el-sub-menu,
                 .el-menu-item-group {
                     background-color: rgb(245, 245, 245);
-
+                    border-radius: 8px;
                 }
             }
         }
+    }
 
-
+    .el-main{
+        width: 100%;
     }
 }
+
 
 // 移除預設超連結樣式
 .visited {
