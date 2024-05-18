@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-05-18 14:07:52
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-18 18:33:15
+ * @LastEditTime: 2024-05-18 22:13:18
  * @FilePath: \vue3\src\components\compoent-items\UpdateImg.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,20 +19,28 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, defineProps } from 'vue'
 import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue'
 import axios from 'axios'
+
+// props
+const props = defineProps({
+  imgPersonal: Array
+});
+
+const fileList=ref([])
+
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 const disabled = ref(false)
-const fileList = ref([]) // 圖片列表
+
 
 // emit
 const emit = defineEmits(['image-selected'])
 const handleChange = (file, fileList) => {
   const imagesBase64 = fileList.map(file => getBase64(file.raw));
-  
+
   Promise.all(imagesBase64)
     .then(imagesBase64 => {
       emit('image-selected', imagesBase64);
@@ -49,16 +57,13 @@ function getBase64(file) {
     reader.readAsDataURL(file);
     reader.onload = function () {
       imgResult = reader.result;
+      resolve(imgResult);
     };
     reader.onerror = function (error) {
       reject(error);
     };
-    reader.onloadend = function () {
-      resolve(imgResult);
-    };
   });
 }
-
 
 
 const handlePictureCardPreview = (file) => {

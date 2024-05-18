@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-18 19:58:40
+ * @LastEditTime: 2024-05-18 21:28:56
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -64,7 +64,7 @@
           </QuillEditor>
         </el-form-item>
         <el-form-item label="上傳圖片" required>
-          <UpdateImg @image-selected="handleImageSelected" />
+          <UpdateImg @image-selected="handleImageSelected" :imgPersonal="form.pic" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
@@ -198,6 +198,7 @@ function editToForm (id) {
     form.value.title = todo.todoTitle
     form.value.content = todo.todoContent
     form.value.datePicker = todo.datePicker
+    form.value.pic = todo.pic
 
   } else {
     form.value.id = ''
@@ -205,6 +206,7 @@ function editToForm (id) {
     form.value.title = ''
     form.value.content = ''
     form.value.datePicker = ''
+    form.value.pic = ''
     quillEditorRef.value.setText('')
   }
 }
