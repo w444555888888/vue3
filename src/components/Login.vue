@@ -1,6 +1,7 @@
 <!-- Login.vue -->
 <template>
   <!-- 登入 -->
+  <div id="login">
   <div v-if="isLogin">
     <div id="title">TODOLIST LOGIN</div>
     <form @submit.prevent="login">
@@ -40,6 +41,7 @@
       </div>
     </form>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -152,6 +154,11 @@ const register = () => {
   padding: 0;
   box-sizing: border-box;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+#login{
+  display: flex;
+  justify-content: center;
 }
 
 #title {

@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-17 01:31:19
+ * @LastEditTime: 2024-05-18 16:58:00
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -63,6 +63,9 @@
           <QuillEditor theme="snow" toolbar="" v-model:content="form.content" contentType="html" ref="quillEditorRef">
           </QuillEditor>
         </el-form-item>
+        <el-form-item label="上傳圖片" required>
+          <UpdateImg @image-selected="handleImageSelected" />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
         </el-form-item>
@@ -82,6 +85,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ElNotification } from 'element-plus'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import UpdateImg from './compoent-items/UpdateImg.vue'
 
 // pinia
 const store = usePiniaStore()
@@ -93,6 +97,7 @@ const form = ref({
   content: '',
   done: false,
   datePicker: '',
+  pic: null
 })
 // i18n語系  
 const locale18n = ref(i18n.global.locale)
@@ -102,11 +107,17 @@ const quillEditorRef = ref(null)
 // uuid全局容器
 let globalUuid = null
 
-
+const handleImageSelected = (fileList) => {
+  console.log('====================================');
+  console.log(fileList,'fileList');
+  console.log('====================================');
+  const images = fileList.map(file => file.raw)
+  form.value.pic = images
+}
 
 
 function submitTodo () {
-  const { id, title, content, done, datePicker } = form.value
+  const { id, title, content, done, datePicker, pic } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     // 有id代表是編輯
     if (id) {
@@ -118,7 +129,8 @@ function submitTodo () {
         done: done,
         todoTitle: title.trim(),
         todoContent: content.trim(),
-        datePicker: datePicker
+        datePicker: datePicker,
+        pic: pic
       })
 
       globalUuid = uuidTodoId
@@ -154,7 +166,7 @@ function submitTodo () {
             })
           })
       } else {
-        axios.post('http://localhost:3000/comments', { id: globalUuid, todoTitle: title, done: done, todoContent: content, datePicker: datePicker })
+        axios.post('http://localhost:3000/comments', { id: globalUuid, todoTitle: title, done: done, todoContent: content, datePicker: datePicker, pic: pic })
           .then(response => {
             if (response.status === 201) {
               ElNotification({
