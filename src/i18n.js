@@ -6,20 +6,20 @@ const i18n = createI18n({
     locale: 'en',
     messages: {
         en: {
-            titleFirst: 'Create New Item',
-            searchButton: 'Add New Item',
+            titleFirst: 'Introduction',
+            searchButton: 'Add New Introduction',
             delete: 'delete',
             detail: 'detail',
             undone: 'undone',
             done: 'done',
             edit: 'deit',
             menu: 'menu',
-            home: 'Home',
+            home: 'home',
 
         },
         zh: {
-            titleFirst: '創建項目',
-            searchButton: '新增項目',
+            titleFirst: '車輛介紹',
+            searchButton: '新增車輛資訊',
             delete: '刪除項目',
             detail: '詳情',
             undone: '待辦',

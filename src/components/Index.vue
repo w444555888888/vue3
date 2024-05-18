@@ -1,23 +1,33 @@
 <template>
-   <div class="block text-center" >
-    <el-carousel height="auto" autoplay>
-      <el-carousel-item v-for="item in 4" :key="item" style="height: 500px">
+  <div class="block text-center">
+    <el-carousel :interval="4000"  height="500px">
+      <el-carousel-item v-for="item in imgList">
+        <img :src="item" class="carousel-image">
       </el-carousel-item>
     </el-carousel>
   </div>
+
+ 
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import carousel from '@/assets/carousel-1.jpeg'
+import carouse2 from '@/assets/carousel-2.jpeg'
+import carouse3 from '@/assets/carousel-3.jpeg'
+import carouse4 from '@/assets/carousel-4.jpeg'
+import carouse5 from '@/assets/carousel-5.jpeg'
+
+const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
 
 </script>
 
 <style lang="scss" scoped>
-.el-carousel__item:nth-child(2n) {
-  background-color: #ffffff;
+.carousel-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  margin: auto;
 }
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
-}
-
 </style>

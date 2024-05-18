@@ -12,14 +12,19 @@
               </el-icon>{{ t("home") }}</el-button>
           </el-header>
           <el-main>
+            <el-carousel :interval="4000" type="card" height="300px">
+              <el-carousel-item v-for="item in imgList">
+                <img :src="item" class="carousel-image">
+              </el-carousel-item>
+            </el-carousel>
             <div>
-              <el-descriptions title="" :column="2"  direction="vertical" border>
+              <el-descriptions title="" :column="2" direction="vertical" border>
                 <el-descriptions-item label="todoTitle" min-width="400px"><el-tag size="large">{{
                   apiCommentFilter[0].todoTitle
-                    }}</el-tag></el-descriptions-item>
+                }}</el-tag></el-descriptions-item>
                 <el-descriptions-item label="datePicker" min-width="400px"><el-tag size="large">{{
                   apiCommentFilter[0].datePicker
-                    }}</el-tag></el-descriptions-item>
+                }}</el-tag></el-descriptions-item>
                 <el-descriptions-item label="todoContent" :span="5" min-width="400px">
                   <div v-html="apiCommentFilter[0].todoContent"></div>
                 </el-descriptions-item>
@@ -49,6 +54,13 @@ import { usePiniaStore } from '../store/pinia.js'
 import axios from 'axios'
 import { ElLoading } from 'element-plus'
 import i18n from '../i18n.js'
+import carousel from '@/assets/carousel-1.jpeg'
+import carouse2 from '@/assets/carousel-2.jpeg'
+import carouse3 from '@/assets/carousel-3.jpeg'
+import carouse4 from '@/assets/carousel-4.jpeg'
+import carouse5 from '@/assets/carousel-5.jpeg'
+
+const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
 // i18n
 const { t } = i18n.global
 
@@ -159,6 +171,14 @@ onBeforeMount(async () => {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+.carousel-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  margin: auto;
 }
 
 
