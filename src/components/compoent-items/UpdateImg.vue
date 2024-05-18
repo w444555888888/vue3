@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-05-18 14:07:52
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-18 22:13:18
+ * @LastEditTime: 2024-05-19 01:58:53
  * @FilePath: \vue3\src\components\compoent-items\UpdateImg.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -20,15 +20,10 @@
 
 <script setup>
 import { ref, defineEmits, defineProps } from 'vue'
-import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue'
 import axios from 'axios'
 
-// props
-const props = defineProps({
-  imgPersonal: Array
-});
-
-const fileList=ref([])
+// 圖片列表
+const fileList = ref([])
 
 
 const dialogImageUrl = ref('')
@@ -46,7 +41,7 @@ const handleChange = (file, fileList) => {
       emit('image-selected', imagesBase64);
     })
     .catch(error => {
-      console.error('获取 Base64 编码字符串时发生错误:', error);
+      console.error('Base64編碼錯誤', error);
     });
 }
 
