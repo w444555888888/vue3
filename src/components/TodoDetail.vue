@@ -12,8 +12,9 @@
               </el-icon>{{ t("home") }}</el-button>
           </el-header>
           <el-main>
-            <el-carousel :interval="4000" type="card" height="300px">
-              <el-carousel-item v-for="item in imgList">
+            <div v-if="filterPic[0].pic == null"></div>
+            <el-carousel v-else :interval="4000" type="card" height="300px">
+              <el-carousel-item v-for="item in filterPic[0].pic" :key="item.id">
                 <img :src="item" class="carousel-image">
               </el-carousel-item>
             </el-carousel>
@@ -66,9 +67,11 @@ const { t } = i18n.global
 
 const apiCommentFilter = ref('')
 const isLoading = ref(true)
+
 // 使用路由router 路由params
 const route = useRoute()
 const routeindex = ref(route.params.index)
+
 // pinia
 const store = usePiniaStore()
 
@@ -80,6 +83,11 @@ function navigateToHome () {
     name: 'TodoList'
   })
 }
+
+// 比對route找pinia
+const filterPic = store.todos.filter((e) => e.id == routeindex.value)
+
+
 
 
 onMounted(() => {

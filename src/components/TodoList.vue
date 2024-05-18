@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-18 16:58:00
+ * @LastEditTime: 2024-05-18 19:58:40
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -47,7 +47,7 @@
   </div>
   <!-- drawer modal -->
   <div>
-    <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="33%">
+    <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="50%">
       <el-form ref="todoFormRef" :model="form" label-width="80px" style="justify-content: flex-start">
         <el-form-item label="日期" required>
           <el-date-picker v-model="form.datePicker" type="datetime" placeholder="Select date and time" />
@@ -108,11 +108,7 @@ const quillEditorRef = ref(null)
 let globalUuid = null
 
 const handleImageSelected = (fileList) => {
-  console.log('====================================');
-  console.log(fileList,'fileList');
-  console.log('====================================');
-  const images = fileList.map(file => file.raw)
-  form.value.pic = images
+  form.value.pic = fileList
 }
 
 
@@ -121,7 +117,7 @@ function submitTodo () {
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     // 有id代表是編輯
     if (id) {
-      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker })
+      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker, pic: pic })
     } else {
       const uuidTodoId = uuidv4()
       store.addTodo({
@@ -150,7 +146,7 @@ function submitTodo () {
       const data = response.data
       const ExistId = data.some(item => item.id == id)
       if (ExistId) {
-        axios.put(`http://localhost:3000/comments/${id}`, { todoTitle: title, done: done, todoContent: content, datePicker: datePicker })
+        axios.put(`http://localhost:3000/comments/${id}`, { todoTitle: title, done: done, todoContent: content, datePicker: datePicker, pic: pic })
           .then(response => {
             ElNotification({
               title: 'Success',
