@@ -12,7 +12,7 @@
               </el-icon>{{ t("home") }}</el-button>
           </el-header>
           <el-main>
-            <div v-if="apiCommentFilter[0].pic == null"></div>
+            <div v-if="apiCommentFilter[0] && apiCommentFilter[0].pic == null"></div>
             <el-carousel v-else :interval="4000" type="card" height="300px">
               <el-carousel-item v-for="item in apiCommentFilter[0].pic" :key="item.id">
                 <img :src="item" class="carousel-image">
@@ -83,8 +83,7 @@ function navigateToHome () {
   })
 }
 
-// 比對route找pinia
-const filterPic = store.todos.filter((e) => e.id == routeindex.value)
+
 
 
 
@@ -105,6 +104,7 @@ onBeforeMount(async () => {
     // 拿後端fetchCommentsApi數據
     await store.fetchCommentsApi()
     apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
+    console.log(apiCommentFilter.value,'apiCommentFilter.value');
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false
