@@ -64,7 +64,7 @@
           </QuillEditor>
         </el-form-item>
         <el-form-item label="上傳圖片" required>
-          <UpdateImg @image-selected="handleImageSelected" :param="form.id" />
+          <UpdateImg @image-selected="handleImageSelected" :param="Number(form.id)" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
