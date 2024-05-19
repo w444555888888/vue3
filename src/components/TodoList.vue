@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-19 01:58:45
+ * @LastEditTime: 2024-05-19 13:37:57
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -64,7 +64,7 @@
           </QuillEditor>
         </el-form-item>
         <el-form-item label="上傳圖片" required>
-          <UpdateImg @image-selected="handleImageSelected"/>
+          <UpdateImg @image-selected="handleImageSelected" :param="form.id" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
@@ -143,7 +143,7 @@ function submitTodo () {
   axios.get('http://localhost:3000/comments')
     .then(response => {
       const data = response.data
-      const ExistId = data.some(item => item.id == id)
+      const ExistId = data.find(item => item.id == id)
       if (ExistId) {
         axios.put(`http://localhost:3000/comments/${id}`, { todoTitle: title, done: done, todoContent: content, datePicker: datePicker, pic: pic })
           .then(response => {
@@ -206,6 +206,7 @@ function editToForm (id) {
     quillEditorRef.value.setText('')
   }
 }
+
 
 // 頁碼
 const currentPage = ref(1)

@@ -49,7 +49,6 @@
 <script setup>
 import { ref, onBeforeMount, onMounted, defineProps, computed, toRefs, watch, onUpdated } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
 import axios from 'axios'
@@ -105,7 +104,7 @@ onBeforeMount(async () => {
     })
     // 拿後端fetchCommentsApi數據
     await store.fetchCommentsApi()
-    apiCommentFilter.value = store.apiComments.filter(e => e.id === routeindex.value)
+    apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false
