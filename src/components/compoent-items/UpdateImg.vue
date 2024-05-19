@@ -16,8 +16,8 @@
       <i class="el-icon-plus"></i>
     </el-upload>
 
-    <el-dialog v-model="dialogVisible">
-      <img :src="dialogImageUrl" alt="Preview Image" />
+    <el-dialog v-model="dialogVisible" >
+      <img :src="dialogImageUrl" alt="Preview Image" style="width:100%"/>
     </el-dialog>
   </div>
 </template>
