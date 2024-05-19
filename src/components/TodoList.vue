@@ -64,7 +64,7 @@
           </QuillEditor>
         </el-form-item>
         <el-form-item label="上傳圖片" required>
-          <UpdateImg @image-selected="handleImageSelected" :param="form.id" />
+          <UpdateImg @image-selected="handleImageSelected" :param="form.id ? form.id : globalUuid" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
@@ -104,10 +104,12 @@ const locale18n = ref(i18n.global.locale)
 const { t } = i18n.global
 // drawer ref實例
 const quillEditorRef = ref(null)
-// uuid全局容器
+
+// 新增uuid容器
 let globalUuid = null
 
 const handleImageSelected = (fileList) => {
+  // 圖片一律儲存到後端
   form.value.pic = fileList
 }
 
@@ -129,7 +131,6 @@ function submitTodo () {
       })
 
       globalUuid = uuidTodoId
-      form.value.id = uuidTodoId
     }
 
     form.value.id = ''

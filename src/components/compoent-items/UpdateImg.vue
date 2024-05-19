@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-05-18 14:07:52
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-19 20:02:05
+ * @LastEditTime: 2024-05-19 21:10:22
  * @FilePath: \vue3\src\components\compoent-items\UpdateImg.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -66,14 +66,21 @@ watch(() => props.param, (newParam) => {
   loadInitialImages(newParam)
 })
 
+
 // emit
 const emit = defineEmits(['image-selected'])
 const handleChange = async (file, newFileList) => {
+  // 拿到raw
   const filesWithRaw = newFileList.filter(f => f.raw)
-  const imagesBase64 = await Promise.all(filesWithRaw.map(file => getBase64(file.raw)))
-
-  emit('image-selected', [...fileList.value.map(f => f.url), ...imagesBase64])
+  // 轉換base64
+  const base64Promises = filesWithRaw.map(file => getBase64(file.raw))
+  const imagesBase64 = await Promise.all(base64Promises)
+  const existingUrls = fileList.value.map(f => f.url)
+  // 目的: (之前預覽的url)+(當前url)=放到emit傳遞給後端
+  emit('image-selected', [...existingUrls, ...imagesBase64])
 }
+
+
 
 // 轉換base64函數
 function getBase64 (file) {
