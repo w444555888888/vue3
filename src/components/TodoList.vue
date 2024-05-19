@@ -117,7 +117,7 @@ function submitTodo () {
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     // 有id代表是編輯
     if (id) {
-      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker, pic: pic })
+      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker })
     } else {
       const uuidTodoId = uuidv4()
       store.addTodo({
@@ -126,7 +126,6 @@ function submitTodo () {
         todoTitle: title.trim(),
         todoContent: content.trim(),
         datePicker: datePicker,
-        pic: pic
       })
 
       globalUuid = uuidTodoId
@@ -198,15 +197,12 @@ function editToForm (id) {
     form.value.title = todo.todoTitle
     form.value.content = todo.todoContent
     form.value.datePicker = todo.datePicker
-    form.value.pic = todo.pic
-
   } else {
     form.value.id = ''
     form.value.done = false
     form.value.title = ''
     form.value.content = ''
     form.value.datePicker = ''
-    form.value.pic = ''
     quillEditorRef.value.setText('')
   }
 }

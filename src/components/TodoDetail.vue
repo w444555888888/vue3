@@ -12,9 +12,9 @@
               </el-icon>{{ t("home") }}</el-button>
           </el-header>
           <el-main>
-            <div v-if="filterPic[0].pic == null"></div>
+            <div v-if="apiCommentFilter[0].pic == null"></div>
             <el-carousel v-else :interval="4000" type="card" height="300px">
-              <el-carousel-item v-for="item in filterPic[0].pic" :key="item.id">
+              <el-carousel-item v-for="item in apiCommentFilter[0].pic" :key="item.id">
                 <img :src="item" class="carousel-image">
               </el-carousel-item>
             </el-carousel>
@@ -64,7 +64,7 @@ import carouse5 from '@/assets/carousel-5.jpeg'
 const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
 // i18n
 const { t } = i18n.global
-
+// fetchCommentsApi數據容器
 const apiCommentFilter = ref('')
 const isLoading = ref(true)
 
@@ -91,7 +91,7 @@ const filterPic = store.todos.filter((e) => e.id == routeindex.value)
 
 
 onMounted(() => {
-
+  store.fetchCommentsApi()
 
 })
 
@@ -103,6 +103,7 @@ onBeforeMount(async () => {
       text: 'Loading',
       background: 'rgba(0, 0, 0, 0.7)',
     })
+    // 拿後端fetchCommentsApi數據
     await store.fetchCommentsApi()
     apiCommentFilter.value = store.apiComments.filter(e => e.id === routeindex.value)
     setTimeout(() => {
