@@ -13,7 +13,7 @@
     <el-upload list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove" :file-list="fileList" @change="handleChange">
       <!-- 上傳icon -->
-      <i class="el-icon-plus"></i>
+      <el-icon><Plus /></el-icon>
     </el-upload>
 
     <el-dialog v-model="dialogVisible" >
@@ -26,6 +26,7 @@
 import { ref, defineEmits, defineProps, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { usePiniaStore } from '../../store/pinia'
+import { Plus } from '@element-plus/icons-vue'
 
 // pinia
 const store = usePiniaStore()
