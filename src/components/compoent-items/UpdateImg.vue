@@ -12,7 +12,7 @@
   <div v-else>
     <el-upload list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove" :file-list="fileList" @change="handleChange">
-      <!-- 上传icon -->
+      <!-- 上傳icon -->
       <i class="el-icon-plus"></i>
     </el-upload>
 
@@ -39,12 +39,15 @@ const props = defineProps({
 })
 
 
-// 图片列表
+// 圖片列表
 const fileList = ref([])
+// src容器
 const dialogImageUrl = ref('')
+// 預覽
 const dialogVisible = ref(false)
 
 // 初始化圖片列表
+// 帶入id
 const loadInitialImages = async (param) => {
   await store.fetchCommentsApi()
   const initialFiles = store.apiComments.find(e => e.id == param)?.pic || []
@@ -62,13 +65,15 @@ onMounted(() => {
 })
 
 // 監聽props.param
-watch(() => props.param, (newParam) => {
+watch(props.param, (newParam) => {
   loadInitialImages(newParam)
 })
 
 
 // emit
 const emit = defineEmits(['image-selected'])
+
+// @change事件
 const handleChange = async (file, newFileList) => {
   // 拿到raw
   const filesWithRaw = newFileList.filter(f => f.raw)
