@@ -15,8 +15,8 @@
                                 </el-menu-item>
                                 <el-menu-item index="1-2"><router-link to="/TodoList" class="visited">{{ t("titleFirst")}}</router-link>
                                 </el-menu-item>
-                                <el-menu-item index="1-3">Option 333</el-menu-item>
-                                <el-menu-item index="1-4">Option 444</el-menu-item>
+                                <el-menu-item index="1-3">Option 3</el-menu-item>
+                                <el-menu-item index="1-4">Option 4</el-menu-item>
                             </el-menu-item-group>
                         </el-sub-menu>
                     </el-menu>
