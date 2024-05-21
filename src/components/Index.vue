@@ -8,7 +8,7 @@
   </div>
   <div>
     <el-input
-      v-model="input"
+      v-model="inputValue"
       style="max-width: 300px"
       placeholder="Search"
       @blur="handleEvent"
@@ -33,12 +33,12 @@ import carouse5 from '@/assets/carousel-5.jpeg'
 // pinia
 const store = usePiniaStore()
 const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
-const input=ref('')
+const inputValue=ref('')
 
-async function handleEvent(event) {
-  console.log(event.target.value,'event.target.value');
+async function handleEvent() {
   try {
-    const response = await axios.get(`http://localhost:3000/comments?todoTitle_like=${event.target.value}`)
+   
+    const response = await axios(`http://localhost:3000/comments?todoTitle=${inputValue.value}`)
     console.log(response.data, 'response')
   } catch (error) {
     console.error('Error fetching data:', error)
