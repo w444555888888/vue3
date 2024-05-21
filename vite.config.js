@@ -21,7 +21,6 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-  base: "/vue3/",
   resolve: {
     alias: {
       // @:ES模塊  ~@:node設置絕對路徑
