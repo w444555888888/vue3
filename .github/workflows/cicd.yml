@@ -1,20 +1,26 @@
 name: cicd
 
+
 on:
+  #僅推送到默認分支
   push:
     branches: ['main']
+    #可以使你手動再Action tab 頁面觸發工作流
   workflow_dispatch:
 
+# 設定 GITHUB_TOKEN 的權限，以允許部署到 GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 允許一個並發的部署
 concurrency:
   group: 'pages'
   cancel-in-progress: true
 
 jobs:
+  #單次佈署的工作描述
   deploy:
     environment:
       name: github-pages
