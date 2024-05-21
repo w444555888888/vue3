@@ -85,11 +85,7 @@ function navigateToHome () {
 
 
 
-
-
-
 onMounted(() => {
-  store.fetchCommentsApi()
 
 })
 
@@ -104,7 +100,6 @@ onBeforeMount(async () => {
     // 拿後端fetchCommentsApi數據
     await store.fetchCommentsApi()
     apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
-    console.log(apiCommentFilter.value,'apiCommentFilter.value');
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false
