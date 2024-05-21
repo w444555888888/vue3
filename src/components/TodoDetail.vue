@@ -190,7 +190,7 @@ onBeforeMount(async () => {
 }
 
 
-::v-deep .el-descriptions {
+:deep(.el-descriptions) {
   padding: 20px;
   width: 100%;
 }

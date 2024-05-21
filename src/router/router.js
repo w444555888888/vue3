@@ -34,11 +34,6 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('@/components/Login.vue')
-    },
-    {
-        path: '/scroll',
-        name: 'Scroll',
-        component: () => import('@/components/Scroll.vue')
     }
 ]
 

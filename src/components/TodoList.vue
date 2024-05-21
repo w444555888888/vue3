@@ -460,11 +460,11 @@ $secondTextColor: #1f2023;
   }
 }
 
-::v-deep .ql-toolbar {
+:deep(.ql-toolbar) {
   width: calc(100% - 60px);
 }
 
-::v-deep .ql-container {
+:deep(.ql-container) {
   height: 300px;
   width: calc(100% - 60px);
 }
