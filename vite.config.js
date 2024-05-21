@@ -21,6 +21,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
+  base: "/vue3/",
   resolve: {
     alias: {
       // @:ES模塊  ~@:node設置絕對路徑
@@ -37,7 +38,7 @@ export default defineConfig({
     include: ['element-plus']
   },
   build: {
-    minify: "terser", 
+    minify: "terser",
     terserOptions: {
       compress: {
         drop_console: true,
