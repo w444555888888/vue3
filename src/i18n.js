@@ -15,6 +15,7 @@ const i18n = createI18n({
             edit: 'deit',
             menu: 'menu',
             home: 'home',
+            search: 'search',
 
         },
         zh: {
@@ -27,6 +28,7 @@ const i18n = createI18n({
             edit: '編輯',
             menu: '選單',
             home: '首頁',
+            search: '搜尋',
 
         }
     },

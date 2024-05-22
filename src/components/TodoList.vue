@@ -10,13 +10,6 @@
 <template>
 
   <div id="TodoListPage">
-    <nav>
-      <select v-model="locale18n">
-        <option value="en">en-US</option>
-        <option value="zh">zh-TW</option>
-      </select>
-    </nav>
-
     <h1>{{ t("titleFirst") }}</h1>
     <form @click="editToForm">
       <button>{{ t("searchButton") }}</button>
@@ -295,19 +288,6 @@ $secondTextColor: #1f2023;
   background-color: rgb(245, 245, 245);
   padding: 30px;
   border-radius: 8px;
-
-  nav {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 10px;
-  }
-
-  select,
-  option {
-    background-color: rgb(22, 22, 22);
-    color: white;
-    border-radius: 5px;
-  }
 
   h1 {
     font-weight: bold;
