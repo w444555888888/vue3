@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-19 19:58:02
+ * @LastEditTime: 2024-05-22 19:58:24
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -40,7 +40,7 @@
   </div>
   <!-- drawer modal -->
   <div>
-    <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="50%">
+    <el-drawer v-model="drawer" title="新增 Todo" :with-header="false" size="50%" destroy-on-close="true">
       <el-form ref="todoFormRef" :model="form" label-width="80px" style="justify-content: flex-start">
         <el-form-item label="日期" required>
           <el-date-picker v-model="form.datePicker" type="datetime" placeholder="Select date and time" />
@@ -205,7 +205,7 @@ function editToForm (id) {
   }
 
   param.value = form.value.id ? form.value.id : globalUuid
-  
+
 }
 
 

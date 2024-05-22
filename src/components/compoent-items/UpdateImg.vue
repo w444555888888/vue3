@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-05-18 14:07:52
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-19 21:10:22
+ * @LastEditTime: 2024-05-22 19:57:57
  * @FilePath: \vue3\src\components\compoent-items\UpdateImg.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,11 +13,13 @@
     <el-upload list-type="picture-card" :auto-upload="false" :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove" :file-list="fileList" @change="handleChange">
       <!-- 上傳icon -->
-      <el-icon><Plus /></el-icon>
+      <el-icon>
+        <Plus />
+      </el-icon>
     </el-upload>
 
-    <el-dialog v-model="dialogVisible" >
-      <img :src="dialogImageUrl" alt="Preview Image" style="width:100%"/>
+    <el-dialog v-model="dialogVisible">
+      <img :src="dialogImageUrl" alt="Preview Image" style="width:100%" />
     </el-dialog>
   </div>
 </template>
@@ -67,7 +69,6 @@ onMounted(() => {
 
 // 監聽props.param
 watch(props.param, (newParam) => {
-  console.log(newParam,'11111111111111111111111111111');
   loadInitialImages(newParam)
 })
 
