@@ -7,15 +7,14 @@
     </el-carousel>
   </div>
   <div>
-    <el-input
-      v-model="inputValue"
-      style="max-width: 300px"
-      placeholder="Search"
-      @blur="handleEvent"
-     @keyup.enter="handleEvent"
-    >
-      <template #prepend>搜尋清單</template>
-    </el-input>
+    <el-button @click="handleSearch">搜尋</el-button>
+    <el-select v-model="selectValue" placeholder="Select" style="width: 240px">
+      <el-option
+        v-for="(item,index) in storetodoTitle"
+        :key="item.index"
+        :value="item"
+      />
+    </el-select>
   </div>
  
 </template>
@@ -33,17 +32,20 @@ import carouse5 from '@/assets/carousel-5.jpeg'
 // pinia
 const store = usePiniaStore()
 const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
-const inputValue=ref('')
+// select
+const storetodoTitle = store.apiComments.map(e => e.todoTitle);
+const selectValue=ref('')
 
-async function handleEvent() {
+async function handleSearch() {
   try {
-   
-    const response = await axios(`http://localhost:3000/comments?todoTitle=${inputValue.value}`)
+    const response = await axios(`http://localhost:3000/comments?todoTitle=${selectValue.value}`)
     console.log(response.data, 'response')
   } catch (error) {
     console.error('Error fetching data:', error)
   }
 }
+
+
 
 
 onBeforeMount(() => {
