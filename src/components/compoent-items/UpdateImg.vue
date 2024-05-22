@@ -67,6 +67,7 @@ onMounted(() => {
 
 // 監聽props.param
 watch(props.param, (newParam) => {
+  console.log(newParam,'11111111111111111111111111111');
   loadInitialImages(newParam)
 })
 

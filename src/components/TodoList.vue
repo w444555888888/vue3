@@ -57,7 +57,7 @@
           </QuillEditor>
         </el-form-item>
         <el-form-item label="上傳圖片" required>
-          <UpdateImg @image-selected="handleImageSelected" :param="form.id ? form.id : globalUuid" />
+          <UpdateImg @image-selected="handleImageSelected" :param="param" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitTodo">提交</el-button>
@@ -100,6 +100,9 @@ const quillEditorRef = ref(null)
 
 // 新增uuid容器
 let globalUuid = null
+
+// props id過去
+let param = ref('')
 
 const handleImageSelected = (fileList) => {
   // 圖片一律儲存到後端
@@ -200,6 +203,9 @@ function editToForm (id) {
     form.value.datePicker = ''
     quillEditorRef.value.setText('')
   }
+
+  param.value = form.value.id ? form.value.id : globalUuid
+  
 }
 
 
