@@ -1,4 +1,5 @@
 <template>
+  <!-- i18n -->
    <nav>
       <select v-model="locale18n">
         <option value="en">en-US</option>
@@ -6,6 +7,7 @@
       </select>
     </nav>
 
+<!-- carousel -->
   <div class="block text-center" style="margin-bottom: 30px;">
     <el-carousel :interval="4000"  height="500px">
       <el-carousel-item v-for="(item, index) in imgList" :key="index">
@@ -14,37 +16,34 @@
     </el-carousel>
   </div>
   <div>
-    <el-button @click="handleSearch">{{t('search')}}</el-button>
+  </div>
+
+  <!-- select -->
+  <el-button @click="handleSearch">{{t('search')}}</el-button>
     <el-select v-model="selectValue" placeholder="Select" style="width: 240px" :value-on-clear="null">
       <el-option :label="'All'" :value="''" />
       <el-option
-        v-for="(item,index) in storetodoTitle"
+        v-for="(item,index) in optionValue"
         :key="item.index"
         :label="item"
         :value="item"
       />
     </el-select>
-  </div>
 
-  
+  <!-- card -->
   <div class="card-container">
-  <el-card 
-    v-for="(item,index) in responseValue"
-    :key="index"
-    style="max-width: 480px"
-    v-show="item.pic && item.pic.length > 0">
-    <template #header>{{ item.todoTitle }}</template>
-    <div class="image-container">
-      <img
-        v-for="(pic, picIndex) in item.pic"
-        :key="picIndex"
-        :src="pic"
-        style="width: 100%; margin-bottom: 10px;"
-      />
-    </div>
-  </el-card>
-</div>
-
+    <template v-if="responseValue.length === 0 || !responseValue.some(item => item.pic && item.pic.length > 0)">
+    <el-empty description="無資料"/>
+  </template>
+  <template v-else>
+    <el-card v-for="(item, index) in responseValue" :key="index" style="max-width: 480px" v-show="item.pic && item.pic.length > 0">
+      <template #header>{{ item.todoTitle }}</template>
+      <div class="image-container">
+        <img v-for="(pic, picIndex) in item.pic" :key="picIndex" :src="pic" style="width: 100%; margin-bottom: 10px;" />
+      </div>
+    </el-card>
+  </template>
+  </div>
 </template>
 
 <script setup>
@@ -65,11 +64,11 @@ const { t } = i18n.global
 const store = usePiniaStore()
 const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
 // select
-const storetodoTitle = [...store.apiComments.map(e => e.todoTitle)];
 const selectValue=ref('')
-
-
+const optionValue = ref([]);
+// response數據
 const responseValue=ref('')
+
 
 async function handleSearch() {
   try {
@@ -84,13 +83,14 @@ async function handleSearch() {
 
 
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  await store.fetchCommentsApi()
+  optionValue.value = store.apiComments.map(e => e.todoTitle)
 })
 
 </script>
 
 <style lang="scss" scoped>
-
 nav {
     display: flex;
     justify-content: flex-start;
@@ -122,7 +122,6 @@ nav {
 .image-container {
   display: flex;
   overflow-x: auto; 
-
 }
 
 </style>
