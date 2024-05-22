@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-05-18 14:07:52
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-22 19:57:57
+ * @LastEditTime: 2024-05-22 23:46:37
  * @FilePath: \vue3\src\components\compoent-items\UpdateImg.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps, onMounted, watch } from 'vue'
+import { ref, defineEmits, defineProps, onMounted, watch, onBeforeMount } from 'vue'
 import axios from 'axios'
 import { usePiniaStore } from '../../store/pinia'
 import { Plus } from '@element-plus/icons-vue'
@@ -58,10 +58,13 @@ const loadInitialImages = async (param) => {
     name: `image_${index}`,
     url: base64,
     status: 'success',
-    uid: index
+    uid: `initial_${index}`
   }))
 
+
 }
+
+
 
 onMounted(() => {
   loadInitialImages(props.param)
@@ -76,16 +79,28 @@ watch(props.param, (newParam) => {
 // emit
 const emit = defineEmits(['image-selected'])
 
-// @change事件
+let uidCounter = 0
+// @change 事件
 const handleChange = async (file, newFileList) => {
-  // 拿到raw
+  // 拿到 raw 文件
   const filesWithRaw = newFileList.filter(f => f.raw)
-  // 轉換base64
+  // 转换为 base64
   const base64Promises = filesWithRaw.map(file => getBase64(file.raw))
   const imagesBase64 = await Promise.all(base64Promises)
+
+  const newFiles = imagesBase64.map((base64, index) => ({
+    name: `new_image_${uidCounter + index}`,
+    url: base64,
+    status: 'success',
+    uid: `new_${uidCounter + index}` // 确保 uid 唯一
+  }))
+  uidCounter += newFiles.length
+
+  fileList.value = [...fileList.value, ...newFiles] // 更新 fileList
+
   const existingUrls = fileList.value.map(f => f.url)
-  // 目的: (之前預覽的url)+(當前url)=放到emit傳遞給後端
-  emit('image-selected', [...existingUrls, ...imagesBase64])
+  // 目的: (之前预览的 url) + (当前 url) = 放到 emit 传递给后端
+  emit('image-selected', [...existingUrls])
 }
 
 
@@ -107,6 +122,8 @@ const handlePictureCardPreview = (file) => {
 
 const handleRemove = (file) => {
   fileList.value = fileList.value.filter(item => item.uid !== file.uid)
+  const updatedUrls = fileList.value.map(f => f.url)
+  emit('image-selected', updatedUrls)
 }
 
 const uploadImage = (file) => {

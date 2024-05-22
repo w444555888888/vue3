@@ -97,12 +97,8 @@ onBeforeMount(async () => {
       text: 'Loading',
       background: 'rgba(0, 0, 0, 0.7)',
     })
-    watchEffect(() => {
-      if (store.apiComments.length > 0) {
-        apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
-      }
-    })
-   
+    await store.fetchCommentsApi()
+    apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false
