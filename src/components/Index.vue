@@ -16,6 +16,23 @@
       />
     </el-select>
   </div>
+
+  
+
+  <el-card style="max-width: 480px">
+    <template #header>Pic</template>
+    <div v-if="aaa[0] && aaa[0].pic && aaa[0].pic.length > 0" class="image-container">
+      <img
+        v-for="(pic, index) in aaa[0].pic"
+        :key="index"
+        :src="pic"
+        style="width: 100%;"
+      />
+    </div>
+    <template v-else>
+      <p>No pictures</p>
+    </template>
+  </el-card>
  
 </template>
 
@@ -36,10 +53,14 @@ const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
 const storetodoTitle = store.apiComments.map(e => e.todoTitle);
 const selectValue=ref('')
 
+
+const aaa=ref('')
+
 async function handleSearch() {
   try {
     const response = await axios(`http://localhost:3000/comments?todoTitle=${selectValue.value}`)
-    console.log(response.data, 'response')
+    aaa.value= response.data
+    console.log( aaa.value,' aaa.value');
   } catch (error) {
     console.error('Error fetching data:', error)
   }
@@ -61,4 +82,11 @@ onBeforeMount(() => {
   display: block;
   margin: auto;
 }
+
+.image-container {
+  display: flex;
+  overflow-x: auto; 
+
+}
+
 </style>
