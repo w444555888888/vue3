@@ -254,7 +254,6 @@ function navigateToDetail (id) {
 
 onBeforeMount(() => {
   store.initializeTodos()
-  store.fetchCommentsApi()
 })
 
 

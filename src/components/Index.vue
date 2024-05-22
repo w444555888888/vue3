@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref ,watch,onBeforeMount} from 'vue'
+import { ref ,watch,watchEffect,onBeforeMount} from 'vue'
 import { usePiniaStore } from '../store/pinia.js'
 import axios from 'axios'
 import carousel from '@/assets/carousel-1.jpeg'
@@ -69,7 +69,7 @@ const optionValue = ref([]);
 // response數據
 const responseValue=ref('')
 
-
+// API搜尋
 async function handleSearch() {
   try {
     const response = await axios(`http://localhost:3000/comments?todoTitle=${selectValue.value}`)
@@ -80,13 +80,13 @@ async function handleSearch() {
   }
 }
 
-
-
-
-onBeforeMount(async () => {
-  await store.fetchCommentsApi()
-  optionValue.value = store.apiComments.map(e => e.todoTitle)
+// 偵測pinia數據防止出問題
+watchEffect(() => {
+  if (store.apiComments.length > 0) {
+    optionValue.value = store.apiComments.map(e => e.todoTitle)
+  }
 })
+
 
 </script>
 

@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, defineProps, computed, toRefs, watch, onUpdated } from 'vue'
+import { ref, onBeforeMount, onMounted, defineProps, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
@@ -97,9 +97,12 @@ onBeforeMount(async () => {
       text: 'Loading',
       background: 'rgba(0, 0, 0, 0.7)',
     })
-    // 拿後端fetchCommentsApi數據
-    await store.fetchCommentsApi()
-    apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
+    watchEffect(() => {
+      if (store.apiComments.length > 0) {
+        apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
+      }
+    })
+   
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false

@@ -6,7 +6,14 @@
 
 
 <script setup>
+import { ref , onMounted} from 'vue'
+import { usePiniaStore } from './store/pinia.js'
 import SiderBar from './components/SiderBar.vue'
+const store=usePiniaStore()
+
+onMounted(async () => {
+  await store.fetchCommentsApi()
+})
 </script>
 
 
