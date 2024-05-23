@@ -82,31 +82,30 @@ const emit = defineEmits(['image-selected'])
 let uidCounter = 0
 // @change 事件
 const handleChange = async (file, newFileList) => {
-  // 拿到 raw 文件
+  // 拿到raw文件
   const filesWithRaw = newFileList.filter(f => f.raw)
-  // 转换为 base64
+  // 轉換base64
   const base64Promises = filesWithRaw.map(file => getBase64(file.raw))
   const imagesBase64 = await Promise.all(base64Promises)
-
+  // 新增圖片加上uid唯一值
   const newFiles = imagesBase64.map((base64, index) => ({
     name: `new_image_${uidCounter + index}`,
     url: base64,
     status: 'success',
-    uid: `new_${uidCounter + index}` // 确保 uid 唯一
+    uid: `new_${uidCounter + index}` 
   }))
   uidCounter += newFiles.length
-
-  fileList.value = [...fileList.value, ...newFiles] // 更新 fileList
-
+  // 目的: (資料庫base64) + (當前新增base64)
+  fileList.value = [...fileList.value, ...newFiles] 
+  // 更新 fileList提出url+emit給父組件
   const existingUrls = fileList.value.map(f => f.url)
-  // 目的: (之前预览的 url) + (当前 url) = 放到 emit 传递给后端
   emit('image-selected', [...existingUrls])
 }
 
 
 
 // 轉換base64函數
-function getBase64 (file) {
+function getBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -120,11 +119,13 @@ const handlePictureCardPreview = (file) => {
   dialogVisible.value = true
 }
 
+// 刪除圖片uid唯一值
 const handleRemove = (file) => {
   fileList.value = fileList.value.filter(item => item.uid !== file.uid)
   const updatedUrls = fileList.value.map(f => f.url)
   emit('image-selected', updatedUrls)
 }
+
 
 const uploadImage = (file) => {
 
