@@ -36,10 +36,10 @@
     <el-empty description="無資料"/>
   </template>
   <template v-else>
-    <el-card v-for="(item, index) in responseValue" :key="index" style="max-width: 480px" v-show="item.pic && item.pic.length > 0">
+    <el-card v-for="(item, index) in responseValue" :key="index"  class="card-margin"  style="max-width: 480px" v-show="item.pic && item.pic.length > 0">
       <template #header>{{ item.todoTitle }}</template>
       <div class="image-container">
-        <img v-for="(pic, picIndex) in item.pic" :key="picIndex" :src="pic" style="width: 100%; margin-bottom: 10px;" />
+        <img v-for="(pic, picIndex) in item.pic" :key="picIndex" :src="pic"  style="width: 100%; margin-bottom: 10px;" />
       </div>
     </el-card>
   </template>
@@ -117,11 +117,19 @@ nav {
 .card-container {
   display: flex;
   flex-wrap: wrap;
+
+  .card-margin {
+    margin: 5px;
+
+    .image-container {
+      display: flex;
+      overflow-x: auto; 
+      object-fit: contain;
+    }
+  }
 }
 
-.image-container {
-  display: flex;
-  overflow-x: auto; 
-}
+
+
 
 </style>
