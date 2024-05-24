@@ -5,23 +5,23 @@
             <el-aside width="300px"> <el-scrollbar>
                     <el-menu :default-openeds="['1']">
                         <el-sub-menu index="1">
-                                <template #title>
-                                    <el-icon>
-                                        <Menu />
-                                    </el-icon> {{ t("menu") }}
-                                    <el-avatar :size="70" :src="imgValue">
-                                    </el-avatar>
-                                </template>
-                        
+                            <template #title>
+                                <el-icon>
+                                    <Menu />
+                                </el-icon> {{ t("menu") }}
+                                <el-avatar :size="70" :src="imgValue">
+                                </el-avatar>
+                            </template>
+
                             <el-menu-item-group>
                                 <el-menu-item index="1-1"><router-link to="/" class="visited">{{
-                                        t("home") }}</router-link>
+                                    t("home") }}</router-link>
                                 </el-menu-item>
                                 <el-menu-item index="1-2"><router-link to="/todoList" class="visited">{{
-                                        t("titleFirst") }}</router-link>
+                                    t("titleFirst") }}</router-link>
                                 </el-menu-item>
                                 <el-menu-item index="1-3"><router-link to="/personalize" class="visited">{{
-                                        t("personalize")}}</router-link></el-menu-item>
+                                    t("personalize") }}</router-link></el-menu-item>
                                 <el-menu-item index="1-4">Option 1-4</el-menu-item>
                             </el-menu-item-group>
                         </el-sub-menu>
@@ -36,39 +36,31 @@
 
 
 <script setup>
-import { ref } from 'vue'
-import axios from "axios";
+import { ref,onMounted } from 'vue'
+import axios from "axios"
+import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
+// i18n
 const { t } = i18n.global
+// pinia
+const store = usePiniaStore()
 const imgValue = ref('')
 
 const tokenString = localStorage.getItem('token')
-const token = JSON.parse(tokenString);
+const token = JSON.parse(tokenString)
 
-axios.get('http://localhost:3000/users')
-    .then(response => {
-        const data = response.data
-        const usernameExist = data.find(user => user.username === token.username)
-        if (usernameExist) {
-            axios.get(`http://localhost:3000/users/${usernameExist.id}`)
-                .then(response => {
-                    console.log(response, 'response');
-                    imgValue.value = response.data.img
-                    ElNotification({
-                        title: 'Success',
-                        message: 'Update Success username',
-                        type: 'success',
-                    })
-                })
-                .catch(error => {
-                    ElNotification({
-                        title: 'Error',
-                        message: 'Update Fail username',
-                        type: 'error',
-                    })
-                })
-        }
-    })
+
+
+
+
+onMounted(async ()=>{
+    await store.fetchUsersApi()
+    let usersValue = store.users.find(e => e.username == token.username)
+    if(usersValue && usersValue.img){
+        imgValue.value=usersValue.img
+    }
+})
+
 </script>
 
 
@@ -115,8 +107,8 @@ $secondTextColor: #1f2023;
     }
 }
 
-:deep(.el-sub-menu__title){
-    height:100px;
+:deep(.el-sub-menu__title) {
+    height: 100px;
 }
 
 
