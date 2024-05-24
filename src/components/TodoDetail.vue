@@ -13,7 +13,7 @@
           </el-header>
           <el-main>
             <div v-if="apiCommentFilter[0] && apiCommentFilter[0].pic == null"></div>
-            <el-carousel v-else :interval="4000" type="card" height="300px">
+            <el-carousel v-else :interval="4000" type="card" height="330px">
               <el-carousel-item v-for="item in apiCommentFilter[0].pic" :key="item.id">
                 <img :src="item" class="carousel-image">
               </el-carousel-item>
