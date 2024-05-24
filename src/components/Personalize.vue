@@ -25,7 +25,7 @@
                   <input ref="uploadInput" type="file" accept="image/jpg, image/jpeg, image/png, image/gif"
                     @change="selectFile" />
                 </button>
-                <div class="file-info" v-if="result.blobURL">
+                <div class="file-info" v-if="result.dataURL">
                   <button @click="removeFile">刪除</button>
                 </div>
               </section>
@@ -84,32 +84,36 @@ import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 
-// 
+
 // cropper
 const isShowModal = ref(false);
 const uploadInput = ref(null);
 const pic = ref('');
 const result = reactive({
-  blobURL: '',
+  dataURL: '',
 });
 
+// 選取照片
 function selectPicture() {
   uploadInput.value.click();
 }
 
+// 關閉modal
 function closeModal() {
   isShowModal.value = false
 }
 
+// 移除上傳圖片
 const removeFile = () => {
-  result.blobURL = '';
+  result.dataURL = '';
   uploadInput.value.value = '';
 };
 
+// 選取圖片
 function selectFile(e) {
-  // 清空图片数据和 blobURL
+  // 清空圖片數據和 dataURL
   pic.value = '';
-  result.blobURL = '';
+  result.dataURL = '';
 
   const { files } = e.target;
   if (!files || !files.length) return;
@@ -141,7 +145,7 @@ function selectFile(e) {
       canvas.height = height;
       ctx.drawImage(img, 0, 0, width, height);
 
-      // 所放圖片後轉換成base64格式
+      // 所放圖片後轉換成base64格式顯示在cropper畫布上
       const scaledImageData = canvas.toDataURL('image/jpeg');
       pic.value = scaledImageData;
       isShowModal.value = true;
@@ -149,13 +153,18 @@ function selectFile(e) {
   };
 }
 
+// 剪裁後base64
 async function getResult() {
   if (!cropper) return
+  // base64
+  const base64 = cropper.getDataURL()
+  result.dataURL = base64
 
-  const blob = await cropper.getBlob()
-  if (!blob) return
-
-  result.blobURL = URL.createObjectURL(blob)
+  // blob
+  // const blob = await cropper.getBlob()
+  // if (!blob) return
+  // result.blobURL = URL.createObjectURL(blob)
+  result.dataURL=base64
   isShowModal.value = false
 }
 
@@ -168,19 +177,9 @@ function reset() {
   if (!cropper) return
   cropper.reset()
 }
-// 
-// 
-// 
-// 
 
 
-
-
-
-
-
-
-
+/* ------------------------------------ */
 
 
 const username = ref("");
@@ -200,35 +199,11 @@ const localStorageToken = () => {
 localStorageToken();
 
 
-
-// onchange 
-async function handleFileChange(file, fileList) {
-  try {
-    // 只能放一張圖
-    // 圖片儲存成base64
-    personalizeImg.value = await getBase64(file.raw);
-  } catch (error) {
-    console.error('Error', error);
-  }
-}
-
-
-// 轉換base64函數
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
-  })
-}
-
-
 const personalize = () => {
-  if (!username.value || !password.value) {
+  if (!username.value && !password.value && !result.dataURL) {
     ElNotification({
       title: 'Error',
-      message: 'Please enter both username & password',
+      message: 'Please enter username & password & img',
       type: 'error',
     })
     return
@@ -237,23 +212,27 @@ const personalize = () => {
   // 先檢查username是否存在
   axios.get('http://localhost:3000/users')
     .then(response => {
-      const Datauser = response.data
-      const userExist = Datauser.some(user => user.username === username.value)
-      if (userExist) {
-
-        ElNotification({
-          title: 'Error',
-          message: 'Username exist',
-          type: 'error',
-        })
+      const data = response.data
+      const usernameExist = data.find(user => user.username === username.value)
+      console.log(usernameExist,'usernameExist');
+      console.log(result.dataURL,'result.dataURL.value');
+      if (usernameExist) {
+        axios.put(`http://localhost:3000/users/${usernameExist.id}`,{username:username.value , password:password.value , img:result.dataURL})
+        .then(response => {
+            ElNotification({
+              title: 'Success',
+              message: 'Update Success username',
+              type: 'success',
+            })
+          })
+          .catch(error => {
+            ElNotification({
+              title: 'Error',
+              message: 'Update Fail username',
+              type: 'error',
+            })
+          })
       }
-    })
-    .catch(error => {
-      ElNotification({
-        title: 'Error',
-        message: 'Failed to get register',
-        type: 'error',
-      })
     })
 };
 
