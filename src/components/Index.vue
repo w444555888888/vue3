@@ -30,19 +30,21 @@
       />
     </el-select>
 
-  <!-- card -->
-  <div class="card-container">
-    <template v-if="responseValue.length === 0 || !responseValue.some(item => item.pic && item.pic.length > 0)">
-    <el-empty description="無資料"/>
+
+
+  <!--無資料-->
+  <template v-if="responseValue.length === 0 || !responseValue.some(item => item.pic && item.pic.length > 0)">
+    <el-empty class="empty" :image-size="100" description="無資料"/>
   </template>
-  <template v-else>
-    <el-card v-for="(item, index) in responseValue" :key="index"  class="card-margin"  style="max-width: 480px" v-show="item.pic && item.pic.length > 0">
+
+  <!-- card -->
+  <div class="card-container" v-else>
+    <el-card v-for="(item, index) in responseValue" :key="index" class="card-margin" style="max-width: 480px" v-show="item.pic && item.pic.length > 0">
       <template #header>{{ item.todoTitle }}</template>
       <div class="image-container">
-        <img v-for="(pic, picIndex) in item.pic" :key="picIndex" :src="pic"  style="width: 100%; margin-bottom: 10px;" />
+        <img v-for="(pic, picIndex) in item.pic" :key="picIndex" :src="pic" style="width: 100%; margin-bottom: 10px;" />
       </div>
     </el-card>
-  </template>
   </div>
 </template>
 
@@ -129,6 +131,13 @@ nav {
   }
 }
 
+
+.empty{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:200px;
+}
 
 
 
