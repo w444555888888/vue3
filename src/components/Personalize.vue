@@ -199,6 +199,7 @@ const localStorageToken = () => {
 localStorageToken();
 
 
+// 修改個人資料
 const personalize = () => {
   if (!username.value && !password.value && !result.dataURL) {
     ElNotification({
@@ -214,8 +215,6 @@ const personalize = () => {
     .then(response => {
       const data = response.data
       const usernameExist = data.find(user => user.username === username.value)
-      console.log(usernameExist,'usernameExist');
-      console.log(result.dataURL,'result.dataURL.value');
       if (usernameExist) {
         axios.put(`http://localhost:3000/users/${usernameExist.id}`,{username:username.value , password:password.value , img:result.dataURL})
         .then(response => {
