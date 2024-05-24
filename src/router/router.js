@@ -9,7 +9,7 @@ const routes = [
 
     },
     {
-        path: '/TodoList',
+        path: '/todoList',
         name: 'TodoList',
         component: () => import('@/components/TodoList.vue'),
 
@@ -29,6 +29,11 @@ const routes = [
 
             }
         ]
+    },
+    {
+        path: '/personalize',
+        name: 'Personalize',
+        component: () => import('@/components/Personalize.vue')
     },
     {
         path: '/login',

@@ -106,9 +106,6 @@ let param = ref('')
 
 const handleImageSelected = (fileList) => {
   // 圖片一律儲存到後端
-  console.log('====================================')
-  console.log(fileList, 'fileListfileList')
-  console.log('====================================')
   form.value.pic = fileList
 }
 
@@ -408,43 +405,6 @@ $secondTextColor: #1f2023;
     justify-content: center;
   }
 
-  .modal-wrap {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-mask {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-
-  .modal-scroll-view {
-    overflow-y: auto;
-  }
-
-  .modal {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-  }
-
-  .modal-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
 }
 
 :deep(.ql-toolbar) {

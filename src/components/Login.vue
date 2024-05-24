@@ -1,7 +1,8 @@
 <!-- Login.vue -->
 <template>
-  <!-- 登入 -->
+  
   <div id="login">
+  <!-- 登入 -->
   <div v-if="isLogin">
     <div id="title">TODOLIST LOGIN</div>
     <form @submit.prevent="login">

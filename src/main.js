@@ -21,6 +21,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import eventBus from 'vue3-eventbus'
 import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import VueCropper from 'vue-cropper'
 
 
 const app = createApp(App)
@@ -39,7 +40,8 @@ app.use(store)
 // 持久化piniaPluginPersistedstate
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-
+// 剪裁圖片cropper
+app.use(VueCropper)
 // element-plus
 app.use(ElementPlus)
 app.use(i18n)
