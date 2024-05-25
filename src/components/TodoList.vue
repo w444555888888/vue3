@@ -274,10 +274,6 @@ function navigateToDetail (id) {
 }
 
 
-
-onBeforeMount(() => {
-  store.fetchCommentsApi()
-})
 onMounted(() => {
 
 })
