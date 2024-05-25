@@ -50,7 +50,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
-
+import { updateUserImage } from './compoent-items/UpdateUserImage.js'
 const username = ref('')
 const password = ref('')
 const router = useRouter()
@@ -74,6 +74,8 @@ const login = () => {
             type: 'success',
           })
           localStorage.setItem('token', JSON.stringify(currentUser.username))
+          // 立即更新帳戶圖片
+          updateUserImage()
           router.push('/')
         } else {
           ElNotification({

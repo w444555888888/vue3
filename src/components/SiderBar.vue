@@ -39,22 +39,11 @@
 import { ref, watch, onMounted } from 'vue'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
+import { updateUserImage, getImageValue } from './compoent-items/UpdateUserImage.js'
 
 const { t } = i18n.global
 const store = usePiniaStore()
-const imgValue = ref('')
-
-// 更新帳戶圖片
-const updateUserImage = () => {
-    let tokenString = localStorage.getItem('token')
-    let token = tokenString ? JSON.parse(tokenString) : null
-    if (token) {
-        let usersValue = store.users.find(e => e.username == token)
-        if (usersValue && usersValue.img) {
-            imgValue.value = usersValue.img
-        }
-    }
-}
+const imgValue = getImageValue()
 
 onMounted(() => {
     updateUserImage()
@@ -62,7 +51,7 @@ onMounted(() => {
 
 // 實時更新users帳戶圖片
 watch(() => store.users, () => {
-  updateUserImage()
+    updateUserImage()
 }, { immediate: true, deep: true })
 </script>
 

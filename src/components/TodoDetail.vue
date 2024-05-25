@@ -98,7 +98,7 @@ onBeforeMount(async () => {
       background: 'rgba(0, 0, 0, 0.7)',
     })
     // 再次獲取fetchCommentsApi
-    // await store.fetchCommentsApi()
+    await store.fetchCommentsApi()
     apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
     setTimeout(() => {
       isLoading.value.close()
