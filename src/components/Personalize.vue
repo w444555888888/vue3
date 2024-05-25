@@ -78,12 +78,14 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive ,onMounted} from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
-
+import { usePiniaStore } from '../store/pinia'
+// pinia
+const store = usePiniaStore()
 
 // cropper
 const isShowModal = ref(false);
@@ -184,19 +186,25 @@ function reset() {
 
 const username = ref("");
 const password = ref("");
-const personalizeImg = ref([]);
 
 // 當前登入帳密
 const localStorageToken = () => {
-  const tokenString = localStorage.getItem('token')
-  if (tokenString) {
-    const token = JSON.parse(tokenString);
-    username.value = token.username
-    password.value = token.password
+  let tokenString = localStorage.getItem('token')
+  let token = tokenString ? JSON.parse(tokenString) : null
+  let account = store.users.find((e)=>e.username == token)
+  if(account){
+    username.value = account.username
+    password.value = account.password
   }
 }
 
-localStorageToken();
+
+
+
+onMounted(() => {
+  localStorageToken();
+})
+
 
 
 // 修改個人資料

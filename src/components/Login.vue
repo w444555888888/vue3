@@ -73,7 +73,7 @@ const login = () => {
             message: 'successfully',
             type: 'success',
           })
-          localStorage.setItem('token', JSON.stringify(currentUser))
+          localStorage.setItem('token', JSON.stringify(currentUser.username))
           router.push('/')
         } else {
           ElNotification({

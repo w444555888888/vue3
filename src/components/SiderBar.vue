@@ -36,33 +36,34 @@
 
 
 <script setup>
-import { ref,onMounted } from 'vue'
-import axios from "axios"
+import { ref, watch, onMounted } from 'vue'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
-// i18n
+import { linkEmits } from 'element-plus'
+
 const { t } = i18n.global
-// pinia
 const store = usePiniaStore()
 const imgValue = ref('')
 
-const tokenString = localStorage.getItem('token')
-const token = JSON.parse(tokenString)
 
-
-
-
-
-onMounted(async ()=>{
-    await store.fetchUsersApi()
-    let usersValue = store.users.find(e => e.username == token.username)
-    if(usersValue && usersValue.img){
-        imgValue.value=usersValue.img
+// 更新帳戶圖片
+const updateUserImage = () => {
+    let tokenString = localStorage.getItem('token')
+    let token = tokenString ? JSON.parse(tokenString) : null
+    if (token) {
+        let usersValue = store.users.find(e => e.username == token)
+        if (usersValue && usersValue.img) {
+            imgValue.value = usersValue.img
+        }
     }
+}
+
+onMounted(() => {
+    updateUserImage()
 })
 
-</script>
 
+</script>
 
 <style scoped lang="scss">
 $border: 2px solid rgba(219, 219, 219, 0.4);
