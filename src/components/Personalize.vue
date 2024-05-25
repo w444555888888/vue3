@@ -209,7 +209,7 @@ onMounted(() => {
 
 // 修改個人資料
 const personalize = () => {
-  if (!username.value && !password.value && !result.dataURL) {
+  if (!username.value || !password.value || !result.dataURL) {
     ElNotification({
       title: 'Error',
       message: 'Please enter username & password & img',
@@ -222,20 +222,28 @@ const personalize = () => {
   axios.get('http://localhost:3000/users')
     .then(response => {
       const data = response.data
-      const usernameExist = data.find(user => user.username === username.value)
+      const usernameExist = data.find(e => e.username === username.value)
       if (usernameExist) {
-        axios.put(`http://localhost:3000/users/${usernameExist.id}`,{username:username.value , password:password.value , img:result.dataURL})
+        const updatedUser = {
+          username: username.value,
+          password: password.value,
+          img: result.dataURL,
+        };
+     
+        axios.put(`http://localhost:3000/users/${usernameExist.id}`,updatedUser)
         .then(response => {
+          // 更新個人資料pinia
+          store.updateUser(updatedUser);
             ElNotification({
               title: 'Success',
-              message: 'Update Success username',
+              message: 'Update Success account',
               type: 'success',
             })
           })
           .catch(error => {
             ElNotification({
               title: 'Error',
-              message: 'Update Fail username',
+              message: 'Update Fail account',
               type: 'error',
             })
           })

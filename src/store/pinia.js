@@ -52,5 +52,12 @@ export const usePiniaStore = defineStore({
                 console.error('Error axios data from user API', error)
             }
         },
+        // 更新users個人資料
+        updateUser(updatedUser) {
+            const index = this.users.findIndex(user => user.username === updatedUser.username);
+            if (index !== -1) {
+              this.users[index] = updatedUser;
+            }
+          },
     },
 })
