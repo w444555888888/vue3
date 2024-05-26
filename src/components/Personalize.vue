@@ -16,7 +16,6 @@
           </div>
           <div class="input-row">
             <label for="password">img:</label>
-
             <!-- copper選取圖片-->
             <div>
               <section class="section">
@@ -29,45 +28,51 @@
                   <button @click="removeFile">刪除</button>
                 </div>
               </section>
-              <!-- cropper Modal -->
-              <div class="modal-wrap" v-if="isShowModal">
-                <div class="modal-mask"></div>
-                <div class="modal-scroll-view">
-                  <div class="modal">
-                    <div class="modal-title">
-                      <span class="title">Cropper</span>
-                      <div class="tools">
-                        <button class="btn" @click="closeModal">Cancel</button>
-                        <button class="btn" @click="clear">Clear</button>
-                        <button class="btn" @click="reset">Reset</button>
-                        <button class="btn primary" @click="getResult">Crop</button>
-                      </div>
-                    </div>
-
-                    <div class="modal-content">
-                      <VuePictureCropper :boxStyle="{
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#f8f8f8',
-        margin: 'auto',
-      }" :img="pic" :options="{
-        viewMode: 1,
-        dragMode: 'crop',
-        aspectRatio: 16 / 9,
-      }" />
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
-
-
+          </div>
+          <div class="input-row">
+            <label for="password">cropper:</label>
+            <div>
+              <img :src="result.dataURL" v-if="result.dataURL">
+            </div>
           </div>
         </div>
         <div class="button-container">
           <button type="submit" @click="personalize">修改個人資料</button>
         </div>
       </form>
+    </div>
+
+
+    <!-- cropper Modal -->
+    <div class="modal-wrap" v-if="isShowModal">
+      <div class="modal-mask"></div>
+      <div class="modal-scroll-view">
+        <div class="modal">
+          <div class="modal-title">
+            <span class="title">Cropper</span>
+            <div class="tools">
+              <button class="btn" @click="closeModal">Cancel</button>
+              <button class="btn" @click="clear">Clear</button>
+              <button class="btn" @click="reset">Reset</button>
+              <button class="btn primary" @click="getResult">Crop</button>
+            </div>
+          </div>
+
+          <div class="modal-content">
+            <VuePictureCropper :boxStyle="{
+width: '100%',
+height: '100%',
+backgroundColor: '#f8f8f8',
+margin: 'auto',
+}" :img="pic" :options="{
+viewMode: 1,
+dragMode: 'crop',
+aspectRatio: 16 / 9,
+}" />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -385,12 +390,6 @@ button {
 
 .section{
   display: flex;          
-}
-
-
-.file-info span {
-  display: inline-block;
-  margin-right: 10px;
 }
 
 .file-info button {
