@@ -68,7 +68,7 @@ margin: 'auto',
 }" :img="pic" :options="{
 viewMode: 1,
 dragMode: 'crop',
-aspectRatio: 16 / 9,
+aspectRatio: 9 / 9,
 }" />
           </div>
         </div>
