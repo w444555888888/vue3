@@ -99,7 +99,7 @@ import { getImageValue } from './compoent-items/UpdateUserImage.js'
 const store = usePiniaStore()
 
 // 帳戶圖片
-const accountImage = computed(() => getImageValue().value)
+const accountImage = computed(() => getImageValue())
 
 // Vue-Picture-Cropper
 const isShowModal = ref(false);
