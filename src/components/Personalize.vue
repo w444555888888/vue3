@@ -19,21 +19,26 @@
             <!-- copper選取圖片-->
             <div>
               <section class="section">
-                <button class="select-picture" @click="selectPicture">
+                <button class="select-picture" @click="selectPicture" v-if="!result.dataURL">
                   <span>選擇圖片</span>
                   <input ref="uploadInput" type="file" accept="image/jpg, image/jpeg, image/png, image/gif"
                     @change="selectFile" />
                 </button>
-                <div class="file-info" v-if="result.dataURL">
+              
+                <div class="file-info" v-else>
                   <button @click="removeFile">刪除</button>
+                 
+                  <button @click="edit">編輯</button>
+               
                 </div>
+                
               </section>
             </div>
           </div>
           <div class="input-row">
             <label for="password">cropper:</label>
             <div>
-              <img :src="result.dataURL" v-if="result.dataURL">
+              <img :src="result.dataURL"  v-if="result.dataURL">
             </div>
           </div>
         </div>
@@ -60,16 +65,16 @@
           </div>
 
           <div class="modal-content">
-            <VuePictureCropper :boxStyle="{
+            <VuePictureCropper  ref="cropperRef" :boxStyle="{
 width: '100%',
 height: '100%',
 backgroundColor: '#f8f8f8',
 margin: 'auto',
-}" :img="pic" :options="{
+}" :img="picBase64" :options="{
 viewMode: 1,
 dragMode: 'crop',
 aspectRatio: 9 / 9,
-}" />
+}"  />
           </div>
         </div>
       </div>
@@ -83,26 +88,37 @@ aspectRatio: 9 / 9,
 </template>
 
 <script setup>
-import { ref, reactive ,onMounted} from "vue";
+import { ref, reactive ,onMounted,computed } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 import { usePiniaStore } from '../store/pinia'
+import { getImageValue } from './compoent-items/UpdateUserImage.js'
 // pinia
 const store = usePiniaStore()
 
-// cropper
+// 帳戶圖片
+const accountImage = computed(() => getImageValue().value)
+
+// Vue-Picture-Cropper
 const isShowModal = ref(false);
+const cropperRef = ref(null);
 const uploadInput = ref(null);
-const pic = ref('');
+const picBase64 = ref('');
 const result = reactive({
   dataURL: '',
 });
 
+
 // 選取照片
 function selectPicture() {
   uploadInput.value.click();
+}
+
+// 編輯
+function edit(){
+  isShowModal.value = true
 }
 
 // 關閉modal
@@ -113,13 +129,13 @@ function closeModal() {
 // 移除上傳圖片
 const removeFile = () => {
   result.dataURL = '';
-  uploadInput.value.value = '';
+  uploadInput.value = '';
 };
 
 // 選取圖片
 function selectFile(e) {
   // 清空圖片數據和 dataURL
-  pic.value = '';
+  picBase64.value = '';
   result.dataURL = '';
 
   const { files } = e.target;
@@ -154,7 +170,7 @@ function selectFile(e) {
 
       // 所放圖片後轉換成base64格式顯示在cropper畫布上
       const scaledImageData = canvas.toDataURL('image/jpeg');
-      pic.value = scaledImageData;
+      picBase64.value = scaledImageData;
       isShowModal.value = true;
     };
   };
@@ -162,6 +178,8 @@ function selectFile(e) {
 
 // 剪裁後base64
 async function getResult() {
+  console.log(cropper,'cropper');
+
   if (!cropper) return
   // base64
   const base64 = cropper.getDataURL()
@@ -394,7 +412,6 @@ button {
 
 .file-info button {
   padding: 5px 10px;
-  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 5px;
@@ -402,6 +419,6 @@ button {
 }
 
 .file-info button:hover {
-  background-color: #c82333;
+  background-color: #fd3e51;
 }
 </style>
