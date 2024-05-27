@@ -248,14 +248,14 @@ axios.get(`http://localhost:3000/comments`)
     store.setTodos(response.data)
     ElNotification({
       title: 'Success',
-      message: 'Delete Success',
+      message: 'comments Success',
       type: 'success',
     })
   })
   .catch(error => {
     ElNotification({
       title: 'Error',
-      message: 'Delete Fail',
+      message: 'comments Fail',
       type: 'error',
     })
   })
