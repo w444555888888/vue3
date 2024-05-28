@@ -28,7 +28,7 @@
                     </el-menu>
                 </el-scrollbar></el-aside>
             <el-main>
-                <router-view></router-view>
+                <router-view :key="globalStore.routeKey"></router-view>
             </el-main>
         </el-container>
     </div>
@@ -40,6 +40,13 @@ import { ref, watch, onMounted } from 'vue'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
 import { updateUserImage, getImageValue } from './compoent-items/UpdateUserImage.js'
+import { useGlobalStore } from '../store/globalStore'
+
+const globalStore = useGlobalStore()
+
+const onClick = () => {
+  globalStore.routeKey++
+}
 
 const { t } = i18n.global
 const store = usePiniaStore()
