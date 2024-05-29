@@ -115,7 +115,7 @@ function submitTodo() {
   const { id, title, content, done, datePicker, pic } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     if (id) {
-      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker })
+      store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker, pic: pic })
     } else {
       const uuidTodoId = uuidv4()
       store.addTodo({
@@ -124,14 +124,17 @@ function submitTodo() {
         todoTitle: title.trim(),
         todoContent: content.trim(),
         datePicker: datePicker,
+        pic: pic
       })
-      form.value.id = ''
+    }
+
+    form.value.id = ''
       form.value.done = false
       form.value.title = ''
       form.value.content = ''
       form.value.datePicker = ''
+      form.value.pic = null
       drawer.value = false
-    }
   }
 }
 
@@ -168,7 +171,7 @@ const pagesTodos = computed(() => {
   const endIndex = startIndex + pageSize
   return store.todos.slice(startIndex, endIndex)
 })
-console.log(store.todos,'store.todos');
+console.log(store.todos, 'store.todos');
 
 const handlePageChange = (newPage) => {
   currentPage.value = newPage
@@ -186,13 +189,13 @@ function dispatchRemoveTodo(todoId) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail (id) {
+function navigateToDetail(id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
-  }).then(() => { 
-    
-   })
+  }).then(() => {
+
+  })
 }
 
 
