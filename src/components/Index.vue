@@ -84,8 +84,8 @@ async function handleSearch() {
 
 // 偵測pinia數據防止出問題
 watchEffect(() => {
-  if (store.apiComments.length > 0) {
-    optionValue.value = store.apiComments.map(e => e.todoTitle)
+  if (store.todos.length > 0) {
+    optionValue.value = store.todos.map(todo => todo.todoTitle)
   }
 })
 

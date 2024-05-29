@@ -73,13 +73,21 @@ export const usePiniaStore = defineStore({
                 console.error('Error fetching users from API', error)
             }
         },
-        updateUser(updatedUser) {
-            const index = this.users.findIndex(user => user.username === updatedUser.username)
-            if (index !== -1) {
-                this.users[index] = updatedUser
-            } else {
-                console.error('User not found:', updatedUser.username)
+        async updateUserProfile({ username, password, img }) {
+            try {
+                const user = this.users.find(user => user.username === username)
+                if (user) {
+                    const updatedUser = { ...user, password, img }
+                    const response = await axios.put(`http://localhost:3000/users/${user.id}`, updatedUser)
+                    if (response.status === 200) {
+                        this.updateUser(updatedUser)
+                        return true
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to update user profile:', error)
             }
+            return false
         },
     },
 })

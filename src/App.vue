@@ -30,8 +30,8 @@ onBeforeMount(async () => {
       text: 'Loading',
       background: 'rgba(0, 0, 0, 0.7)',
     })
-    await store.fetchCommentsApi()
-    await store.fetchUsersApi()
+    await store.axiosTodosApi()
+    await store.axiosUsersApi()
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false

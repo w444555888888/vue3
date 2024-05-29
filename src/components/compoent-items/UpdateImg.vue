@@ -52,8 +52,8 @@ const dialogVisible = ref(false)
 // 初始化圖片列表
 // 帶入id
 const loadInitialImages = async (param) => {
-  await store.fetchCommentsApi()
-  const initialFiles = store.apiComments.find(e => e.id == param)?.pic || []
+  await store.axiosUsersApi()
+  const initialFiles = store.todos.find(e => e.id == param)?.pic || []
   fileList.value = initialFiles.map((base64, index) => ({
     name: `image_${index}`,
     url: base64,

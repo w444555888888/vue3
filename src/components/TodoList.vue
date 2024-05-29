@@ -69,7 +69,7 @@
 
 
 <script setup>
-import { onBeforeMount, onMounted, computed, ref, reactive, toRefs, watch, onUnmounted } from 'vue'
+import { onBeforeMount, onMounted, computed, ref, reactive, toRefs, watch } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia'
@@ -110,10 +110,10 @@ const handleImageSelected = (fileList) => {
 }
 
 
-function submitTodo () {
+// 新增待辦事項
+function submitTodo() {
   const { id, title, content, done, datePicker, pic } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
-    // 有id代表是編輯
     if (id) {
       store.editUpdateTodo(id, { id, todoTitle: title.trim(), todoContent: content.trim(), done: done, datePicker: datePicker })
     } else {
@@ -125,68 +125,20 @@ function submitTodo () {
         todoContent: content.trim(),
         datePicker: datePicker,
       })
-
-      globalUuid = uuidTodoId
+      form.value.id = ''
+      form.value.done = false
+      form.value.title = ''
+      form.value.content = ''
+      form.value.datePicker = ''
+      drawer.value = false
     }
-
-    form.value.id = ''
-    form.value.done = false
-    form.value.title = ''
-    form.value.content = ''
-    form.value.datePicker = ''
-    drawer.value = false
   }
-
-  // 資料儲存到comments後端
-  axios.get('http://localhost:3000/comments')
-    .then(response => {
-      const data = response.data
-      const ExistId = data.find(item => item.id == id)
-      if (ExistId) {
-        axios.put(`http://localhost:3000/comments/${id}`, { todoTitle: title, done: done, todoContent: content, datePicker: datePicker, pic: pic })
-          .then(response => {
-            ElNotification({
-              title: 'Success',
-              message: 'Update Success',
-              type: 'success',
-            })
-          })
-          .catch(error => {
-            ElNotification({
-              title: 'Error',
-              message: 'Update Fail',
-              type: 'error',
-            })
-          })
-      } else {
-        axios.post('http://localhost:3000/comments', { id: globalUuid, todoTitle: title, done: done, todoContent: content, datePicker: datePicker, pic: pic })
-          .then(response => {
-            if (response.status === 201) {
-              ElNotification({
-                title: 'Success',
-                message: 'Store Success',
-                type: 'success',
-              })
-            }
-          })
-          .catch(error => {
-            ElNotification({
-              title: 'Error',
-              message: 'Store Fail',
-              type: 'error',
-            })
-          })
-      }
-    })
-    .catch(error => {
-      console.error('Error', error)
-    })
 }
 
 
-function editToForm (id) {
+// 編輯待辦事項
+function editToForm(id) {
   drawer.value = true
-  // id判斷是新增還是編輯
   let existId = store.todos.find(todo => todo.id === id)
   if (existId) {
     const todo = store.editTodo(id)
@@ -203,9 +155,7 @@ function editToForm (id) {
     form.value.datePicker = ''
     quillEditorRef.value.setText('')
   }
-
   param.value = form.value.id ? form.value.id : globalUuid
-
 }
 
 
@@ -218,47 +168,19 @@ const pagesTodos = computed(() => {
   const endIndex = startIndex + pageSize
   return store.todos.slice(startIndex, endIndex)
 })
+console.log(store.todos,'store.todos');
 
 const handlePageChange = (newPage) => {
   currentPage.value = newPage
 }
 
-function dispatchRemoveTodo (todoId) {
+// 刪除待辦事項
+function dispatchRemoveTodo(todoId) {
   store.removeTodo(todoId)
-  axios.delete(`http://localhost:3000/comments/${String(todoId)}`)
-    .then(response => {
-      ElNotification({
-        title: 'Success',
-        message: 'Delete Success',
-        type: 'success',
-      })
-    })
-    .catch(error => {
-      ElNotification({
-        title: 'Error',
-        message: 'Delete Fail',
-        type: 'error',
-      })
-    })
 }
 
 
-axios.get(`http://localhost:3000/comments`)
-  .then(response => {
-    store.setTodos(response.data)
-    ElNotification({
-      title: 'Success',
-      message: 'comments Success',
-      type: 'success',
-    })
-  })
-  .catch(error => {
-    ElNotification({
-      title: 'Error',
-      message: 'comments Fail',
-      type: 'error',
-    })
-  })
+
 
 
 
@@ -268,9 +190,7 @@ function navigateToDetail (id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
-  }).then(() => {
-
-  })
+  }).then(() => {  })
 }
 
 
@@ -278,9 +198,7 @@ onMounted(() => {
 
 })
 
-onUnmounted(() => {
 
-});
 
 </script>
 

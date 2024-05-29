@@ -231,48 +231,45 @@ onMounted(() => {
 
 
 // 修改個人資料
-const personalize = () => {
-  if (!username.value || !password.value || !result.dataURL) {
-    ElNotification({
-      title: 'Error',
-      message: 'Please enter username & password & img',
-      type: 'error',
-    })
-    return
-  }
+const personalize = async () => {
+    if (!username.value || !password.value || !result.dataURL) {
+        ElNotification({
+            title: 'Error',
+            message: 'Please enter username & password & img',
+            type: 'error',
+        })
+        return
+    }
 
-  // 先檢查username是否存在
-  axios.get('http://localhost:3000/users')
-    .then(response => {
-      const data = response.data
-      const usernameExist = data.find(e => e.username === username.value)
-      if (usernameExist) {
-        const updatedUser = {
-          username: username.value,
-          password: password.value,
-          img: result.dataURL,
-        };
-     
-        axios.put(`http://localhost:3000/users/${usernameExist.id}`,updatedUser)
-        .then(response => {
-          // 更新個人資料pinia
-          store.updateUser(updatedUser);
+    try {
+        const success = await store.updateUserProfile({
+            username: username.value,
+            password: password.value,
+            img: result.dataURL,
+        })
+        if (success) {
             ElNotification({
-              title: 'Success',
-              message: 'Update Success account',
-              type: 'success',
+                title: 'Success',
+                message: 'Update Success account',
+                type: 'success',
             })
-          })
-          .catch(error => {
+        } else {
             ElNotification({
-              title: 'Error',
-              message: 'Update Fail account',
-              type: 'error',
+                title: 'Error',
+                message: 'Update Fail account',
+                type: 'error',
             })
-          })
-      }
-    })
+        }
+    } catch (error) {
+        console.error('Error updating user profile:', error)
+        ElNotification({
+            title: 'Error',
+            message: 'Update Fail account',
+            type: 'error',
+        })
+    }
 };
+
 
 
 </script>

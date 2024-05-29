@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, defineProps, computed, watchEffect } from 'vue'
+import { ref, computed,onBeforeMount, onMounted, defineProps, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
@@ -63,17 +63,19 @@ import carouse5 from '@/assets/carousel-5.jpeg'
 const imgList = ref([carousel, carouse2, carouse3, carouse4, carouse5])
 // i18n
 const { t } = i18n.global
-// fetchCommentsApi數據容器
-const apiCommentFilter = ref('')
+
 const isLoading = ref(true)
 
 // 使用路由router 路由params
 const route = useRoute()
 const routeindex = ref(route.params.index)
 
+
 // pinia
 const store = usePiniaStore()
-
+const apiCommentFilter = computed(() => {
+  return store.todos.filter(e => e.id == routeindex.value)
+})
 
 //router到首頁
 const appRouter = useRouter()
@@ -97,9 +99,7 @@ onBeforeMount(async () => {
       text: 'Loading',
       background: 'rgba(0, 0, 0, 0.7)',
     })
-    // 再次獲取fetchCommentsApi
-    await store.fetchCommentsApi()
-    apiCommentFilter.value = store.apiComments.filter(e => e.id == routeindex.value)
+    await store.axiosCommentsApi()
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false
