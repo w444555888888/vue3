@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, computed,onBeforeMount, onMounted, defineProps, computed, watchEffect } from 'vue'
+import { ref, computed,onBeforeMount, onMounted, defineProps, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
@@ -99,7 +99,7 @@ onBeforeMount(async () => {
       text: 'Loading',
       background: 'rgba(0, 0, 0, 0.7)',
     })
-    await store.axiosCommentsApi()
+    await store.axiosTodosApi()
     setTimeout(() => {
       isLoading.value.close()
       isLoading.value = false

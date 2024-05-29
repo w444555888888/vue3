@@ -190,7 +190,9 @@ function navigateToDetail (id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },
-  }).then(() => {  })
+  }).then(() => { 
+    
+   })
 }
 
 
