@@ -94,20 +94,21 @@ import { useRouter } from "vue-router";
 import { ElNotification } from "element-plus";
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 import { usePiniaStore } from '../store/pinia'
-import { getImageValue } from './compoent-items/UpdateUserImage.js'
+import { updateUserImage } from './compoent-items/UpdateUserImage.js'
 // pinia
 const store = usePiniaStore()
 
-// 帳戶圖片
-const accountImage = computed(() => getImageValue())
+// 原有帳戶圖片
+const accountImage = ref(updateUserImage());
+
 
 // Vue-Picture-Cropper
 const isShowModal = ref(false);
 const cropperRef = ref(null);
 const uploadInput = ref(null);
-const picBase64 = ref('');
+const picBase64 = ref(accountImage.value);
 const result = reactive({
-  dataURL: '',
+  dataURL: accountImage.value,
 });
 
 
@@ -129,6 +130,7 @@ function closeModal() {
 // 移除上傳圖片
 const removeFile = () => {
   result.dataURL = '';
+  picBase64.value='';
   uploadInput.value = '';
 };
 

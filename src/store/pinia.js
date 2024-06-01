@@ -77,17 +77,16 @@ export const usePiniaStore = defineStore({
             try {
                 const user = this.users.find(user => user.username === username)
                 if (user) {
-                    const updatedUser = { ...user, password, img }
-                    const response = await axios.put(`http://localhost:3000/users/${user.id}`, updatedUser)
-                    if (response.status === 200) {
-                        this.updateUser(updatedUser)
-                        return true
-                    }
+                    const updatedUser = { username, password, img }
+                    await axios.put(`http://localhost:3000/users/${user.id}`, updatedUser)
+                    await this.axiosUsersApi();
+                    return true;
                 }
             } catch (error) {
                 console.error('Failed to update user profile:', error)
+                return false;
             }
-            return false
+            
         },
     },
 })

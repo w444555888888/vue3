@@ -4,7 +4,7 @@ import { usePiniaStore } from '../../store/pinia'
 
 const imgValue = ref('')
 
-// 帳戶圖片對應本地存儲
+// 帳戶圖片對應本地存儲，輸出圖片
 export const updateUserImage = () => {
   const store = usePiniaStore()
   let tokenString = localStorage.getItem('token')
@@ -15,7 +15,7 @@ export const updateUserImage = () => {
       imgValue.value = usersValue.img
     }
   }
+  return imgValue.value;
 }
 
-// 輸出帳戶圖片
-export const getImageValue = () => imgValue
+

@@ -39,7 +39,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { usePiniaStore } from '../store/pinia'
 import i18n from '../i18n.js'
-import { updateUserImage, getImageValue } from './compoent-items/UpdateUserImage.js'
+import { updateUserImage } from './compoent-items/UpdateUserImage.js'
 import { useGlobalStore } from '../store/globalStore'
 
 const globalStore = useGlobalStore()
@@ -50,7 +50,8 @@ const onClick = () => {
 
 const { t } = i18n.global
 const store = usePiniaStore()
-const imgValue = getImageValue()
+const imgValue = ref(updateUserImage())
+
 
 onMounted(() => {
     updateUserImage()
@@ -58,7 +59,7 @@ onMounted(() => {
 
 // 實時更新users帳戶圖片
 watch(() => store.users, () => {
-    updateUserImage()
+    imgValue.value = updateUserImage()
 }, { immediate: true, deep: true })
 </script>
 

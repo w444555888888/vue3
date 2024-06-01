@@ -1,48 +1,48 @@
 <!-- Login.vue -->
 <template>
-  
+
   <div id="login">
-  <!-- 登入 -->
-  <div v-if="isLogin">
-    <div id="title">TODOLIST LOGIN</div>
-    <form @submit.prevent="login">
-      <div class="input-group">
-        <div class="input-row">
-          <label for="username">Username:</label>
-          <input type="text" id="username" v-model="username" />
+    <!-- 登入 -->
+    <div v-if="isLogin">
+      <div id="title">TODOLIST LOGIN</div>
+      <form @submit.prevent="login">
+        <div class="input-group">
+          <div class="input-row">
+            <label for="username">Username:</label>
+            <input type="text" id="username" v-model="username" />
+          </div>
+          <div class="input-row">
+            <label for="password">Password:</label>
+            <input type="password" id="password" v-model="password" />
+          </div>
         </div>
-        <div class="input-row">
-          <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password" />
+        <div class="button-container">
+          <button type="submit">Login</button>
+          <button @click="toggleForm">Register</button>
         </div>
-      </div>
-      <div class="button-container">
-        <button type="submit">Login</button>
-        <button @click="toggleForm">Register</button>
-      </div>
-    </form>
+      </form>
+    </div>
+    <!-- 註冊 -->
+    <div v-else>
+      <div id="title">REGISTER ACCOUNT</div>
+      <form @submit.prevent="register">
+        <div class="input-group">
+          <div class="input-row">
+            <label for="username">Username:</label>
+            <input type="text" id="username" v-model="username" />
+          </div>
+          <div class="input-row">
+            <label for="password">Password:</label>
+            <input type="password" id="password" v-model="password" />
+          </div>
+        </div>
+        <div class="button-container">
+          <button type="submit">Register</button>
+          <button @click="toggleForm">Back In Login</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <!-- 註冊 -->
-  <div v-else>
-    <div id="title">REGISTER ACCOUNT</div>
-    <form @submit.prevent="register">
-      <div class="input-group">
-        <div class="input-row">
-          <label for="username">Username:</label>
-          <input type="text" id="username" v-model="username" />
-        </div>
-        <div class="input-row">
-          <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password" />
-        </div>
-      </div>
-      <div class="button-container">
-        <button type="submit">Register</button>
-        <button @click="toggleForm">Back In Login</button>
-      </div>
-    </form>
-  </div>
-</div>
 </template>
 
 <script setup>
@@ -51,6 +51,10 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import { updateUserImage } from './compoent-items/UpdateUserImage.js'
+import { usePiniaStore } from '../store/pinia'
+// pinia
+const store = usePiniaStore()
+
 const username = ref('')
 const password = ref('')
 const router = useRouter()
@@ -62,37 +66,25 @@ const toggleForm = () => {
 
 
 const login = () => {
-  axios.get('http://localhost:3000/users')
-    .then(response => {
-      if (response.status === 200) {
-        const dataUsers = response.data
-        const currentUser = dataUsers.find(user => user.username === username.value && user.password === password.value)
-        if (currentUser) {
-          ElNotification({
-            title: 'Success',
-            message: 'successfully',
-            type: 'success',
-          })
-          localStorage.setItem('token', JSON.stringify(currentUser.username))
-          // 立即更新帳戶圖片
-          updateUserImage()
-          router.push('/')
-        } else {
-          ElNotification({
-            title: 'Error',
-            message: 'Invalid username or password',
-            type: 'error',
-          })
-        }
-      }
+  const dataUsers = store.users
+  const currentUser = dataUsers.find(user => user.username === username.value && user.password === password.value)
+  if (currentUser) {
+    ElNotification({
+      title: 'Success',
+      message: 'successfully',
+      type: 'success',
     })
-    .catch(error => {
-      ElNotification({
-        title: 'Error',
-        message: 'response Failed ',
-        type: 'error',
-      })
+    localStorage.setItem('token', JSON.stringify(currentUser.username))
+    // 立即更新帳戶圖片
+    updateUserImage()
+    router.push('/')
+  } else {
+    ElNotification({
+      title: 'Error',
+      message: 'Invalid username or password',
+      type: 'error',
     })
+  }
 }
 
 const register = () => {
@@ -106,46 +98,36 @@ const register = () => {
   }
 
   // 先檢查username是否存在
-  axios.get('http://localhost:3000/users')
-    .then(response => {
-      const Datauser = response.data
-      const userExist = Datauser.some(user => user.username === username.value)
-      if (userExist) {
+  const dataUsers = store.users
+  const userExist = dataUsers.find(user => user.username === username.value)
+  if (userExist) {
+    ElNotification({
+      title: 'Error',
+      message: 'Username exist',
+      type: 'error',
+    })
+  } else {
+    axios.post('http://localhost:3000/users', { username: username.value, password: password.value })
+      .then(response => {
+        if (response.status === 201) {
+          ElNotification({
+            title: 'Success',
+            message: 'Successfully registered',
+            type: 'success',
+          })
+          username.value = ''
+          password.value = ''
+          isLogin.value = true
+        }
+      })
+      .catch(error => {
         ElNotification({
           title: 'Error',
-          message: 'Username exist',
+          message: 'Failed to register',
           type: 'error',
         })
-      } else {
-        axios.post('http://localhost:3000/users', { username: username.value, password: password.value })
-          .then(response => {
-            if (response.status === 201) {
-              ElNotification({
-                title: 'Success',
-                message: 'Successfully registered',
-                type: 'success',
-              })
-              username.value = ''
-              password.value = ''
-              isLogin.value = true
-            }
-          })
-          .catch(error => {
-            ElNotification({
-              title: 'Error',
-              message: 'Failed to register',
-              type: 'error',
-            })
-          })
-      }
-    })
-    .catch(error => {
-      ElNotification({
-        title: 'Error',
-        message: 'Failed to get register',
-        type: 'error',
       })
-    })
+  }
 };
 
 
@@ -159,7 +141,7 @@ const register = () => {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
-#login{
+#login {
   display: flex;
   justify-content: center;
 }
