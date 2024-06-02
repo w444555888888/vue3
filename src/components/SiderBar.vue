@@ -58,7 +58,7 @@ onMounted(() => {
 })
 
 // 實時更新users帳戶圖片
-watch(() => store.users, () => {
+watch(() => updateUserImage(), () => {
     imgValue.value = updateUserImage()
 }, { immediate: true, deep: true })
 </script>

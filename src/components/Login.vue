@@ -74,7 +74,6 @@ const login = () => {
       message: 'successfully',
       type: 'success',
     })
-    store.axiosUsersApi();
     localStorage.setItem('token', JSON.stringify(currentUser.username))
     // 立即更新帳戶圖片
     updateUserImage()

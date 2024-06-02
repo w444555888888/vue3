@@ -2,7 +2,8 @@
 import { ref } from 'vue'
 import { usePiniaStore } from '../../store/pinia'
 
-const imgValue = ref('')
+// 全局ref
+export const imgValue = ref('')
 
 // 帳戶圖片對應本地存儲，輸出圖片
 export const updateUserImage = () => {
