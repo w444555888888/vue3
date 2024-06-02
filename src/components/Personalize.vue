@@ -12,10 +12,10 @@
           </div>
           <div class="input-row">
             <label for="password">Password:</label>
-            <input type="text" id="password" v-model="password" />
+            <input type="password" id="password" v-model="password" />
           </div>
           <div class="input-row">
-            <label for="password">img:</label>
+            <label>img:</label>
             <!-- copper選取圖片-->
             <div>
               <section class="section">
@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="input-row">
-            <label for="password">cropper:</label>
+            <label>cropper:</label>
             <div>
               <img :src="result.dataURL"  v-if="result.dataURL">
             </div>

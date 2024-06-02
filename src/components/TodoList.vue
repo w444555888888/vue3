@@ -2,7 +2,7 @@
  * @Author: w444555888 w444555888@yahoo.com.tw
  * @Date: 2024-04-02 12:13:18
  * @LastEditors: w444555888 w444555888@yahoo.com.tw
- * @LastEditTime: 2024-05-25 00:58:49
+ * @LastEditTime: 2024-06-02 22:25:56
  * @FilePath: \vue3\src\components\TodoList.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -111,7 +111,7 @@ const handleImageSelected = (fileList) => {
 
 
 // 新增待辦事項
-function submitTodo() {
+function submitTodo () {
   const { id, title, content, done, datePicker, pic } = form.value
   if (title.trim() !== '' && content.trim() !== '' && done !== '') {
     if (id) {
@@ -129,18 +129,18 @@ function submitTodo() {
     }
 
     form.value.id = ''
-      form.value.done = false
-      form.value.title = ''
-      form.value.content = ''
-      form.value.datePicker = ''
-      form.value.pic = null
-      drawer.value = false
+    form.value.done = false
+    form.value.title = ''
+    form.value.content = ''
+    form.value.datePicker = ''
+    form.value.pic = null
+    drawer.value = false
   }
 }
 
 
 // 編輯待辦事項
-function editToForm(id) {
+function editToForm (id) {
   drawer.value = true
   let existId = store.todos.find(todo => todo.id === id)
   if (existId) {
@@ -171,14 +171,14 @@ const pagesTodos = computed(() => {
   const endIndex = startIndex + pageSize
   return store.todos.slice(startIndex, endIndex)
 })
-console.log(store.todos, 'store.todos');
+
 
 const handlePageChange = (newPage) => {
   currentPage.value = newPage
 }
 
 // 刪除待辦事項
-function dispatchRemoveTodo(todoId) {
+function dispatchRemoveTodo (todoId) {
   store.removeTodo(todoId)
 }
 
@@ -189,7 +189,7 @@ function dispatchRemoveTodo(todoId) {
 
 // 使用路由useRouter
 const appRouter = useRouter()
-function navigateToDetail(id) {
+function navigateToDetail (id) {
   appRouter.push({
     name: 'TodoDetail',
     params: { index: id },

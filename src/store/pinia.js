@@ -89,4 +89,9 @@ export const usePiniaStore = defineStore({
             
         },
     },
+    persist:{
+        key:'user',
+        storage:sessionStorage,
+        paths:['users']
+    }
 })
