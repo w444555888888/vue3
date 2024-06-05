@@ -17,6 +17,11 @@ const i18n = createI18n({
             home: 'home',
             search: 'search',
             personalize: 'personalize',
+            username: 'username',
+            password: 'password',
+            img: 'img',
+            cropper: 'cropper',
+            personalInfo: 'personal-info',
 
         },
         zh: {
@@ -31,6 +36,11 @@ const i18n = createI18n({
             home: '首頁',
             search: '搜尋',
             personalize: '個人化',
+            username: '帳號',
+            password: '密碼',
+            img: '圖片',
+            cropper: '大頭貼',
+            personalInfo: '個人資料修改',
 
         }
     },

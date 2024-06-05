@@ -7,15 +7,15 @@
       <form @submit.prevent="register">
         <div class="input-group">
           <div class="input-row">
-            <label for="username">Username:</label>
+            <label for="username">{{ t("username") }}:</label>
             <input type="text" id="username" v-model="username" />
           </div>
           <div class="input-row">
-            <label for="password">Password:</label>
+            <label for="password">{{ t("password") }}:</label>
             <input type="password" id="password" v-model="password" />
           </div>
           <div class="input-row">
-            <label>img:</label>
+            <label>{{ t("img") }}:</label>
             <!-- copper選取圖片-->
             <div>
               <section class="section">
@@ -26,9 +26,9 @@
                 </button>
               
                 <div class="file-info" v-else>
-                  <button @click="removeFile">刪除</button>
+                  <button @click="removeFile">{{ t("delete") }}</button>
                  
-                  <button @click="edit">編輯</button>
+                  <button @click="edit">{{ t("edit") }}</button>
                
                 </div>
                 
@@ -36,14 +36,14 @@
             </div>
           </div>
           <div class="input-row">
-            <label>cropper:</label>
+            <label>{{ t("cropper") }}:</label>
             <div>
               <img :src="result.dataURL"  v-if="result.dataURL">
             </div>
           </div>
         </div>
         <div class="button-container">
-          <button type="submit" @click="personalize">修改個人資料</button>
+          <button type="submit" @click="personalize">{{ t("personalInfo") }}</button>
         </div>
       </form>
     </div>
@@ -95,6 +95,11 @@ import { ElNotification } from "element-plus";
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 import { usePiniaStore } from '../store/pinia'
 import { updateUserImage } from './compoent-items/UpdateUserImage.js'
+import i18n from '../i18n.js'
+// i18n語系  
+const locale18n = ref(i18n.global.locale)
+const { t } = i18n.global
+
 // pinia
 const store = usePiniaStore()
 
