@@ -32,10 +32,9 @@ onBeforeMount(async () => {
     })
     await store.axiosTodosApi()
     await store.axiosUsersApi()
-    setTimeout(() => {
-      isLoading.value.close()
-      isLoading.value = false
-    }, 1000)
+    isLoading.value.close()
+    isLoading.value = false
+   
   } catch (error) {
     console.error(error)
     isLoading.value.close()

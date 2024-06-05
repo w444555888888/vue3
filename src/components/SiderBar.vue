@@ -32,26 +32,14 @@
                 </el-scrollbar>
             </el-aside>
             <el-main>
-                <template v-if="currentRoute && currentRoute.matched.length > 0 && currentRoute.matched[0].components">
+                <Suspense>
+                    <template #default>
+                        <router-view v-slot="{ Component }">
+                            <component :is="Component" />
+                        </router-view>
+                    </template>
 
-                    <KeepAlive>
-                        <Suspense>
-                            <!-- 主要内容 -->
-                            <component :is="currentRoute.matched[0].components.default"></component>
-
-
-                            <template #fallback>
-                                <div class="loading">
-                                    <el-loading :visible="isLoading" :lock="true" text="Loading"
-                                        background="rgba(0, 0, 0, 0.7)">
-                                       
-                                    </el-loading>
-                                </div>
-                            </template>
-                        </Suspense>
-                    </KeepAlive>
-
-                </template>
+                </Suspense>
             </el-main>
         </el-container>
 
@@ -60,36 +48,15 @@
 
 
 <script setup>
-import { ref, watch, onMounted ,Suspense,KeepAlive } from 'vue'
+import { ref, watch, onMounted, Suspense, KeepAlive } from 'vue'
 import { usePiniaStore } from '../store/pinia'
+import { useRouter } from 'vue-router'
 import i18n from '../i18n.js'
 import { updateUserImage } from './compoent-items/UpdateUserImage.js'
-import { useRouter } from 'vue-router';
-import { ElLoading } from 'element-plus';
-const router = useRouter();
-const currentRoute = router.currentRoute;
-// loading
-const isLoading = ref(true);
-
-watch(currentRoute, (to, from) => {
-    console.log('Route changed from', from, 'to', to);
-    isLoading.value = true;
-});
-
-// 在路由导航开始之前设置isLoading为true
-router.beforeEach((to, from, next) => {
-  isLoading.value = true;
-  next();
-});
-
-// 在路由导航结束之后设置isLoading为false
-router.afterEach((to, from) => {
-  isLoading.value = true;
-});
-
-
-const { t } = i18n.global
+const router = useRouter()
 const store = usePiniaStore()
+const { t } = i18n.global
+
 
 const imgValue = ref(updateUserImage())
 onMounted(() => {
@@ -145,12 +112,13 @@ $secondTextColor: #1f2023;
     }
 }
 
+
 .loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px; 
-  background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    background-color: gray;
 }
 
 

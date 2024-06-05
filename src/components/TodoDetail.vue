@@ -22,10 +22,10 @@
               <el-descriptions title="" :column="2" direction="vertical" border>
                 <el-descriptions-item label="todoTitle" min-width="400px"><el-tag size="large">{{
                   apiCommentFilter[0].todoTitle
-                }}</el-tag></el-descriptions-item>
+                    }}</el-tag></el-descriptions-item>
                 <el-descriptions-item label="datePicker" min-width="400px"><el-tag size="large">{{
                   apiCommentFilter[0].datePicker
-                }}</el-tag></el-descriptions-item>
+                    }}</el-tag></el-descriptions-item>
                 <el-descriptions-item label="todoContent" :span="5" min-width="400px">
                   <div v-html="apiCommentFilter[0].todoContent"></div>
                 </el-descriptions-item>
@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, computed,onBeforeMount, onMounted, defineProps, watchEffect } from 'vue'
+import { ref, computed, onBeforeMount, onMounted, defineProps, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { usePiniaStore } from '../store/pinia.js'
@@ -100,10 +100,9 @@ onBeforeMount(async () => {
       background: 'rgba(0, 0, 0, 0.7)',
     })
     await store.axiosTodosApi()
-    setTimeout(() => {
-      isLoading.value.close()
-      isLoading.value = false
-    }, 1000)
+
+    isLoading.value.close()
+    isLoading.value = false
   } catch (error) {
     console.error(error)
     isLoading.value.close()
