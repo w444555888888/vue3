@@ -113,15 +113,6 @@ $secondTextColor: #1f2023;
 }
 
 
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-    background-color: gray;
-}
-
-
 :deep(.el-sub-menu__title) {
     height: 100px;
 }
