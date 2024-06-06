@@ -32,13 +32,15 @@
                 </el-scrollbar>
             </el-aside>
             <el-main>
-                <Suspense>
+                <Suspense @pending="showLoading" @resolve="hideLoading">
                     <template #default>
                         <router-view v-slot="{ Component }">
                             <component :is="Component" />
                         </router-view>
                     </template>
-
+                    <template #fallback>
+                        <div class="loading-container"></div>
+                    </template>
                 </Suspense>
             </el-main>
         </el-container>
@@ -67,6 +69,23 @@ onMounted(() => {
 watch(() => updateUserImage(), () => {
     imgValue.value = updateUserImage()
 }, { immediate: true, deep: true })
+
+
+const loadingInstance = ref(null);
+
+function showLoading() {
+    loadingInstance.value = ElLoading.service({
+        lock: true,
+        text: 'Loading...',
+        background: 'rgba(0, 0, 0, 0.7)', 
+    });
+}
+
+function hideLoading() {
+    if (loadingInstance.value) {
+        loadingInstance.value.close();
+    }
+}
 </script>
 
 <style scoped lang="scss">
@@ -110,6 +129,13 @@ $secondTextColor: #1f2023;
     .el-main {
         width: 100%;
     }
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 
