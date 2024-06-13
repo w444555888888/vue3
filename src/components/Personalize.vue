@@ -97,10 +97,6 @@ import { usePiniaStore } from '../store/pinia'
 import { updateUserImage } from './compoent-items/UpdateUserImage.js'
 import i18n from '../i18n.js'
 
-// 暫時性異步測試suspense
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-console.log('Start delay for About component');
-await delay(2000); 
 
 
 console.log('End delay for About component');
