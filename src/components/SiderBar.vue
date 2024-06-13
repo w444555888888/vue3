@@ -48,6 +48,7 @@ import { usePiniaStore } from '../store/pinia'
 import { useRouter } from 'vue-router'
 import i18n from '../i18n.js'
 import { updateUserImage } from './compoent-items/UpdateUserImage.js'
+import axios from 'axios'
 const router = useRouter()
 const store = usePiniaStore()
 const { t } = i18n.global
@@ -56,7 +57,21 @@ const { t } = i18n.global
 const imgValue = ref(updateUserImage())
 onMounted(() => {
     updateUserImage()
+    strapi()
+
 })
+
+async function strapi() {
+    try {
+        const response = await axios.get('http://localhost:1337/api/details?populate=*');
+        console.log(response.data, 'response');
+    } catch (error) {
+        console.error('Failed to add todo:', error);
+    }
+}
+
+
+
 
 // 實時更新users帳戶圖片
 watch(() => updateUserImage(), () => {
