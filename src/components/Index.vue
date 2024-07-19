@@ -74,7 +74,7 @@ const responseValue=ref('')
 // API搜尋
 async function handleSearch() {
   try {
-    const response = await axios(`http://localhost:3000/todos?todoTitle=${selectValue.value}`)
+    const response = await axios(`http://localhost:3003/todos?todoTitle=${selectValue.value}`)
     responseValue.value= response.data
     console.log( responseValue.value,' responseValue.value');
   } catch (error) {

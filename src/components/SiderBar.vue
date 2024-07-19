@@ -57,18 +57,10 @@ const { t } = i18n.global
 const imgValue = ref(updateUserImage())
 onMounted(() => {
     updateUserImage()
-    strapi()
 
 })
 
-async function strapi() {
-    try {
-        const response = await axios.get('http://localhost:1337/api/details?populate=*');
-        console.log(response.data, 'response');
-    } catch (error) {
-        console.error('Failed to add todo:', error);
-    }
-}
+
 
 
 
